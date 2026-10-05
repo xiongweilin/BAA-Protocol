@@ -2,22 +2,29 @@
 
 ## Current claim level
 
-The repository has reached four evidence layers for one concrete domain: employee offboarding.
+The repository has reached five evidence layers for one concrete domain: employee offboarding.
 
 1. Executable BAA reference semantics and deterministic fault fixtures.
 2. Pinned AIOS contract compatibility and execution-engine gating.
 3. Isolated production-like network acceptance across HTTP/process/Docker boundaries.
 4. High-fidelity connector acceptance against real ephemeral Keycloak and Odoo product instances.
+5. Single-episode real-product end-to-end acceptance composing BAA, AIOS, World Runtime, both products, independent read-back, and recovery.
+
+The pinned AIOS baseline is:
+
+~~~text
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
+~~~
 
 The strongest current claim is:
 
-> For the finite BAA model, the pinned AIOS offboarding contract at commit `f5afd2721e04ab4b9e14c4aecd0e6bc688828783`, the isolated network acceptance fixture, and the tested real-product connector surfaces, the protocol can constrain the modeled offboarding action path, preserve and recover explicit uncertainty without replaying committed effects, and execute the covered IAM/HRIS connector operations against real ephemeral Keycloak and Odoo instances with separate writer/verifier identities.
+> For the finite BAA model and the tested employee-offboarding deployment topology, one bounded offboarding episode can pass through BAA admission, the AIOS execution engine, the World Runtime authorization/capability boundary, real ephemeral Keycloak and Odoo writers, separately credentialed product read-back, semantic postcondition verification, and completion. The same topology can recover from a lost acknowledgement and an independent read-back outage while preserving stable logical request identity and persisted reconciliation transitions, and it rejects a direct Runtime invocation at the authorization boundary before real product state changes.
 
-This is not a production-tenant safety claim, a general unattended-autonomy theorem, or a certification result.
+This remains falsification/integration evidence. It is not a production-tenant safety claim, a general unattended-autonomy theorem, or a certification result.
 
 ## What is executable
 
-The prototype includes:
+The prototype and pinned AIOS baseline now cover:
 
 - generic bounded action admission;
 - concrete employee-offboarding admission;
@@ -31,24 +38,25 @@ The prototype includes:
 - protected guarantee-source isolation;
 - a conservative unresolved-effect concurrency limit;
 - VSAR event capture;
-- self-check, post-hoc audit, and BAA experiment regimes;
+- self-check, post-hoc audit, and BAA reference experiment regimes;
 - deterministic episode-level fault fixtures;
 - finite exhaustive admission checks;
 - projection from real AIOS Administrative obligations;
-- CI against a pinned AIOS checkout;
+- pinned AIOS compatibility CI;
 - isolated Windows/Docker network acceptance;
 - real ephemeral Keycloak connector acceptance;
-- real ephemeral Odoo connector acceptance.
+- real ephemeral Odoo connector acceptance;
+- a real-product end-to-end fault matrix using both products in one episode topology.
 
 ## Pinned AIOS compatibility
 
 BAA CI pins:
 
 ~~~text
-xiongweilin/aios@f5afd2721e04ab4b9e14c4aecd0e6bc688828783
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
-CI verifies:
+CI verifies the contract and local enforcement surface:
 
 1. AIOS offboarding policy effects equal the BAA hard-domain effect set.
 2. AIOS-derived external obligations project without losing case, subject, authority epoch, governance basis, target system, or operation.
@@ -58,7 +66,7 @@ CI verifies:
 6. The BAA provider gate changes the actual AIOS execution path while preserving deferred/no-attempt versus outcome-unknown semantics.
 7. The pinned World Runtime surface requires authorization, resource binding, version binding, and separated writer/verifier credential domains.
 
-These checks detect contract drift. They do not prove completeness of the production threat model or production credential isolation.
+The pinned AIOS version additionally fixes semantic verification so the IAM postconditions `enabled = false` and `active_sessions = 0` cannot be silently ignored.
 
 ## Isolated network evidence
 
@@ -71,49 +79,103 @@ Observed evidence:
 - read-back outage: recovered to completion with three unique writes and zero duplicates;
 - unauthorized Runtime bypass: HTTP 403 with zero provider writes.
 
-This establishes that the bounded path can cross a real HTTP/process/Docker boundary while preserving the modeled no-replay and authorization properties for the synthetic effect service.
+This establishes recovery and authorization behavior across a real HTTP/process/Docker boundary using a synthetic effect service.
 
-## Real Keycloak evidence
+## Standalone real-product connector evidence
+
+### Keycloak
 
 AIOS workflow run `37306648690` passed against Keycloak `26.8.0`.
 
-Observed evidence:
+Observed evidence includes real OAuth/Admin REST, distinct writer/verifier service accounts, identity disable, real session count from one to zero, durable reconciliation metadata, independent read-back, and verifier mutation denial.
 
-- real OAuth client-credentials/Admin REST path;
-- separate writer and verifier service accounts;
-- real user session present before offboarding;
-- identity disable succeeds and is independently read back;
-- session revoke changes the real session count from one to zero;
-- reconciliation succeeds through durable connector metadata;
-- verifier mutation attempt is rejected with HTTP 403.
-
-Evidence artifact: `real-keycloak-offboarding-37306648690`, artifact id `11344280550`.
-
-## Real Odoo evidence
+### Odoo
 
 AIOS workflow run `37307582025` passed against Odoo `18.0-20260926` with PostgreSQL.
 
-Observed evidence:
+Observed evidence includes real JSON-RPC, distinct writer/verifier users, exact `hr.employee` deactivation, durable request identity, independent read-back, reconciliation after deactivation, and verifier write denial.
 
-- real JSON-RPC path;
-- separate writer and verifier Odoo users;
-- exact `hr.employee` deactivation;
-- durable deactivate request marker persisted;
-- independent read-back observes `active = false`;
-- reconciliation succeeds after deactivation;
-- verifier write is denied.
+This run exposed the inactive-record lookup issue; durable Odoo lookup now uses `active_test = false`, with regression coverage.
 
-The real-product run exposed a concrete semantic/implementation boundary: inactive Odoo employees are excluded by the default active filter. The connector now performs durable identity lookup with `active_test = false`; regression coverage locks that behavior.
+## Single-episode real-product E2E evidence
 
-Evidence artifact: `real-odoo-offboarding-37307582025`, artifact id `11344206985`.
+AIOS workflow run `37315551794` passed all four scenarios against real ephemeral Keycloak and Odoo instances:
+
+### Normal
+
+The same subject identity, `odoo:hr.employee:<id>`, is carried across Odoo, Keycloak, AIOS obligations, and BAA.
+
+The final independently observed product state is:
+
+~~~text
+Keycloak:
+  enabled = false
+  active_sessions = 0
+  disable request marker present
+  session-revoke request marker present
+
+Odoo:
+  active = false
+  deactivate request marker present
+~~~
+
+All three covered effects have AIOS effect records, realization assessments, confirmed outcomes, and BAA verified-effect state.
+
+### Lost acknowledgement
+
+The Keycloak identity disable is committed in the real product before the acknowledgement is converted to an unknown outcome.
+
+The first run therefore observes a partially advanced reality: identity disabled, session still present, Odoo employee still active.
+
+Recovery then converges to full completion. The durable disable request identity remains stable, and AIOS persists both:
+
+~~~text
+case.reconciliation_started
+case.reconciliation_resolved_for_execution
+~~~
+
+The claim is stable logical request identity and successful reconciliation, not physical exactly-once transport.
+
+### Read-back outage
+
+A real product write succeeds while the independent verifier is made unavailable once.
+
+The episode preserves uncertainty, persists the reconciliation transition, later resumes after independent read-back, and completes without changing the logical request identity.
+
+### Runtime bypass
+
+The test creates responsibility/work/run state but intentionally omits execution authorization, then directly invokes the effectful Runtime capability.
+
+World Runtime returns HTTP 403 specifically at the authorization boundary. Real Keycloak and Odoo state before and after the attempt is identical.
+
+The real-product matrix also rechecks writer/verifier separation and write denial for the verifier identities.
+
+## Semantic evidence boundary
+
+The real-product E2E does not copy the desired postcondition into the observed state.
+
+Product read-back supplies reality-facing fields:
+
+~~~text
+Keycloak:
+  enabled
+  active_sessions
+  durable request markers
+
+Odoo:
+  active
+  durable request marker
+~~~
+
+Frozen execution context supplies fields such as employee reference, employment episode, termination status, and effective time.
+
+AIOS then builds the semantic evidence view and compares the actual product fields with the frozen expected postcondition. This separation is part of the evidence claim.
 
 ## What remains unproved
 
 The repository does not establish:
 
-- completeness of the threat model;
-- correctness of HR policy or termination decisions;
-- end-to-end execution of one BAA offboarding episode through World Runtime into both real product instances;
+- correctness, legality, or fairness of the underlying HR termination decision;
 - production tenant configuration correctness;
 - production credential, network, and infrastructure isolation;
 - completeness or independence of production IAM/HRIS observations;
@@ -123,60 +185,62 @@ The repository does not establish:
 - production delegation leverage;
 - principal attention savings;
 - third-party assurance labor savings;
-- the full semantic bridge from kernel invariants to all relevant real-world harms.
+- the full semantic bridge from kernel invariants to every relevant real-world harm.
 
 ## Experiment interpretation
 
-All current positive results remain falsification evidence, not open-world probability estimates.
-
-The evidence now supports three different statements that must remain separate:
+The positive results must remain separated by evidence type:
 
 - structural/reference: modeled forbidden transitions are mechanically excluded under stated assumptions;
-- integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
-- product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration.
+- integration: the pinned AIOS runtime and BAA gate preserve action-state distinctions and recovery behavior;
+- product compatibility: covered connectors work against real ephemeral Keycloak/Odoo under explicit temporary configuration;
+- composed E2E: one bounded offboarding topology composes BAA, AIOS, Runtime authorization, real product effects, independent read-back, semantic verification, and recovery.
 
-None implies that a production tenant is safe.
+None implies production-tenant safety.
 
 ## Convergence criterion for this phase
 
-The reference/network/product-connector phase is converged because:
+The real-product integration phase is converged because:
 
-1. one task domain is pinned to a source version;
-2. guarantee boundary and semantic-bridge assumptions are explicit;
-3. the protocol is executable;
-4. safety and delivery are measured separately;
-5. ambiguous effects remain unresolved rather than silently retried;
-6. independently resolved ambiguity can resume bounded execution;
-7. adaptive retry is present in threat fixtures;
-8. finite admission-state exploration is automated;
-9. CI runs regression tests and deterministic comparison harnesses;
-10. source-domain contracts are pinned and checked;
-11. the action path crosses an actual HTTP/process/Docker boundary;
-12. lost acknowledgement and read-back outage recover without duplicate writes;
-13. unauthorized Runtime bypass is rejected before provider execution;
-14. real Keycloak disable/session-revoke behavior is exercised;
-15. real Odoo deactivation/reconciliation behavior is exercised;
-16. writer/verifier separation is tested on both products;
-17. documentation states what is and is not proved.
+1. the task domain and AIOS version are pinned;
+2. the guarantee boundary and semantic-bridge assumptions are explicit;
+3. BAA is on the actual execution path;
+4. World Runtime enforces authorization/resource/version constraints;
+5. real product writers and verifiers use separate identities;
+6. one cross-system subject identity is used across the episode;
+7. normal completion reaches verified product postconditions;
+8. lost acknowledgement recovers without changing logical request identity;
+9. read-back outage preserves uncertainty and later resumes;
+10. recovery transitions are persisted in the AIOS audit history;
+11. unauthorized Runtime invocation is rejected at the authorization boundary;
+12. the semantic verifier checks `active`, `enabled`, and `active_sessions`;
+13. current CI, Sonar, Acceptance, BAA preflight, and the real-product E2E matrix are green;
+14. claim language remains below production-tenant safety.
 
 ## Next phase boundary
 
-Further connector-only expansion is not justified by the current evidence.
+Further connector or single-episode mechanism expansion is not the main research bottleneck.
 
-The next stronger experiment should compose the layers in one episode:
+The next experiment should return to the original comparative research question and run three regimes under the same task distribution and explicit budgets:
 
 ~~~text
-BAA admission
-  -> AIOS OffboardingExecutionEngine
-  -> World Runtime authorization/capability boundary
-  -> real ephemeral Keycloak writer
-  -> real ephemeral Odoo writer
-  -> independently credentialed Keycloak/Odoo read-back
-  -> BAA settlement / recovery / completion
+A. agent self-check
+B. agent + post-hoc audit
+C. BAA non-bypassable admission / execution / verification
 ~~~
 
-The experiment should include at least normal completion, one ambiguous transport outcome with successful independent read-back, one read-back outage, and one unauthorized bypass attempt. It should preserve the same episode-level evidence accounting and distinguish principal attention from assurance labor.
+Measure at least:
 
-Until that experiment passes, the strongest supported level is:
+- useful delivery;
+- structural/observed safety failures;
+- principal attention;
+- third-party assurance labor;
+- unknown-state duration;
+- recovery quality;
+- duplicate/replay incidence.
 
-> reference guarantees + pinned AIOS execution gating + isolated network recovery + real-product connector compatibility.
+Then increase adaptive attacker capability while holding the workload, attention budget, and exposure constraints comparable.
+
+The next falsifiable claim is therefore not “the mechanism can work”; that has now been demonstrated for this bounded domain. It is:
+
+> Under common attention and risk constraints, does BAA increase useful delegated work or enlarge the feasible delegated task set, and does that advantage persist as adaptive capability increases?
