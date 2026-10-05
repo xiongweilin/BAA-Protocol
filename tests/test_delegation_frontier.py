@@ -88,7 +88,7 @@ class DelegationFrontierTests(unittest.TestCase):
     def test_unrecovered_unknown_remains_outside_strict_frontier_even_when_safe(self):
         scenario = EpisodeScenario(
             "unknown",
-            observation_outage=True,
+            post_execution_observation_outage=True,
         )
         result = evaluate_delegation_frontier(
             (scenario,),
