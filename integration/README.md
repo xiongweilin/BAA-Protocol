@@ -3,7 +3,7 @@
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text
-xiongweilin/aios@6f51a0f96d2b6c7a5077d3ab745f6da749930964
+xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
 ~~~
 
 ## Level 1: contract compatibility
@@ -57,7 +57,21 @@ Independent read-back:
 BAA gate -> network read-back endpoint -> external observed state
 ~~~
 
-That acceptance path is designed to exercise normal completion, lost acknowledgement, read-back outage, and an unauthorized Runtime bypass attempt while preserving exact-once observed effects in the isolated fixture. A particular workflow run is evidence only if that run completes and its artifact is retained; the existence of the path is not itself evidence that a deployment passed it.
+That acceptance path is designed to exercise normal completion, lost acknowledgement, read-back outage, and an unauthorized Runtime bypass attempt while preserving exact-once observed effects in the isolated fixture.
+
+### Recorded network evidence
+
+AIOS workflow run `37302243172` completed successfully on `aios-windows-docker-desktop` at AIOS head `600ada8075d4641f22293bf0ba97482c4e73a55c`.
+
+Its retained evidence reports:
+
+- mandate probe: HTTP 200 / active;
+- normal: `completed`, three unique writes;
+- lost acknowledgement: `executing -> completed`, three final unique writes, `duplicate_writes = 0`;
+- read-back outage: `executing -> completed`, three final unique writes, `duplicate_writes = 0`;
+- unauthorized Runtime bypass: HTTP 403, provider writes `0 -> 0`.
+
+The evidence qualification is intentionally narrow: production-like network acceptance with isolated synthetic effects; it is not real Odoo/Keycloak evidence.
 
 It still does not establish:
 
