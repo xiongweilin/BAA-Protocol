@@ -99,7 +99,7 @@ class AIOSOffboardingCompatibilityTests(unittest.TestCase):
     def test_03_aios_postconditions_retain_covered_reality_state(self):
         _, external = self._external_obligations()
         projected = {
-            item.operation: project_aios_external_obligation(item)
+            item.required_operation: project_aios_external_obligation(item)
             for item in external
         }
 
