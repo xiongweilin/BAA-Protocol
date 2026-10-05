@@ -1,5 +1,7 @@
 # BAA-Protocol
 
+> English | [简体中文](README.zh-CN.md)
+
 [![Tests](https://github.com/xiongweilin/BAA-Protocol/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/xiongweilin/BAA-Protocol/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/github/license/xiongweilin/BAA-Protocol)](LICENSE)
 

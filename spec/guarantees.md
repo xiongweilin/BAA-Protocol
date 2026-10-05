@@ -1,5 +1,7 @@
 # Guarantee Claims and Proof Obligations
 
+> English | [简体中文](guarantees.zh-CN.md)
+
 ## 1. Claim discipline
 
 BAA-Protocol separates three kinds of support.

@@ -1,5 +1,7 @@
 # Deterministic Delegation Frontier Baseline
 
+> English | [简体中文](delegation-frontier-baseline.zh-CN.md)
+
 ## Purpose
 
 This baseline is the first executable bridge from BAA safety fixtures to the

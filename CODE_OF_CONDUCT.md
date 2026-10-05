@@ -1,5 +1,7 @@
 # Contributor Covenant Code of Conduct
 
+> English | [简体中文](CODE_OF_CONDUCT.zh-CN.md)
+
 ## Our Pledge
 
 We pledge to make participation in our community a harassment-free experience for everyone.

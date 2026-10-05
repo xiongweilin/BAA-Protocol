@@ -1,5 +1,7 @@
 # Prototype Status
 
+> English | [简体中文](status.zh-CN.md)
+
 ## Current claim level
 
 The repository has reached five evidence layers for one concrete domain: employee offboarding.

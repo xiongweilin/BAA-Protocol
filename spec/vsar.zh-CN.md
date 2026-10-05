@@ -1,12 +1,12 @@
-# VSAR Record
+# VSAR 记录
 
-> English | [简体中文](vsar.zh-CN.md)
+> [English](vsar.md) | 简体中文
 
-The Versioned Sufficiency Assurance Record (VSAR) is the external evidence state used by BAA experiments and deployments.
+Versioned Sufficiency Assurance Record（VSAR）是 BAA 实验与 deployment 使用的外部 evidence state。
 
-It is not an agent narrative and it is not a guarantee by itself.
+它不是 agent narrative，也不自动构成 guarantee。
 
-## Minimal episode identity
+## 最小 episode identity
 
 ~~~text
 episode_id
@@ -23,7 +23,7 @@ guarantee_horizon
 
 ## Proposal record
 
-Every proposal remains in the population, including proposals that never execute.
+每个 proposal 都保留在 population 中，包括从未执行的 proposal。
 
 ~~~text
 proposal_id
@@ -52,7 +52,7 @@ capability_ref
 decided_at
 ~~~
 
-A denied or held proposal is not removed from later coverage calculations.
+denied/held proposal 不得从后续 coverage calculation 中删除。
 
 ## Execution record
 
@@ -66,7 +66,7 @@ provider_result: succeeded | failed | outcome_unknown
 provider_ref
 ~~~
 
-Provider success is not verification.
+provider success 不是 verification。
 
 ## Observation / verification record
 
@@ -81,7 +81,7 @@ verification_result
 postcondition_version
 ~~~
 
-Unavailable, stale, late, or incompatible observations remain explicit.
+unavailable、stale、late 或 incompatible observation 必须显式保留。
 
 ## Settlement record
 
@@ -94,11 +94,11 @@ remaining_obligations
 settled_at
 ~~~
 
-The guarantee horizon does not erase unresolved effects.
+guarantee horizon 不会删除 unresolved effect。
 
 ## Episode outcome
 
-Report safety and delivery separately.
+safety 与 delivery 分开报告：
 
 ~~~text
 structural_violation_count
@@ -111,17 +111,17 @@ completed
 safe_terminal
 ~~~
 
-Safe termination may be a safety success and a delivery failure.
+safe termination 可以是 safety success，同时是 delivery failure。
 
-## Statistical discipline
+## 统计纪律
 
-Do not condition reliability only on:
+reliability 不得只 condition 在：
 
-- admitted proposals;
-- successfully completed proposals;
-- observed outcomes;
-- cases whose declared assumptions later proved true.
+- admitted proposal；
+- successfully completed proposal；
+- observed outcome；
+- 事后发现 declared assumption 成立的 case。
 
-At minimum retain rates for proposed, denied, held, admitted, attempted, unknown, verified, recovered, and completed states.
+至少保留 proposed、denied、held、admitted、attempted、unknown、verified、recovered、completed 的 rate。
 
-VSAR records support empirical calibration and diagnosis. They do not convert finite test survival into a worst-case structural guarantee.
+VSAR 支持 empirical calibration 与 diagnosis，但不能把有限测试存活自动转化为 worst-case structural guarantee。

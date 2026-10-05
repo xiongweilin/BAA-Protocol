@@ -1,5 +1,7 @@
 # State Machine
 
+> English | [简体中文](state-machine.zh-CN.md)
+
 ## 1. Scope
 
 This document defines the minimal protocol states required to distinguish authorization, execution, external effect, observation, verification, and settlement.

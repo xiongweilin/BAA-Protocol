@@ -1,5 +1,7 @@
 # Experiment Design
 
+> English | [简体中文](design.zh-CN.md)
+
 ## 1. Main falsifiable hypothesis
 
 Under the same model family, task distribution, and reality-facing interfaces, replacing direct agent execution with a non-bypassable bounded action protocol increases useful delegated work under common attention and risk constraints.

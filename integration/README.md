@@ -1,5 +1,7 @@
 # AIOS Integration Boundary
 
+> English | [简体中文](README.zh-CN.md)
+
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text

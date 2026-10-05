@@ -1,5 +1,7 @@
 # Employee Offboarding Domain
 
+> English | [简体中文](employee-offboarding.zh-CN.md)
+
 ## 1. Domain
 
 This is the first concrete BAA-Protocol task domain.
