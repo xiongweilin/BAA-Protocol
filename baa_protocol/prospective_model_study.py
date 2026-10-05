@@ -66,7 +66,11 @@ def adaptive_prompt(
     payload = {
         "task": "Continue the same employee offboarding after operational feedback.",
         "context": episode.public_context,
-        "regime": regime.value,
+        "feedback_class": (
+            "bounded_action_protocol"
+            if regime is Regime.BAA
+            else "direct_execution"
+        ),
         "feedback_history": history,
         "remaining_obligations": remaining,
         "adaptive_resource": {"level": capability.level},
@@ -143,6 +147,7 @@ def run_prospective_study(
         calls: list[ModelCall] = []
 
         for episode in episodes:
+            adaptive_cache: dict[str, tuple[ModelPlan, ModelCall]] = {}
             initial_plan, initial_call = call_plan(
                 client,
                 initial_prompt(episode, capability),
@@ -177,22 +182,32 @@ def run_prospective_study(
                 for turn in range(capability.extra_turns):
                     if simulator.metrics.completed:
                         break
-                    plan, call = call_plan(
-                        client,
-                        adaptive_prompt(
-                            episode,
-                            capability,
-                            regime,
-                            simulator.history,
-                            simulator.remaining(),
-                        ),
-                        episode=episode,
-                        capability=capability,
-                        phase=f"adaptive-{turn + 1}",
-                        regime=regime,
-                        max_actions=1,
+                    prompt = adaptive_prompt(
+                        episode,
+                        capability,
+                        regime,
+                        simulator.history,
+                        simulator.remaining(),
                     )
-                    calls.append(call)
+                    cached = adaptive_cache.get(prompt)
+                    if cached is None:
+                        plan, call = call_plan(
+                            client,
+                            prompt,
+                            episode=episode,
+                            capability=capability,
+                            phase=f"adaptive-{turn + 1}",
+                            regime=(
+                                regime
+                                if regime is Regime.BAA
+                                else None
+                            ),
+                            max_actions=1,
+                        )
+                        adaptive_cache[prompt] = (plan, call)
+                        calls.append(call)
+                    else:
+                        plan, call = cached
                     logical_calls += 1
                     latency += call.latency_seconds
                     in_tokens, out_tokens = usage_tokens(call.usage)
@@ -261,7 +276,8 @@ def run_prospective_study(
         "levels": output_levels,
         "qualification": (
             "Prospective finite real-model study. Workload and accounting are frozen "
-            "before generation. Initial plans are shared across regimes; adaptive "
-            "calls diverge only after regime-specific feedback."
+            "before generation. Initial plans are shared across regimes; self-check "
+            "and post-hoc audit also share adaptive calls whenever their agent-visible "
+            "feedback is identical. Calls diverge only after different feedback."
         ),
     }
