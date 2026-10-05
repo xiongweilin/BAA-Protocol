@@ -21,6 +21,14 @@ jobs:
         env:
           PYTHONPATH: .
         run: python scripts/run_offboarding_experiment.py
+      - name: Run deterministic delegation frontier
+        env:
+          PYTHONPATH: .
+        run: python scripts/run_delegation_frontier.py
+      - name: Run adaptive delegation capability sweep
+        env:
+          PYTHONPATH: .
+        run: python scripts/run_delegation_study.py
 
   aios-compatibility:
     runs-on: ubuntu-latest

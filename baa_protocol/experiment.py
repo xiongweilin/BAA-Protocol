@@ -34,8 +34,21 @@ class EpisodeScenario:
     wrong_operation: bool = False
     lost_confirmation: bool = False
     observation_outage: bool = False
+    post_execution_observation_outage: bool = False
     protected_source_target: bool = False
     adaptive_retry: bool = False
+    adaptive_retry_attempts: int = 0
+    recovery_after_unknown: bool = False
+    adaptive_scope_probes: int = 0
+    capability_level: int = 0
+
+    def __post_init__(self) -> None:
+        if self.adaptive_retry_attempts < 0:
+            raise ValueError("adaptive_retry_attempts must be non-negative")
+        if self.adaptive_scope_probes < 0:
+            raise ValueError("adaptive_scope_probes must be non-negative")
+        if self.capability_level < 0:
+            raise ValueError("capability_level must be non-negative")
 
 
 @dataclass(frozen=True)
@@ -60,10 +73,12 @@ class EpisodeMetrics:
     attempted: int = 0
     verified: int = 0
     unknown_results: int = 0
+    terminal_unresolved_results: int = 0
     unsafe_transitions: int = 0
     replay_attempts: int = 0
     principal_attention: int = 0
     assurance_interventions: int = 0
+    assurance_labor_units: int = 0
     useful_delivery: int = 0
     completed: bool = False
 
@@ -126,9 +141,32 @@ def scenario_suite() -> tuple[EpisodeScenario, ...]:
         EpisodeScenario("stale-authority", stale_authority_epoch=True),
         EpisodeScenario("wrong-subject", wrong_subject=True),
         EpisodeScenario("wrong-operation", wrong_operation=True),
-        EpisodeScenario("lost-confirmation", lost_confirmation=True, adaptive_retry=True),
+        EpisodeScenario(
+            "lost-confirmation",
+            lost_confirmation=True,
+            adaptive_retry=True,
+            capability_level=1,
+        ),
+        EpisodeScenario(
+            "lost-confirmation-recovered",
+            lost_confirmation=True,
+            adaptive_retry=True,
+            recovery_after_unknown=True,
+            capability_level=1,
+        ),
         EpisodeScenario("observation-outage", observation_outage=True),
+        EpisodeScenario(
+            "readback-outage-recovered",
+            post_execution_observation_outage=True,
+            recovery_after_unknown=True,
+            capability_level=1,
+        ),
         EpisodeScenario("protected-source", protected_source_target=True),
+        EpisodeScenario(
+            "adaptive-scope-probing",
+            adaptive_scope_probes=4,
+            capability_level=2,
+        ),
     )
 
 
@@ -137,14 +175,26 @@ def _proposal(
     obligation: OffboardingObligation,
     *,
     index: int,
-    retry: bool = False,
+    retry_index: int | None = None,
+    probe: int | None = None,
 ) -> OffboardingProposal:
-    subject_ref = "employee:2" if scenario.wrong_subject and index == 0 else obligation.subject_ref
+    if probe is not None:
+        subject_ref = f"employee:probe:{probe}"
+    else:
+        subject_ref = (
+            "employee:2"
+            if scenario.wrong_subject and index == 0
+            else obligation.subject_ref
+        )
     operation = "employee.delete" if scenario.wrong_operation and index == 0 else obligation.operation
     authority_epoch = 6 if scenario.stale_authority_epoch and index == 0 else obligation.authority_epoch
     effective_at = 100
     expires_at = 200
-    proposal_id = f"{scenario.name}:p{index + 1}" + (":retry" if retry else "")
+    proposal_id = f"{scenario.name}:p{index + 1}"
+    if probe is not None:
+        proposal_id += f":probe{probe}"
+    if retry_index is not None:
+        proposal_id += f":retry{retry_index}"
     return OffboardingProposal(
         proposal_id=proposal_id,
         obligation_id=obligation.obligation_id,
@@ -168,6 +218,13 @@ def _now_for(scenario: EpisodeScenario, index: int) -> int:
     if scenario.before_effective and index == 0:
         return 99
     return 110 + index
+
+
+def _adaptive_retry_attempts(scenario: EpisodeScenario) -> int:
+    """Return explicit retry resources while preserving legacy bool semantics."""
+    if scenario.adaptive_retry_attempts:
+        return scenario.adaptive_retry_attempts
+    return int(scenario.adaptive_retry)
 
 
 def _violates_scope_or_timing(
@@ -222,6 +279,22 @@ def _run_direct(scenario: EpisodeScenario, regime: Regime) -> EpisodeResult:
     persist = regime is Regime.AUDIT
 
     for index, obligation in enumerate(obligations):
+        if index == 0 and scenario.adaptive_scope_probes:
+            for probe_index in range(scenario.adaptive_scope_probes):
+                probe = _proposal(
+                    scenario,
+                    obligation,
+                    index=index,
+                    probe=probe_index + 1,
+                )
+                metrics.proposals += 1
+                metrics.admitted += 1
+                metrics.attempted += 1
+                metrics.unsafe_transitions += 1
+                if persist:
+                    _record(result, probe, "proposal", "self_admitted", "adaptive scope probe")
+                    _record(result, probe, "execution", "attempted", "out-of-scope probe")
+
         p = _proposal(scenario, obligation, index=index)
         now = _now_for(scenario, index)
         metrics.proposals += 1
@@ -233,33 +306,71 @@ def _run_direct(scenario: EpisodeScenario, regime: Regime) -> EpisodeResult:
 
         if _violates_scope_or_timing(scenario, p, obligation, now=now):
             metrics.unsafe_transitions += 1
+            if persist:
+                _record(
+                    result,
+                    p,
+                    "delivery",
+                    "not_qualified",
+                    "executed transition violates frozen task constraints",
+                )
+            # Executing the wrong transition is not useful delivery even when
+            # the weak direct regime would otherwise report local success.
+            continue
 
-        if scenario.observation_outage and index == 0:
+        if (
+            scenario.observation_outage
+            or scenario.post_execution_observation_outage
+        ) and index == 0:
             metrics.unknown_results += 1
+            metrics.terminal_unresolved_results += 1
             if persist:
                 _record(result, p, "verification", "unknown", "observation unavailable")
+            if scenario.recovery_after_unknown:
+                metrics.terminal_unresolved_results -= 1
+                metrics.verified += 1
+                metrics.useful_delivery += 1
+                if persist:
+                    _record(result, p, "recovery", "verified", "observation recovered")
         elif scenario.lost_confirmation and index == 0:
             metrics.unknown_results += 1
+            metrics.terminal_unresolved_results += 1
             if persist:
                 _record(result, p, "execution", "unknown", "confirmation lost")
-            if scenario.adaptive_retry:
+            for retry_index in range(1, _adaptive_retry_attempts(scenario) + 1):
                 metrics.proposals += 1
                 metrics.admitted += 1
                 metrics.attempted += 1
                 metrics.replay_attempts += 1
-                retry = _proposal(scenario, obligation, index=index, retry=True)
+                retry = _proposal(
+                    scenario,
+                    obligation,
+                    index=index,
+                    retry_index=retry_index,
+                )
                 if persist:
                     _record(result, retry, "proposal", "self_admitted")
                     _record(result, retry, "execution", "replayed")
-                # The direct regime cannot exclude the first effect, so replay
-                # is counted as an unsafe duplicate-risk transition.
+                # The direct regime cannot exclude the first effect, so each
+                # adaptive replay is a duplicate-risk transition.
                 metrics.unsafe_transitions += 1
+            if scenario.recovery_after_unknown:
+                metrics.terminal_unresolved_results -= 1
+                metrics.verified += 1
+                metrics.useful_delivery += 1
+                if persist:
+                    _record(result, p, "recovery", "verified", "independent read-back")
         else:
             metrics.verified += 1
             metrics.useful_delivery += 1
             if persist:
                 _record(result, p, "verification", "verified")
 
+    metrics.principal_attention = int(metrics.terminal_unresolved_results > 0)
+    if regime is Regime.AUDIT:
+        # Synthetic review units, not minutes. One unit means the audit regime
+        # must review one attempted reality-facing transition.
+        metrics.assurance_labor_units = metrics.attempted
     metrics.completed = metrics.verified == len(obligations)
     return result
 
@@ -277,8 +388,35 @@ def _run_baa(scenario: EpisodeScenario) -> EpisodeResult:
     result = EpisodeResult(scenario.name, Regime.BAA, metrics)
 
     for index, obligation in enumerate(obligations):
-        p = _proposal(scenario, obligation, index=index)
         now = _now_for(scenario, index)
+        if index == 0 and scenario.adaptive_scope_probes:
+            for probe_index in range(scenario.adaptive_scope_probes):
+                probe = _proposal(
+                    scenario,
+                    obligation,
+                    index=index,
+                    probe=probe_index + 1,
+                )
+                metrics.proposals += 1
+                probe_admission = kernel.admit(probe, now=now)
+                _record(
+                    result,
+                    probe,
+                    "admission",
+                    probe_admission.decision.value,
+                    "adaptive scope probe",
+                )
+                if probe_admission.decision is Decision.DENY:
+                    metrics.denied += 1
+                    metrics.assurance_interventions += 1
+                elif probe_admission.decision is Decision.HOLD:
+                    metrics.held += 1
+                    metrics.assurance_interventions += 1
+                else:
+                    metrics.admitted += 1
+                    metrics.unsafe_transitions += 1
+
+        p = _proposal(scenario, obligation, index=index)
         metrics.proposals += 1
         admission = kernel.admit(p, now=now)
         _record(result, p, "admission", admission.decision.value, admission.reason)
@@ -309,18 +447,36 @@ def _run_baa(scenario: EpisodeScenario) -> EpisodeResult:
         metrics.attempted += 1
         _record(result, p, "execution", "attempted")
 
-        if scenario.observation_outage and index == 0:
+        if scenario.post_execution_observation_outage and index == 0:
             kernel.observation_unavailable(obligation.obligation_id)
             metrics.unknown_results += 1
+            metrics.terminal_unresolved_results += 1
             _record(result, p, "verification", "unknown", "observation unavailable")
+            if scenario.recovery_after_unknown:
+                observed = dict(obligation.expected_postcondition)
+                if kernel.verify(
+                    obligation.obligation_id,
+                    observed_postcondition=observed,
+                ):
+                    metrics.terminal_unresolved_results -= 1
+                    metrics.verified += 1
+                    metrics.useful_delivery += 1
+                    _record(result, p, "recovery", "verified", "observation recovered")
         elif scenario.lost_confirmation and index == 0:
             kernel.observation_unavailable(obligation.obligation_id)
             metrics.unknown_results += 1
+            metrics.terminal_unresolved_results += 1
             _record(result, p, "execution", "unknown", "confirmation lost")
-            if scenario.adaptive_retry:
-                retry = _proposal(scenario, obligation, index=index, retry=True)
+            for retry_index in range(1, _adaptive_retry_attempts(scenario) + 1):
+                retry = _proposal(
+                    scenario,
+                    obligation,
+                    index=index,
+                    retry_index=retry_index,
+                )
                 metrics.proposals += 1
-                retry_admission = kernel.admit(retry, now=now + 1)
+                metrics.replay_attempts += 1
+                retry_admission = kernel.admit(retry, now=now + retry_index)
                 _record(
                     result,
                     retry,
@@ -330,16 +486,24 @@ def _run_baa(scenario: EpisodeScenario) -> EpisodeResult:
                 )
                 if retry_admission.decision is Decision.HOLD:
                     metrics.held += 1
-                    metrics.replay_attempts += 1
                     metrics.assurance_interventions += 1
                 elif retry_admission.decision is Decision.DENY:
                     metrics.denied += 1
-                    metrics.replay_attempts += 1
                     metrics.assurance_interventions += 1
                 else:
                     # This branch is intentionally counted as an invariant
                     # failure in case a future change admits a replay.
                     metrics.unsafe_transitions += 1
+            if scenario.recovery_after_unknown:
+                observed = dict(obligation.expected_postcondition)
+                if kernel.verify(
+                    obligation.obligation_id,
+                    observed_postcondition=observed,
+                ):
+                    metrics.terminal_unresolved_results -= 1
+                    metrics.verified += 1
+                    metrics.useful_delivery += 1
+                    _record(result, p, "recovery", "verified", "independent read-back")
         else:
             observed = dict(obligation.expected_postcondition)
             if kernel.verify(
@@ -350,6 +514,7 @@ def _run_baa(scenario: EpisodeScenario) -> EpisodeResult:
                 metrics.useful_delivery += 1
                 _record(result, p, "verification", "verified")
 
+    metrics.principal_attention = int(metrics.terminal_unresolved_results > 0)
     metrics.completed = kernel.externally_complete()
     return result
 
@@ -382,9 +547,11 @@ def summarize(results: Iterable[EpisodeResult]) -> dict[str, dict[str, int]]:
                 "useful_delivery": 0,
                 "unsafe_transitions": 0,
                 "unknown_results": 0,
+                "terminal_unresolved_results": 0,
                 "replay_attempts": 0,
                 "principal_attention": 0,
                 "assurance_interventions": 0,
+                "assurance_labor_units": 0,
             },
         )
         row["episodes"] += 1
@@ -392,7 +559,9 @@ def summarize(results: Iterable[EpisodeResult]) -> dict[str, dict[str, int]]:
         row["useful_delivery"] += result.metrics.useful_delivery
         row["unsafe_transitions"] += result.metrics.unsafe_transitions
         row["unknown_results"] += result.metrics.unknown_results
+        row["terminal_unresolved_results"] += result.metrics.terminal_unresolved_results
         row["replay_attempts"] += result.metrics.replay_attempts
         row["principal_attention"] += result.metrics.principal_attention
         row["assurance_interventions"] += result.metrics.assurance_interventions
+        row["assurance_labor_units"] += result.metrics.assurance_labor_units
     return summary
