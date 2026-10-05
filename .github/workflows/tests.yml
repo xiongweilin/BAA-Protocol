@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  reference-model:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,3 +19,26 @@ jobs:
         run: python -m unittest discover -s tests -p "test_*.py" -v
       - name: Run deterministic offboarding experiment
         run: python scripts/run_offboarding_experiment.py
+
+  aios-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout BAA-Protocol
+        uses: actions/checkout@v4
+        with:
+          path: baa
+      - name: Checkout pinned AIOS
+        uses: actions/checkout@v4
+        with:
+          repository: xiongweilin/aios
+          ref: d2ca4e9e874bec1f5c28911e8175ff84e5f45055
+          path: aios
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned AIOS
+        run: python -m pip install -e ./aios
+      - name: Run AIOS compatibility tests
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -v
