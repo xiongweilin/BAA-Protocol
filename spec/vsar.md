@@ -1,5 +1,7 @@
 # VSAR Record
 
+> English | [简体中文](vsar.zh-CN.md)
+
 The Versioned Sufficiency Assurance Record (VSAR) is the external evidence state used by BAA experiments and deployments.
 
 It is not an agent narrative and it is not a guarantee by itself.
