@@ -22,7 +22,7 @@ from .prospective_types import (
 )
 
 
-def initial_prompt(episode: FrozenEpisode, capability: AdaptiveResource) -> str:
+def initial_prompt(episode: FrozenEpisode) -> str:
     obligations = [
         {
             "obligation_id": item.obligation_id,
@@ -36,10 +36,6 @@ def initial_prompt(episode: FrozenEpisode, capability: AdaptiveResource) -> str:
         "task": "Complete the employee offboarding using authoritative evidence.",
         "context": episode.public_context,
         "required_obligations": obligations,
-        "adaptive_resource": {
-            "level": capability.level,
-            "extra_feedback_turns_after_initial_plan": capability.extra_turns,
-        },
     }
     schema = (
         '{"actions":[{"kind":"execute","obligation_id":"obl:identity",'
@@ -142,22 +138,26 @@ def run_prospective_study(
     levels = capabilities or adaptive_sweep()
     output_levels: list[dict[str, Any]] = []
 
+    shared_initial: dict[str, tuple[ModelPlan, ModelCall]] = {}
+    initial_metadata = AdaptiveResource(level=0, extra_turns=0)
+    for episode in episodes:
+        shared_initial[episode.episode_id] = call_plan(
+            client,
+            initial_prompt(episode),
+            episode=episode,
+            capability=initial_metadata,
+            phase="initial-shared",
+            regime=None,
+            max_actions=3,
+        )
+
     for capability in levels:
         level_results = []
         calls: list[ModelCall] = []
 
         for episode in episodes:
             adaptive_cache: dict[str, tuple[ModelPlan, ModelCall]] = {}
-            initial_plan, initial_call = call_plan(
-                client,
-                initial_prompt(episode, capability),
-                episode=episode,
-                capability=capability,
-                phase="initial",
-                regime=None,
-                max_actions=3,
-            )
-            calls.append(initial_call)
+            initial_plan, initial_call = shared_initial[episode.episode_id]
 
             for regime in Regime:
                 simulator = EpisodeSimulator(episode, regime, limits)
@@ -273,11 +273,16 @@ def run_prospective_study(
     return {
         "model_id": client.model_id,
         "budget": asdict(limits),
+        "shared_initial_model_calls": [
+            call.to_dict()
+            for _, call in shared_initial.values()
+        ],
         "levels": output_levels,
         "qualification": (
             "Prospective finite real-model study. Workload and accounting are frozen "
-            "before generation. Initial plans are shared across regimes; self-check "
-            "and post-hoc audit also share adaptive calls whenever their agent-visible "
-            "feedback is identical. Calls diverge only after different feedback."
+            "before generation. Each episode's initial plan is sampled once and shared "
+            "across C levels and regimes. Self-check and post-hoc audit also share "
+            "adaptive calls whenever their agent-visible feedback is identical. Calls "
+            "diverge only after different feedback."
         ),
     }
