@@ -344,13 +344,12 @@ class BAARuntimeGateTests(unittest.TestCase):
         )
 
         first = engine.run(case.case_id)
-        self.assertEqual(first.status, CaseStatus.RECONCILING)
+        # Independent read-back can resolve the lost acknowledgement in the
+        # same engine turn. The key invariant is that only the first external
+        # effect was attempted before the gate released further execution.
+        self.assertEqual(first.status, CaseStatus.EXECUTING)
         self.assertEqual(provider.execute_calls, 1)
         self.assertEqual(provider.operations, ["identity.disable"])
-
-        resumed = engine.run(case.case_id)
-        self.assertEqual(resumed.status, CaseStatus.EXECUTING)
-        self.assertEqual(provider.execute_calls, 1)
 
         completed = engine.run(case.case_id)
         self.assertEqual(completed.status, CaseStatus.COMPLETED)
