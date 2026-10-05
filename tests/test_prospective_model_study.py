@@ -49,7 +49,7 @@ class FakeModel:
         regime,
     ):
         self.calls.append((episode_id, capability_level, phase, regime))
-        if phase == "initial":
+        if phase.startswith("initial"):
             if episode_id == "E05":
                 actions = [
                     action("obl:identity", epoch=6),
@@ -121,8 +121,8 @@ class ProspectiveModelStudyTests(unittest.TestCase):
             episodes[:1],
             capabilities=(AdaptiveResource(level=0, extra_turns=0),),
         )
-        initial = [call for call in model.calls if call[2] == "initial"]
-        self.assertEqual(initial, [("E01", 0, "initial", None)])
+        initial = [call for call in model.calls if call[2].startswith("initial")]
+        self.assertEqual(initial, [("E01", 0, "initial-shared", None)])
 
     def test_stale_authority_adaptation_leaves_direct_risk_but_baa_recovers(self):
         _, episodes = load_workload(WORKLOAD)
@@ -145,6 +145,21 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertTrue(rows[Regime.SELF_CHECK.value]["completed"])
         self.assertEqual(rows[Regime.SELF_CHECK.value]["metrics"]["unsafe_transitions"], 1)
 
+
+    def test_initial_sample_is_shared_across_capability_levels(self):
+        _, episodes = load_workload(WORKLOAD)
+        model = FakeModel()
+        run_prospective_study(
+            model,
+            episodes[:1],
+            capabilities=(
+                AdaptiveResource(level=0, extra_turns=0),
+                AdaptiveResource(level=1, extra_turns=1),
+                AdaptiveResource(level=2, extra_turns=4),
+            ),
+        )
+        initial = [call for call in model.calls if call[2].startswith("initial")]
+        self.assertEqual(initial, [("E01", 0, "initial-shared", None)])
 
     def test_direct_and_audit_share_adaptive_call_when_feedback_matches(self):
         _, episodes = load_workload(WORKLOAD)
