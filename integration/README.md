@@ -3,7 +3,7 @@
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text
-xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
+xiongweilin/aios@e585cd5dd7e7a8dce75680992720b7a6941b6e0a
 ~~~
 
 ## Level 1: contract compatibility
@@ -61,7 +61,7 @@ That acceptance path is designed to exercise normal completion, lost acknowledge
 
 ### Recorded network evidence
 
-AIOS workflow run `37302243172` completed successfully on `aios-windows-docker-desktop` at AIOS head `600ada8075d4641f22293bf0ba97482c4e73a55c`.
+AIOS workflow run `37302243172` completed successfully on `aios-windows-docker-desktop` at AIOS head `e585cd5dd7e7a8dce75680992720b7a6941b6e0a`.
 
 Its retained evidence reports:
 
@@ -71,11 +71,26 @@ Its retained evidence reports:
 - read-back outage: `executing -> completed`, three final unique writes, `duplicate_writes = 0`;
 - unauthorized Runtime bypass: HTTP 403, provider writes `0 -> 0`.
 
-The evidence qualification is intentionally narrow: production-like network acceptance with isolated synthetic effects; it is not real Odoo/Keycloak evidence.
+The evidence qualification is intentionally narrow: production-like network acceptance with isolated synthetic effects.
+
+### Real Keycloak connector acceptance
+
+The pinned AIOS commit also contains a high-fidelity connector acceptance against an ephemeral real Keycloak 26.8.0 server. AIOS workflow run `37307098287` completed successfully on `main`; artifact `real-keycloak-offboarding-37307098287` (artifact id `11343404378`) records:
+
+- a real user session existed before offboarding and was reduced from 1 active session to 0;
+- the AIOS identity-disable connector succeeded and independent read-back observed `enabled = false`;
+- disable reconciliation succeeded;
+- the AIOS session-revoke connector succeeded and independent read-back observed `active_sessions = 0`;
+- session-revoke reconciliation succeeded;
+- writer and verifier used distinct service clients;
+- a write attempted with the verifier identity was rejected with HTTP 403.
+
+The Keycloak realm used explicit admin-only managed User Profile attributes for the durable BAA/AIOS identities and kept unmanaged attributes disabled. This is evidence about the real Keycloak product/API and AIOS connector behavior, but it is still an ephemeral test realm rather than a production tenant.
 
 It still does not establish:
 
-- real Keycloak or Odoo behavior;
+- real Odoo behavior;
+- production Keycloak tenant configuration or credential administration;
 - production credential and infrastructure isolation;
 - real latency, outage, concurrency, or operator-attention distributions;
 - empirical delegation leverage on a non-synthetic workload.
@@ -107,4 +122,4 @@ BAA reference semantics
   -> pinned World Runtime enforcement prerequisites
 ~~~
 
-The pinned AIOS repository additionally provides the isolated network acceptance path described above. The next stronger empirical step is no longer another local abstraction layer; it is evidence from less synthetic effect/read-back services and eventually the real administrative systems under an explicit deployment threat model.
+The pinned AIOS repository additionally provides both the isolated end-to-end network acceptance path and the real ephemeral Keycloak connector acceptance described above. The next stronger empirical step is real or high-fidelity Odoo/HRIS behavior, followed by composed Administrative execution against independently controlled external systems under an explicit deployment threat model.
