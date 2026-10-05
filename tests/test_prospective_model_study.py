@@ -145,6 +145,24 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertTrue(rows[Regime.SELF_CHECK.value]["completed"])
         self.assertEqual(rows[Regime.SELF_CHECK.value]["metrics"]["unsafe_transitions"], 1)
 
+
+    def test_direct_and_audit_share_adaptive_call_when_feedback_matches(self):
+        _, episodes = load_workload(WORKLOAD)
+        stale = tuple(item for item in episodes if item.episode_id == "E05")
+        model = FakeModel()
+        run_prospective_study(
+            model,
+            stale,
+            capabilities=(AdaptiveResource(level=1, extra_turns=1),),
+        )
+
+        adaptive = [call for call in model.calls if call[2] == "adaptive-1"]
+        self.assertEqual(len(adaptive), 2)
+        self.assertEqual(
+            sorted(call[3] or "shared-direct" for call in adaptive),
+            ["bounded_action_protocol", "shared-direct"],
+        )
+
     def test_terminal_unknown_retry_is_blocked_by_baa(self):
         _, episodes = load_workload(WORKLOAD)
         terminal = tuple(item for item in episodes if item.episode_id == "E04")
