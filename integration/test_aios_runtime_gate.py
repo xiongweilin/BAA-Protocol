@@ -53,8 +53,14 @@ _AFTER = _EFFECTIVE + timedelta(seconds=1)
 
 
 class Provider:
-    def __init__(self, *, unknown_first: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        unknown_first: bool = False,
+        lost_ack_first: bool = False,
+    ) -> None:
         self.unknown_first = unknown_first
+        self.lost_ack_first = lost_ack_first
         self.execute_calls = 0
         self.operations: list[str] = []
         self.observations: dict[str, RealityObservation] = {}
@@ -62,12 +68,10 @@ class Provider:
     def execute(self, effect, payload):
         self.execute_calls += 1
         self.operations.append(effect.operation)
-        if self.unknown_first and self.execute_calls == 1:
-            return ProviderExecutionResult(
-                status=ProviderExecutionStatus.OUTCOME_UNKNOWN,
-                error="simulated lost confirmation",
-                retryable=False,
-            )
+        ambiguous_first = (
+            (self.unknown_first or self.lost_ack_first)
+            and self.execute_calls == 1
+        )
 
         expected_payload = {
             key: payload[key]
@@ -103,7 +107,17 @@ class Provider:
             digest=f"digest:{effect.effect_id}",
             observed_at=_AFTER,
         )
-        self.observations[str(effect.effect_id)] = observation
+        if not (self.unknown_first and ambiguous_first):
+            # lost_ack_first models a reality write whose acknowledgement is
+            # lost; unknown_first models ambiguity with no independent readback.
+            self.observations[str(effect.effect_id)] = observation
+        if ambiguous_first:
+            return ProviderExecutionResult(
+                status=ProviderExecutionStatus.OUTCOME_UNKNOWN,
+                provider_ref=observation.provider_ref if self.lost_ack_first else None,
+                error="simulated lost confirmation",
+                retryable=False,
+            )
         return ProviderExecutionResult(
             status=ProviderExecutionStatus.SUCCEEDED,
             provider_ref=observation.provider_ref,
@@ -313,6 +327,39 @@ class BAARuntimeGateTests(unittest.TestCase):
             ["identity.disable", "sessions.revoke", "employee.deactivate"],
         )
         self.assertEqual(provider.execute_calls, 3)
+
+    def test_lost_ack_recovers_then_releases_remaining_effects(self):
+        store, case = authorized_case()
+        provider = Provider(lost_ack_first=True)
+        gate = BAAGatedAIOSProvider(
+            store,
+            provider,
+            now=lambda: _AFTER,
+            unresolved_limit=1,
+        )
+        engine = OffboardingExecutionEngine(
+            store,
+            gate,
+            clock=lambda: _AFTER,
+        )
+
+        first = engine.run(case.case_id)
+        self.assertEqual(first.status, CaseStatus.RECONCILING)
+        self.assertEqual(provider.execute_calls, 1)
+        self.assertEqual(provider.operations, ["identity.disable"])
+
+        resumed = engine.run(case.case_id)
+        self.assertEqual(resumed.status, CaseStatus.EXECUTING)
+        self.assertEqual(provider.execute_calls, 1)
+
+        completed = engine.run(case.case_id)
+        self.assertEqual(completed.status, CaseStatus.COMPLETED)
+        self.assertEqual(
+            provider.operations,
+            ["identity.disable", "sessions.revoke", "employee.deactivate"],
+        )
+        self.assertEqual(provider.execute_calls, 3)
+
 
     def test_unknown_first_effect_prevents_additional_provider_dispatch(self):
         store, case = authorized_case()
