@@ -6,7 +6,7 @@ The repository has reached an executable reference baseline for one concrete dom
 
 The strongest current claim is:
 
-> For the finite BAA reference model and explicit fault fixtures in this repository, the BAA regime mechanically blocks the modeled out-of-scope, stale-authority, premature, protected-source, and ambiguous-replay transitions while preserving explicit unknown states. The BAA offboarding projection is also compatible with the pinned AIOS policy, obligation, postcondition, and World Runtime capability surface at commit `600ada8075d4641f22293bf0ba97482c4e73a55c`.
+> For the finite BAA reference model and explicit fault fixtures in this repository, the BAA regime mechanically blocks the modeled out-of-scope, stale-authority, premature, protected-source, and ambiguous-replay transitions while preserving explicit unknown states. The BAA offboarding projection is also compatible with the pinned AIOS policy, obligation, postcondition, and World Runtime capability surface at commit `e585cd5dd7e7a8dce75680992720b7a6941b6e0a`.
 
 This is not a real-world safety or production-implementation claim.
 
@@ -60,13 +60,17 @@ A separate isolated network acceptance has now passed end to end on the reposito
 
 - AIOS workflow run: `37302243172`;
 - runner: `aios-windows-docker-desktop`;
-- AIOS head: `600ada8075d4641f22293bf0ba97482c4e73a55c`;
+- AIOS head: `e585cd5dd7e7a8dce75680992720b7a6941b6e0a`;
 - normal episode: completed with exactly three unique external writes;
 - lost-ack episode: recovered from one committed write to completion with three unique writes and zero duplicates;
 - read-back outage: recovered from one committed write to completion with three unique writes and zero duplicates;
 - unauthorized Runtime bypass: HTTP 403 with zero provider writes.
 
-The evidence artifact explicitly qualifies the run as production-like network acceptance with isolated synthetic effects, not real Odoo/Keycloak evidence.
+The original Windows network evidence remains qualified as production-like network acceptance with isolated synthetic effects.
+
+A second, less-synthetic boundary is now established for IAM: AIOS workflow run `37307098287` passed against a real ephemeral Keycloak 26.8.0 server at pinned AIOS head `e585cd5dd7e7a8dce75680992720b7a6941b6e0a`. It exercised a real user session, real Admin REST/client-credentials authentication, separated writer/verifier service clients, identity disable, session revoke, independent read-back and reconciliation. The verifier credential was also confirmed unable to create a user (HTTP 403). Keycloak durable BAA/AIOS attributes were provisioned as admin-only managed User Profile attributes with unmanaged attributes disabled.
+
+This is real-product connector evidence, but not production-tenant evidence.
 
 ## What remains unproved
 
@@ -75,7 +79,9 @@ The repository does not establish:
 - completeness of the threat model;
 - correctness or non-bypassability of the AIOS production implementation;
 - correctness of HR policy or termination decisions;
-- completeness or independence of IAM / HRIS observations;
+- completeness or independence of production IAM / HRIS observations;
+- production Keycloak tenant configuration, provisioning, and credential isolation;
+- real Odoo / HRIS connector behavior;
 - absence of uncovered side channels;
 - real-world failure probabilities;
 - worst-case safety against arbitrary adaptive agents;
@@ -117,9 +123,10 @@ All ten conditions are now satisfied.
 
 Further local conceptual or synthetic network expansion is not justified by the current evidence.
 
-The next stronger phase is a **less-synthetic administrative integration experiment** using real or faithful external systems and a controlled test population. It must add evidence for:
+The next stronger phase is a **real or high-fidelity Odoo / HRIS integration experiment**, followed by composed Administrative execution against both external systems. It must add evidence for:
 
-- real Keycloak / IAM and Odoo / HRIS effect behavior;
+- real Odoo / HRIS effect and read-back behavior;
+- composed Odoo + Keycloak execution under the bounded action gate;
 - independently credentialed external read-back;
 - real outage, latency, concurrency, and reconciliation behavior;
 - bypass attempts across the deployed process / credential boundary;
@@ -127,4 +134,4 @@ The next stronger phase is a **less-synthetic administrative integration experim
 - third-party assurance labor;
 - useful delivery under the same workload across the three regimes.
 
-Current claims therefore stop at: reference-model guarantees + pinned AIOS compatibility + finite execution-engine gating + successful isolated network acceptance on the self-hosted Windows/Docker Desktop environment.
+Current claims therefore stop at: reference-model guarantees + pinned AIOS compatibility + finite execution-engine gating + successful isolated Windows network acceptance + high-fidelity real Keycloak connector acceptance in an ephemeral realm.
