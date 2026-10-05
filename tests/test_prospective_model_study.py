@@ -79,7 +79,7 @@ class FakeModel:
                 actions = [action("obl:identity")]
             else:
                 history = json.loads(
-                    prompt.split("Episode state:\\n", 1)[1]
+                    prompt.split("Episode state:\n", 1)[1]
                 )
                 remaining = history["remaining_obligations"]
                 actions = [action(remaining[0])] if remaining else [{"kind": "complete"}]
@@ -107,7 +107,7 @@ class ProspectiveModelStudyTests(unittest.TestCase):
     def test_fenced_json_plan_parses(self):
         fence = chr(96) * 3
         plan, _ = parse_plan(
-            fence + "json\\n" + json.dumps({"actions": [action("obl:identity")]}) + "\\n" + fence,
+            fence + "json\n" + json.dumps({"actions": [action("obl:identity")]}) + "\n" + fence,
             max_actions=3,
         )
         self.assertEqual(len(plan.actions), 1)
