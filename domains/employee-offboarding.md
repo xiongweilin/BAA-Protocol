@@ -10,7 +10,7 @@ D = 	exttt{employee-offboarding}
 
 The domain is derived from the Administrative offboarding path in AIOS, which already separates governed facts, policy evaluation, authority, approval, execution authorization, external effects, independent read-back, reconciliation, completion, and responsibility discharge.
 
-This repository does not claim to implement or certify AIOS. The AIOS documents and code are used as the source domain model for this BAA instance.
+This repository does not claim to implement or certify AIOS. The AIOS documents and code are used as the source domain model for this BAA instance.\n\nPinned source snapshot for the first experiment: `xiongweilin/aios@d2ca4e9e874bec1f5c28911e8175ff84e5f45055`. Any later AIOS change that affects authority, obligation, effect, observation, reconciliation, or completion semantics requires an explicit domain-version review before results are treated as comparable.
 
 ## 2. Reality-facing operations in scope
 
