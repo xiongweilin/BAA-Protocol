@@ -68,7 +68,7 @@ Safety and delivery are reported separately.
 The first domain is **employee offboarding**, derived from this pinned AIOS snapshot:
 
 ~~~text
-xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
 Compatibility CI checks:
@@ -110,8 +110,8 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 
 ## Status
 
-**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, and a successful isolated network acceptance run on the self-hosted Windows/Docker Desktop environment.**
+**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, isolated network recovery, and single-episode real-product end-to-end acceptance.**
 
-Current evidence additionally includes AIOS workflow run `37302243172`, where the isolated network acceptance completed successfully on `aios-windows-docker-desktop`. The run exercised World Runtime over HTTP, lost acknowledgement, read-back outage, and an unauthorized bypass attempt. It does not establish general unattended-autonomy safety, real Odoo/Keycloak correctness, production delegation leverage, real-world failure probabilities, or production certification.
+Current evidence includes isolated network run `37302243172`, standalone real Keycloak/Odoo connector runs `37306648690` and `37307582025`, and real-product end-to-end matrix run `37315551794`. The E2E matrix composes BAA, the AIOS offboarding engine, World Runtime, real ephemeral Keycloak and Odoo, independent verifier credentials, semantic postcondition checking, durable request identities, recovery after lost acknowledgement/read-back outage, and an authorization-boundary bypass rejection. It does not establish production-tenant safety, production delegation leverage, real-world failure probabilities, or a general unattended-autonomy theorem.
 
 See [experiments/status.md](experiments/status.md).
