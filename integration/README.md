@@ -3,7 +3,7 @@
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text
-xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
+xiongweilin/aios@f5afd2721e04ab4b9e14c4aecd0e6bc688828783
 ~~~
 
 ## Level 1: contract compatibility
@@ -75,11 +75,49 @@ The evidence qualification is intentionally narrow: production-like network acce
 
 It still does not establish:
 
-- real Keycloak or Odoo behavior;
+- an end-to-end BAA/World Runtime episode using both real product instances;
 - production credential and infrastructure isolation;
-- real latency, outage, concurrency, or operator-attention distributions;
+- real production latency, outage, concurrency, or operator-attention distributions;
 - empirical delegation leverage on a non-synthetic workload.
 
+
+## Real product connector evidence
+
+The pinned AIOS commit also contains high-fidelity acceptance against ephemeral instances of the actual administrative products used by the offboarding connectors.
+
+### Keycloak
+
+AIOS workflow run `37306648690` passed against Keycloak `26.8.0`.
+
+The test uses real Admin REST and OAuth client-credentials flows and verifies:
+
+- separate writer and verifier service accounts;
+- a real user session exists before offboarding;
+- `identity.disable` succeeds and is independently read back;
+- `sessions.revoke` reduces the real session count from one to zero;
+- durable request metadata is reconciled through the connector;
+- the verifier credential cannot mutate users (HTTP 403).
+
+Evidence artifact: `real-keycloak-offboarding-37306648690` (artifact id `11344280550`).
+
+### Odoo
+
+AIOS workflow run `37307582025` passed against real Odoo `18.0-20260926` with PostgreSQL.
+
+The test uses real JSON-RPC and verifies:
+
+- separate writer and verifier Odoo users;
+- exact `hr.employee` deactivation;
+- a durable deactivate request marker;
+- independent read-back of `active = false`;
+- reconciliation after the employee becomes inactive;
+- verifier write denial.
+
+The real Odoo run exposed one production-relevant issue: normal Odoo searches hide inactive employees. The connector now performs durable identity lookup with `active_test = false`, and a regression test locks that behavior.
+
+Evidence artifact: `real-odoo-offboarding-37307582025` (artifact id `11344206985`).
+
+These runs establish connector compatibility with real ephemeral product instances. They do not establish production-tenant safety, production credential isolation, or an end-to-end BAA/World Runtime execution through both products in one episode.
 
 ## Level 3: pinned World Runtime enforcement prerequisite
 
@@ -107,4 +145,4 @@ BAA reference semantics
   -> pinned World Runtime enforcement prerequisites
 ~~~
 
-The pinned AIOS repository additionally provides the isolated network acceptance path described above. The next stronger empirical step is no longer another local abstraction layer; it is evidence from less synthetic effect/read-back services and eventually the real administrative systems under an explicit deployment threat model.
+The pinned AIOS repository additionally provides the isolated network acceptance path and the real-product connector acceptances described above. The next stronger empirical step is to compose those layers: run one bounded offboarding episode through BAA, AIOS, World Runtime, and ephemeral real Keycloak/Odoo instances with independent writer/verifier credentials and explicit fault injection.
