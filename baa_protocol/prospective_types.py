@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 import json
 from pathlib import Path
-import re
 import time
 from typing import Any, Protocol
 import urllib.request
@@ -166,8 +165,11 @@ def load_workload(path: str | Path) -> tuple[str, tuple[FrozenEpisode, ...]]:
 def _parse_json_object(raw_text: str) -> dict[str, Any]:
     text = raw_text.strip()
     if text.startswith("```"):
-        text = re.sub(r"^```(?:json)?s*", "", text)
-        text = re.sub(r"s*```$", "", text)
+        lines = text.splitlines()
+        lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
     try:
         value = json.loads(text)
     except json.JSONDecodeError:
