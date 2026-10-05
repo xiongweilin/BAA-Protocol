@@ -3,7 +3,7 @@
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text
-xiongweilin/aios@f5afd2721e04ab4b9e14c4aecd0e6bc688828783
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
 ## Level 1: contract compatibility
@@ -117,7 +117,35 @@ The real Odoo run exposed one production-relevant issue: normal Odoo searches hi
 
 Evidence artifact: `real-odoo-offboarding-37307582025` (artifact id `11344206985`).
 
-These runs establish connector compatibility with real ephemeral product instances. They do not establish production-tenant safety, production credential isolation, or an end-to-end BAA/World Runtime execution through both products in one episode.
+These standalone runs establish connector compatibility with real ephemeral product instances. They do not by themselves establish production-tenant safety or production credential isolation.
+
+## Composed real-product end-to-end evidence
+
+AIOS workflow run `37315551794` passed at code merged to AIOS main as `87f24f32a01c67a9246fc3cb127517c80798e169`.
+
+The workflow matrix composes:
+
+~~~text
+BAA admission / settlement
+  -> real AIOS OffboardingExecutionEngine
+  -> WorldRuntimeBridge over HTTP
+  -> World Runtime authorization / capability boundary
+  -> real ephemeral Keycloak writer
+  -> real ephemeral Odoo writer
+  -> independently credentialed Keycloak/Odoo read-back
+  -> AIOS semantic verification / completion
+~~~
+
+Observed scenarios:
+
+- normal completion: `enabled = false`, `active_sessions = 0`, `active = false`, three confirmed outcomes, and all BAA effects `verified_effected`;
+- lost acknowledgement after a real Keycloak mutation: reconciliation state is persisted, the logical disable request identity remains stable, product read-back resolves the ambiguity, and execution resumes;
+- independent read-back outage: uncertainty is preserved through reconciliation, then resolved after read-back recovers;
+- unauthorized Runtime bypass: HTTP 403, no provider effect observed, and product state unchanged.
+
+Both recovery scenarios require persisted `case.reconciliation_started` and `case.reconciliation_resolved_for_execution` audit events. The evidence claims stable logical request identity and reconciliation, not physical exactly-once delivery.
+
+This is ephemeral-product acceptance evidence, not production-tenant safety or a measurement of production delegation leverage.
 
 ## Level 3: pinned World Runtime enforcement prerequisite
 
@@ -134,15 +162,22 @@ For the three BAA-covered capabilities it verifies:
 
 This establishes a local enforcement prerequisite for the pinned runtime version. The repository-local BAA gate test and World Runtime prerequisite test remain separate compatibility checks. The pinned AIOS network acceptance path is the executable place where those components are composed across an HTTP/process boundary.
 
-## Converged local boundary
+## Converged integration boundary
 
-The repository can test, without external infrastructure:
+The pinned integration now has executable evidence for:
 
 ~~~text
 BAA reference semantics
   -> AIOS contract projection
   -> real AIOS offboarding execution engine
-  -> pinned World Runtime enforcement prerequisites
+  -> World Runtime enforcement
+  -> real ephemeral Keycloak + Odoo mutation
+  -> independent product read-back
+  -> reconciliation / completion
 ~~~
 
-The pinned AIOS repository additionally provides the isolated network acceptance path and the real-product connector acceptances described above. The next stronger empirical step is to compose those layers: run one bounded offboarding episode through BAA, AIOS, World Runtime, and ephemeral real Keycloak/Odoo instances with independent writer/verifier credentials and explicit fault injection.
+The current acceptance matrix covers normal completion, lost acknowledgement, read-back outage, and unauthorized Runtime bypass.
+
+Further connector-only expansion is not the next research step. The next stronger empirical question is whether this non-bypassable protocol improves useful delegated work under common attention and risk constraints relative to self-check and post-hoc-audit regimes.
+
+Production tenant configuration, production credential/network isolation, real-world failure distributions, and production delegation leverage remain outside the current evidence.
