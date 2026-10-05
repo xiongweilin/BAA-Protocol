@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: xiongweilin/aios
-          ref: 6f51a0f96d2b6c7a5077d3ab745f6da749930964
+          ref: 600ada8075d4641f22293bf0ba97482c4e73a55c
           path: aios
       - uses: actions/setup-python@v5
         with:
