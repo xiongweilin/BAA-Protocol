@@ -6,7 +6,7 @@ The repository has reached an executable reference baseline for one concrete dom
 
 The strongest current claim is:
 
-> For the finite BAA reference model and explicit fault fixtures in this repository, the BAA regime mechanically blocks the modeled out-of-scope, stale-authority, premature, protected-source, and ambiguous-replay transitions while preserving explicit unknown states. The BAA offboarding projection is also compatible with the pinned AIOS policy, obligation, postcondition, and World Runtime capability surface at commit `d2ca4e9e874bec1f5c28911e8175ff84e5f45055`.
+> For the finite BAA reference model and explicit fault fixtures in this repository, the BAA regime mechanically blocks the modeled out-of-scope, stale-authority, premature, protected-source, and ambiguous-replay transitions while preserving explicit unknown states. The BAA offboarding projection is also compatible with the pinned AIOS policy, obligation, postcondition, and World Runtime capability surface at commit `600ada8075d4641f22293bf0ba97482c4e73a55c`.
 
 This is not a real-world safety or production-implementation claim.
 
@@ -46,14 +46,27 @@ These checks detect contract drift. They do not show that production execution i
 
 The integration suite now also wraps the pinned AIOS `OffboardingExecutionEngine` with an integration-only BAA provider gate.
 
-It verifies two finite execution-path properties:
+It verifies three finite execution-path properties:
 
 - a normal authorized offboarding episode completes through BAA and the real AIOS execution state machine;
-- when the first provider effect returns an ambiguous outcome, BAA leaves it unresolved, prevents additional provider dispatch under the conservative unresolved-effect limit, and repeated AIOS reconciliation does not replay that effect.
+- when an attempted effect remains genuinely unresolved, BAA prevents additional provider dispatch under the conservative unresolved-effect limit and does not replay that effect;
+- when an effect is committed but its acknowledgement is lost, independent read-back resolves the ambiguity, execution resumes within the same authority epoch, and the remaining covered effects complete without replaying the committed effect.
 
 This is stronger than contract projection because BAA now changes the execution path exercised by the pinned AIOS engine. It still uses an in-memory database and deterministic provider fixture.
 
-The pinned production World Runtime surface is also exercised locally: all three covered capabilities require authorization, resource binding, and version binding; writer and verifier credential domains are distinct; and an invocation without authorization is rejected before provider execution. This establishes an enforcement prerequisite, not yet an end-to-end BAA-through-World-Runtime deployment.
+The pinned production World Runtime surface is also exercised locally: all three covered capabilities require authorization, resource binding, and version binding; writer and verifier credential domains are distinct; and an invocation without authorization is rejected before provider execution.
+
+A separate isolated network acceptance has now passed end to end on the repository's self-hosted Windows/Docker Desktop runner:
+
+- AIOS workflow run: `37302243172`;
+- runner: `aios-windows-docker-desktop`;
+- AIOS head: `600ada8075d4641f22293bf0ba97482c4e73a55c`;
+- normal episode: completed with exactly three unique external writes;
+- lost-ack episode: recovered from one committed write to completion with three unique writes and zero duplicates;
+- read-back outage: recovered from one committed write to completion with three unique writes and zero duplicates;
+- unauthorized Runtime bypass: HTTP 403 with zero provider writes.
+
+The evidence artifact explicitly qualifies the run as production-like network acceptance with isolated synthetic effects, not real Odoo/Keycloak evidence.
 
 ## What remains unproved
 
@@ -77,11 +90,11 @@ A positive fixture result means only:
 
 > Under the explicit modeled histories, the enforced protocol changes which reality-facing transitions can occur.
 
+The isolated network experiment now establishes that the protocol can cross a real HTTP/process boundary in the self-hosted Windows/Docker Desktop environment while preserving the modeled safety and recovery properties.
+
 The next empirical claim is stronger:
 
-> Under the same offboarding workload and real execution interfaces, does BAA improve the feasible delivery frontier under common attention and risk constraints after assurance labor is counted?
-
-That requires exercising the actual execution and observation boundary.
+> Under the same non-synthetic offboarding workload and real administrative effect/read-back interfaces, does BAA improve the feasible delivery frontier under common attention and risk constraints after assurance labor is counted?
 
 ## Convergence criterion for this phase
 
@@ -102,17 +115,16 @@ All ten conditions are now satisfied.
 
 ## Next phase boundary
 
-Further local conceptual or reference-model expansion is not justified by the current evidence.
+Further local conceptual or synthetic network expansion is not justified by the current evidence.
 
-The next phase is a **production-like networked integration experiment** beyond the current in-memory execution-engine gate and local World Runtime prerequisite checks. It must exercise:
+The next stronger phase is a **less-synthetic administrative integration experiment** using real or faithful external systems and a controlled test population. It must add evidence for:
 
-- World Runtime cutover through the deployed capability boundary;
-- provider execution outcomes;
-- independent HRIS / IAM read-back;
-- reconciliation after ambiguous effects;
-- bypass attempts against the covered reality boundary;
+- real Keycloak / IAM and Odoo / HRIS effect behavior;
+- independently credentialed external read-back;
+- real outage, latency, concurrency, and reconciliation behavior;
+- bypass attempts across the deployed process / credential boundary;
 - episode-level principal attention;
 - third-party assurance labor;
 - useful delivery under the same workload across the three regimes.
 
-Until that experiment exists, claims remain at the reference-model + pinned-contract-compatibility + finite AIOS execution-engine-gate level.
+Current claims therefore stop at: reference-model guarantees + pinned AIOS compatibility + finite execution-engine gating + successful isolated network acceptance on the self-hosted Windows/Docker Desktop environment.
