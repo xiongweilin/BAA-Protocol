@@ -60,3 +60,7 @@ jobs:
         env:
           PYTHONPATH: baa
         run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_05 -v
+      - name: Check BAA gate in real AIOS offboarding engine
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_aios_runtime_gate.py" -v
