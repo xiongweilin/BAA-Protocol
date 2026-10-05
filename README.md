@@ -1,5 +1,8 @@
 # BAA-Protocol
 
+[![Tests](https://github.com/xiongweilin/BAA-Protocol/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/xiongweilin/BAA-Protocol/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/github/license/xiongweilin/BAA-Protocol)](LICENSE)
+
 **Bounded Action Admission Protocol**
 
 BAA-Protocol studies whether a non-bypassable admission and execution protocol can increase useful delegated work under fixed attention and risk constraints.
@@ -115,3 +118,7 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 Current evidence additionally includes AIOS workflow run `37302243172`, where the isolated network acceptance completed successfully on `aios-windows-docker-desktop`. The run exercised World Runtime over HTTP, lost acknowledgement, read-back outage, and an unauthorized bypass attempt. It does not establish general unattended-autonomy safety, real Odoo/Keycloak correctness, production delegation leverage, real-world failure probabilities, or production certification.
 
 See [experiments/status.md](experiments/status.md).
+
+## Project policies
+
+See [Contributing](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), [Security Policy](SECURITY.md), and the [MIT License](LICENSE).
