@@ -89,11 +89,11 @@ Safety and delivery are reported separately. Safe termination can be a safety su
 
 ## Repository map
 
-- [spec/protocol.md](spec/protocol.md) — protocol responsibilities and transitions.
+- [domains/employee-offboarding.md](domains/employee-offboarding.md) — first concrete task-domain instance derived from AIOS Administrative offboarding.\n- [spec/protocol.md](spec/protocol.md) — protocol responsibilities and transitions.
 - [spec/guarantees.md](spec/guarantees.md) — claim language, proof obligations, and assumption set.
 - [spec/state-machine.md](spec/state-machine.md) — executable state semantics.
 - [experiments/design.md](experiments/design.md) — falsifiable evaluation design.
-- [baa_protocol/model.py](baa_protocol/model.py) — minimal reference state machine.
+- [baa_protocol/model.py](baa_protocol/model.py) — minimal generic reference state machine.\n- [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — concrete employee-offboarding admission model.
 - [tests/test_protocol_model.py](tests/test_protocol_model.py) — mechanical regression tests.
 
 ## Relationship to guide
