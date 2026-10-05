@@ -3,7 +3,7 @@
 BAA-Protocol pins the first employee-offboarding integration to:
 
 ~~~text
-xiongweilin/aios@d2ca4e9e874bec1f5c28911e8175ff84e5f45055
+xiongweilin/aios@6f51a0f96d2b6c7a5077d3ab745f6da749930964
 ~~~
 
 ## Level 1: contract compatibility
@@ -32,27 +32,39 @@ AIOS OffboardingExecutionEngine
   -> AIOS verification / completion
 ~~~
 
-The integration tests establish two finite properties:
+The integration tests establish three finite properties:
 
 1. A normal authorized offboarding episode can pass through the gate and complete the three covered external obligations.
-2. If the first provider execution has an ambiguous outcome, BAA preserves it as unresolved, prevents later provider dispatch under `U_max = 1`, and repeated AIOS reconciliation does not re-execute the ambiguous effect.
+2. If an attempted effect has an ambiguous outcome and independent read-back cannot resolve it, BAA preserves the ambiguity, prevents later provider dispatch under `U_max = 1`, and does not re-execute the ambiguous effect.
+3. If an effect is committed but its acknowledgement is lost, independent read-back can settle that effect, the same authority epoch can resume execution, and the remaining covered effects can complete without replaying the committed effect.
+
+A BAA `HOLD` is represented across the AIOS provider boundary as a deferred/no-attempt result, not as an outcome-unknown external attempt. This keeps admission, execution attempt, and observed effect as distinct states.
 
 This is the first test in the repository where BAA changes the actual execution path of the pinned AIOS engine.
 
-## Remaining boundary
+## Network acceptance boundary
 
-The current integration still uses an in-memory AIOS database and a deterministic provider fixture.
+The compatibility tests in this repository still use an in-memory AIOS database and deterministic provider fixtures. The pinned AIOS commit now also contains an executable network acceptance path at `tests/acceptance/baa_offboarding`:
 
-It does not yet establish:
+~~~text
+AIOS OffboardingExecutionEngine
+  -> BAA gate
+  -> WorldRuntimeBridge over HTTP
+  -> World Runtime process
+  -> isolated network effect service
 
-- World Runtime HTTP cutover behavior through the BAA gate;
-- non-bypassability across a deployed process / network boundary;
+Independent read-back:
+BAA gate -> network read-back endpoint -> external observed state
+~~~
+
+That acceptance path is designed to exercise normal completion, lost acknowledgement, read-back outage, and an unauthorized Runtime bypass attempt while preserving exact-once observed effects in the isolated fixture. A particular workflow run is evidence only if that run completes and its artifact is retained; the existence of the path is not itself evidence that a deployment passed it.
+
+It still does not establish:
+
 - real Keycloak or Odoo behavior;
-- independence of writer and verifier credentials in deployment;
+- production credential and infrastructure isolation;
 - real latency, outage, concurrency, or operator-attention distributions;
-- empirical delegation leverage.
-
-Those require a production-like runtime experiment rather than more reference-model structure.
+- empirical delegation leverage on a non-synthetic workload.
 
 
 ## Level 3: pinned World Runtime enforcement prerequisite
@@ -68,11 +80,11 @@ For the three BAA-covered capabilities it verifies:
 - writer and verifier use different credential domains;
 - an invocation missing authorization is rejected by World Runtime before provider execution.
 
-This establishes a local enforcement prerequisite for the pinned runtime version. The current BAA gate test and the World Runtime test are still separate paths; BAA has not yet been deployed through the actual World Runtime HTTP cutover boundary.
+This establishes a local enforcement prerequisite for the pinned runtime version. The repository-local BAA gate test and World Runtime prerequisite test remain separate compatibility checks. The pinned AIOS network acceptance path is the executable place where those components are composed across an HTTP/process boundary.
 
 ## Converged local boundary
 
-The repository can now test, without external infrastructure:
+The repository can test, without external infrastructure:
 
 ~~~text
 BAA reference semantics
@@ -81,4 +93,4 @@ BAA reference semantics
   -> pinned World Runtime enforcement prerequisites
 ~~~
 
-The next non-synthetic step requires an executable network boundary and external effect/read-back services. Further local abstraction would not strengthen the same empirical claim.
+The pinned AIOS repository additionally provides the isolated network acceptance path described above. The next stronger empirical step is no longer another local abstraction layer; it is evidence from less synthetic effect/read-back services and eventually the real administrative systems under an explicit deployment threat model.
