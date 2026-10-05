@@ -71,7 +71,7 @@ Safety and delivery are reported separately.
 The first domain is **employee offboarding**, derived from this pinned AIOS snapshot:
 
 ~~~text
-xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
 Compatibility CI checks:
@@ -113,9 +113,15 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 
 ## Status
 
-**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, and a successful isolated network acceptance run on the self-hosted Windows/Docker Desktop environment.**
+**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, isolated network recovery, real-product connector acceptance, and a successful single-episode real-product end-to-end offboarding acceptance.**
 
-Current evidence additionally includes AIOS workflow run `37302243172`, where the isolated network acceptance completed successfully on `aios-windows-docker-desktop`. The run exercised World Runtime over HTTP, lost acknowledgement, read-back outage, and an unauthorized bypass attempt. It does not establish general unattended-autonomy safety, real Odoo/Keycloak correctness, production delegation leverage, real-world failure probabilities, or production certification.
+The evidence chain now includes:
+
+- AIOS workflow run `37302243172`: isolated HTTP/process/Docker network acceptance on `aios-windows-docker-desktop`, including lost acknowledgement, read-back outage, and unauthorized Runtime bypass;
+- AIOS workflow runs `37306648690` and `37307582025`: standalone real ephemeral Keycloak and Odoo connector acceptance with separated writer/verifier identities;
+- AIOS workflow run `37315551794`: one composed BAA -> AIOS -> World Runtime -> real ephemeral Keycloak/Odoo episode, with normal completion, lost-ack recovery, read-back-outage recovery, and unauthorized Runtime bypass. The composed run records independent product read-back, persisted recovery transitions, stable logical request identity, and verified external completion.
+
+These are bounded acceptance results for ephemeral test products. They do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or delegation leverage.
 
 See [experiments/status.md](experiments/status.md).
 
