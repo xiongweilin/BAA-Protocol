@@ -1,5 +1,7 @@
 # Protocol
 
+> English | [简体中文](protocol.zh-CN.md)
+
 ## 1. Purpose
 
 The Bounded Action Admission Protocol (BAA) separates an adaptive agent's proposal process from the mechanism that grants reality-facing authority.
