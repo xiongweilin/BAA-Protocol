@@ -53,6 +53,8 @@ It verifies two finite execution-path properties:
 
 This is stronger than contract projection because BAA now changes the execution path exercised by the pinned AIOS engine. It still uses an in-memory database and deterministic provider fixture.
 
+The pinned production World Runtime surface is also exercised locally: all three covered capabilities require authorization, resource binding, and version binding; writer and verifier credential domains are distinct; and an invocation without authorization is rejected before provider execution. This establishes an enforcement prerequisite, not yet an end-to-end BAA-through-World-Runtime deployment.
+
 ## What remains unproved
 
 The repository does not establish:
@@ -100,9 +102,9 @@ All ten conditions are now satisfied.
 
 ## Next phase boundary
 
-Further conceptual expansion is not justified by the current evidence.
+Further local conceptual or reference-model expansion is not justified by the current evidence.
 
-The next phase is a **production-like runtime integration experiment** beyond the current in-memory execution-engine gate. It must exercise:
+The next phase is a **production-like networked integration experiment** beyond the current in-memory execution-engine gate and local World Runtime prerequisite checks. It must exercise:
 
 - World Runtime cutover through the deployed capability boundary;
 - provider execution outcomes;
