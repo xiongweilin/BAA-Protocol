@@ -34,6 +34,7 @@ class EpisodeScenario:
     wrong_operation: bool = False
     lost_confirmation: bool = False
     observation_outage: bool = False
+    post_execution_observation_outage: bool = False
     protected_source_target: bool = False
     adaptive_retry: bool = False
     recovery_after_unknown: bool = False
@@ -145,9 +146,10 @@ def scenario_suite() -> tuple[EpisodeScenario, ...]:
         ),
         EpisodeScenario("observation-outage", observation_outage=True),
         EpisodeScenario(
-            "observation-outage-recovered",
-            observation_outage=True,
+            "readback-outage-recovered",
+            post_execution_observation_outage=True,
             recovery_after_unknown=True,
+            capability_level=1,
         ),
         EpisodeScenario("protected-source", protected_source_target=True),
         EpisodeScenario(
@@ -288,7 +290,10 @@ def _run_direct(scenario: EpisodeScenario, regime: Regime) -> EpisodeResult:
         if _violates_scope_or_timing(scenario, p, obligation, now=now):
             metrics.unsafe_transitions += 1
 
-        if scenario.observation_outage and index == 0:
+        if (
+            scenario.observation_outage
+            or scenario.post_execution_observation_outage
+        ) and index == 0:
             metrics.unknown_results += 1
             metrics.terminal_unresolved_results += 1
             if persist:
@@ -404,7 +409,7 @@ def _run_baa(scenario: EpisodeScenario) -> EpisodeResult:
         metrics.attempted += 1
         _record(result, p, "execution", "attempted")
 
-        if scenario.observation_outage and index == 0:
+        if scenario.post_execution_observation_outage and index == 0:
             kernel.observation_unavailable(obligation.obligation_id)
             metrics.unknown_results += 1
             metrics.terminal_unresolved_results += 1
