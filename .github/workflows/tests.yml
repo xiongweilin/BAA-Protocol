@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: xiongweilin/aios
-          ref: d2ca4e9e874bec1f5c28911e8175ff84e5f45055
+          ref: experiment/baa-network-hosted-preflight
           path: aios
       - uses: actions/setup-python@v5
         with:
