@@ -71,7 +71,7 @@ Safety and delivery are reported separately.
 The first domain is **employee offboarding**, derived from this pinned AIOS snapshot:
 
 ~~~text
-xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
+xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
 Compatibility CI checks:
@@ -113,9 +113,9 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 
 ## Status
 
-**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, and a successful isolated network acceptance run on the self-hosted Windows/Docker Desktop environment.**
+**Executable bounded-action prototype with pinned AIOS compatibility, execution-engine gating, isolated network recovery, real-product connector acceptance, and a successful single-episode real-product end-to-end acceptance.**
 
-Current evidence additionally includes AIOS workflow run `37302243172`, where the isolated network acceptance completed successfully on `aios-windows-docker-desktop`. The run exercised World Runtime over HTTP, lost acknowledgement, read-back outage, and an unauthorized bypass attempt. It does not establish general unattended-autonomy safety, real Odoo/Keycloak correctness, production delegation leverage, real-world failure probabilities, or production certification.
+The strongest completed composed evidence is AIOS workflow run `37315551794` at the code merged as `87f24f32a01c67a9246fc3cb127517c80798e169`. It exercised one offboarding episode through BAA, the real AIOS offboarding engine, World Runtime, ephemeral Keycloak and Odoo, and independently credentialed product read-back. Its matrix covered normal completion, lost acknowledgement, read-back outage, and an unauthorized Runtime bypass. The result remains acceptance evidence for an ephemeral test topology; it does not establish production-tenant safety, general unattended-autonomy safety, production delegation leverage, real-world failure probabilities, or production certification.
 
 See [experiments/status.md](experiments/status.md).
 
