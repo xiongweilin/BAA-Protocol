@@ -68,7 +68,7 @@ Safety and delivery are reported separately.
 The first domain is **employee offboarding**, derived from this pinned AIOS snapshot:
 
 ~~~text
-xiongweilin/aios@d2ca4e9e874bec1f5c28911e8175ff84e5f45055
+xiongweilin/aios@600ada8075d4641f22293bf0ba97482c4e73a55c
 ~~~
 
 Compatibility CI checks:
@@ -94,7 +94,10 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — employee-offboarding kernel.
 - [baa_protocol/experiment.py](baa_protocol/experiment.py) — three-regime episode harness.
 - [baa_protocol/aios_adapter.py](baa_protocol/aios_adapter.py) — thin AIOS-to-BAA projection.
-- [integration/README.md](integration/README.md) — current AIOS integration boundary and remaining claims.\n- [integration/test_aios_offboarding_contract.py](integration/test_aios_offboarding_contract.py) — pinned AIOS compatibility checks.\n- [integration/aios_gate.py](integration/aios_gate.py) — BAA gate on the real AIOS EffectProvider boundary.\n- [integration/test_aios_runtime_gate.py](integration/test_aios_runtime_gate.py) — real AIOS offboarding-engine gate tests.
+- [integration/README.md](integration/README.md) — current AIOS integration boundary and remaining claims.
+- [integration/test_aios_offboarding_contract.py](integration/test_aios_offboarding_contract.py) — pinned AIOS compatibility checks.
+- [integration/aios_gate.py](integration/aios_gate.py) — BAA gate on the real AIOS EffectProvider boundary.
+- [integration/test_aios_runtime_gate.py](integration/test_aios_runtime_gate.py) — real AIOS offboarding-engine gate tests.
 - [tests](tests) — regression and finite exhaustive checks.
 
 ## Relationship to guide and AIOS
@@ -107,8 +110,8 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 
 ## Status
 
-**Executable reference prototype with pinned AIOS contract compatibility and execution-engine gating.**
+**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, and a successful isolated network acceptance run on the self-hosted Windows/Docker Desktop environment.**
 
-Current evidence supports claims about the reference model, its compatibility with the pinned AIOS offboarding contract surface, and finite execution-path behavior when a BAA gate wraps the real pinned AIOS offboarding engine. It does not establish general unattended-autonomy safety, production delegation leverage, real-world failure probabilities, or production certification.
+Current evidence additionally includes AIOS workflow run `37302243172`, where the isolated network acceptance completed successfully on `aios-windows-docker-desktop`. The run exercised World Runtime over HTTP, lost acknowledgement, read-back outage, and an unauthorized bypass attempt. It does not establish general unattended-autonomy safety, real Odoo/Keycloak correctness, production delegation leverage, real-world failure probabilities, or production certification.
 
 See [experiments/status.md](experiments/status.md).
