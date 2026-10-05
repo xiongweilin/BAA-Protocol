@@ -127,3 +127,36 @@ labor.
 
 The next empirical step must replace fixture counters with prospectively
 measured episode outcomes while preserving the same accounting semantics.
+
+## Current deterministic observation
+
+With the default strict point:
+
+~~~text
+A = 0
+R_unsafe = 0
+R_unknown = 0
+~~~
+
+the current fixture suite reports:
+
+| regime | delegable episodes | delegable useful delivery | total useful delivery | unsafe transitions | automatic assurance interventions |
+|---|---:|---:|---:|---:|---:|
+| self-check | 2 / 11 | 6 | 31 | 11 | 0 |
+| post-hoc audit | 2 / 11 | 6 | 31 | 11 | 0 |
+| BAA | 4 / 11 | 12 | 24 | 0 | 14 |
+
+The two additional BAA-delegable fixtures are the recovered lost-acknowledgement
+case and adaptive scope probing. The recovered read-back-outage fixture is
+delegable in all three regimes and therefore does not create the observed
+frontier difference.
+
+This result is intentionally two-sided:
+
+- BAA expands the completed-and-within-budget fixture set at this strict point;
+- BAA also reduces aggregate unconstrained delivery and performs more automatic
+  assurance interventions.
+
+The baseline therefore does not define success as “more safety” alone. The next
+empirical experiment must determine whether the same frontier improvement
+survives measured attention/assurance costs and real adaptive proposal behavior.
