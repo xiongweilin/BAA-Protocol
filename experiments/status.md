@@ -42,6 +42,17 @@ CI installs the pinned AIOS repository and independently verifies five boundarie
 
 These checks detect contract drift. They do not show that production execution is non-bypassable or that real HRIS / IAM observations satisfy the semantic bridge.
 
+## Real AIOS execution-engine gate now established
+
+The integration suite now also wraps the pinned AIOS `OffboardingExecutionEngine` with an integration-only BAA provider gate.
+
+It verifies two finite execution-path properties:
+
+- a normal authorized offboarding episode completes through BAA and the real AIOS execution state machine;
+- when the first provider effect returns an ambiguous outcome, BAA leaves it unresolved, prevents additional provider dispatch under the conservative unresolved-effect limit, and repeated AIOS reconciliation does not replay that effect.
+
+This is stronger than contract projection because BAA now changes the execution path exercised by the pinned AIOS engine. It still uses an in-memory database and deterministic provider fixture.
+
 ## What remains unproved
 
 The repository does not establish:
@@ -91,9 +102,9 @@ All ten conditions are now satisfied.
 
 Further conceptual expansion is not justified by the current evidence.
 
-The next phase is a **runtime integration experiment** against the pinned AIOS offboarding stack or an equivalent faithful executable environment. It must exercise:
+The next phase is a **production-like runtime integration experiment** beyond the current in-memory execution-engine gate. It must exercise:
 
-- real World Runtime capability enforcement;
+- World Runtime cutover through the deployed capability boundary;
 - provider execution outcomes;
 - independent HRIS / IAM read-back;
 - reconciliation after ambiguous effects;
@@ -102,4 +113,4 @@ The next phase is a **runtime integration experiment** against the pinned AIOS o
 - third-party assurance labor;
 - useful delivery under the same workload across the three regimes.
 
-Until that runtime experiment exists, claims remain at the reference-model + pinned-contract-compatibility level.
+Until that experiment exists, claims remain at the reference-model + pinned-contract-compatibility + finite AIOS execution-engine-gate level.
