@@ -1,5 +1,7 @@
 # Contributing
 
+> English | [简体中文](CONTRIBUTING.zh-CN.md)
+
 BAA-Protocol is a research prototype for conditional guarantees and bounded action admission. Contributions should preserve the distinction between modeled properties, experimental evidence, and claims about real deployments.
 
 ## Before proposing a change
