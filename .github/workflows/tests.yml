@@ -17,3 +17,5 @@ jobs:
           python-version: "3.11"
       - name: Run reference model tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: Run deterministic offboarding experiment
+        run: python scripts/run_offboarding_experiment.py
