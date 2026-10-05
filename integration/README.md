@@ -53,3 +53,32 @@ It does not yet establish:
 - empirical delegation leverage.
 
 Those require a production-like runtime experiment rather than more reference-model structure.
+
+
+## Level 3: pinned World Runtime enforcement prerequisite
+
+CI builds the pinned AIOS production World Runtime stack without contacting the configured external services and checks the covered offboarding capability surface.
+
+For the three BAA-covered capabilities it verifies:
+
+- `authorization_required == true`;
+- `resource_required == true`;
+- `version_required == true`;
+- exactly one registered writer and one registered verification capability;
+- writer and verifier use different credential domains;
+- an invocation missing authorization is rejected by World Runtime before provider execution.
+
+This establishes a local enforcement prerequisite for the pinned runtime version. The current BAA gate test and the World Runtime test are still separate paths; BAA has not yet been deployed through the actual World Runtime HTTP cutover boundary.
+
+## Converged local boundary
+
+The repository can now test, without external infrastructure:
+
+~~~text
+BAA reference semantics
+  -> AIOS contract projection
+  -> real AIOS offboarding execution engine
+  -> pinned World Runtime enforcement prerequisites
+~~~
+
+The next non-synthetic step requires an executable network boundary and external effect/read-back services. Further local abstraction would not strengthen the same empirical claim.
