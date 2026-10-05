@@ -48,25 +48,28 @@ class AIOSOffboardingCompatibilityTests(unittest.TestCase):
                 facts=self.facts.model_dump(mode="json"),
             ),
         )
-        self.governance_basis_id = uuid4()
+
+    def _external_obligations(self):
+        governance_basis_id = uuid4()
         store = SqlStore("sqlite+pysqlite:///:memory:")
         store.init_schema()
         authority = AuthorityRepository(store)
-        self.obligation_set = derive_offboarding_obligations(
+        obligation_set = derive_offboarding_obligations(
             self.case,
             self.evaluation,
             self.policy,
             authority,
-            governance_basis_id=self.governance_basis_id,
+            governance_basis_id=governance_basis_id,
             transfer_requirements=(),
         )
-        self.external = tuple(
+        external = tuple(
             item
-            for item in self.obligation_set.obligations
+            for item in obligation_set.obligations
             if item.fulfillment_kind is ObligationFulfillmentKind.EXTERNAL_EFFECT_VERIFIED
         )
+        return governance_basis_id, external
 
-    def test_aios_policy_effect_set_matches_baa_hard_domain(self):
+    def test_01_policy_effect_set_matches_baa_hard_domain(self):
         policy_pairs = {
             (item.target_system, item.operation)
             for item in self.evaluation.allowed_effects
@@ -76,8 +79,9 @@ class AIOSOffboardingCompatibilityTests(unittest.TestCase):
             set(OffboardingKernel.ALLOWED_EXTERNAL_OPERATIONS),
         )
 
-    def test_aios_derived_external_obligations_project_without_loss_of_scope(self):
-        projected = tuple(project_aios_external_obligation(item) for item in self.external)
+    def test_02_aios_derived_external_obligations_project_without_loss_of_scope(self):
+        governance_basis_id, external = self._external_obligations()
+        projected = tuple(project_aios_external_obligation(item) for item in external)
 
         self.assertEqual(len(projected), 3)
         self.assertEqual(
@@ -89,13 +93,14 @@ class AIOSOffboardingCompatibilityTests(unittest.TestCase):
             all(item.authority_epoch == self.case.authority_epoch for item in projected)
         )
         self.assertTrue(
-            all(item.governance_basis_id == str(self.governance_basis_id) for item in projected)
+            all(item.governance_basis_id == str(governance_basis_id) for item in projected)
         )
 
-    def test_aios_postconditions_retain_covered_reality_state(self):
+    def test_03_aios_postconditions_retain_covered_reality_state(self):
+        _, external = self._external_obligations()
         projected = {
             item.operation: project_aios_external_obligation(item)
-            for item in self.external
+            for item in external
         }
 
         self.assertEqual(
@@ -111,15 +116,17 @@ class AIOSOffboardingCompatibilityTests(unittest.TestCase):
             0,
         )
 
-    def test_runtime_capability_mapping_exists_in_pinned_aios(self):
-        projected = tuple(project_aios_external_obligation(item) for item in self.external)
+    def test_04_runtime_capability_mapping_exists_in_pinned_aios(self):
+        _, external = self._external_obligations()
+        projected = tuple(project_aios_external_obligation(item) for item in external)
         mapped = {runtime_capability_for(item) for item in projected}
 
         self.assertEqual(mapped, set(AIOS_RUNTIME_CAPABILITY_BY_EFFECT.values()))
         self.assertTrue(mapped <= set(WORLD_RUNTIME_EFFECT_CAPABILITIES))
 
-    def test_baa_kernel_can_execute_aios_derived_obligations(self):
-        projected = tuple(project_aios_external_obligation(item) for item in self.external)
+    def test_05_baa_kernel_can_execute_aios_derived_obligations(self):
+        _, external = self._external_obligations()
+        projected = tuple(project_aios_external_obligation(item) for item in external)
         kernel = OffboardingKernel(
             case_id=str(self.case.case_id),
             authority_epoch=self.case.authority_epoch,
