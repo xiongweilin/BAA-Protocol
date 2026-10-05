@@ -57,13 +57,24 @@ class BAAGatedAIOSProvider:
 
     def _kernel(self, effect) -> OffboardingKernel:
         key = (str(effect.case_id), int(effect.authority_epoch))
-        existing = self._kernels.get(key)
-        if existing is not None:
-            return existing
-
         case = self.store.get_case(effect.case_id)
         if case is None:
             raise ValueError("administrative case is unavailable")
+
+        existing = self._kernels.get(key)
+        if existing is not None:
+            # AIOS may advance its local lifecycle version while preserving the
+            # same authority epoch and immutable obligation set. Once every
+            # ambiguous external effect has been independently resolved, allow
+            # the BAA kernel to monotonically follow that controlled progress.
+            if (
+                case.version > existing.state_version
+                and existing.unresolved_count == 0
+                and case.status.value == "executing"
+            ):
+                existing.update_state_version(case.version)
+            return existing
+
         obligation_set = ObligationRepository(self.store).get_current(
             effect.case_id,
             effect.authority_epoch,
@@ -136,11 +147,11 @@ class BAAGatedAIOSProvider:
         now = int(self.now().timestamp())
         admission = kernel.admit(proposal, now=now)
         if admission.decision is not Decision.ADMIT:
-            # HOLD is represented as outcome_unknown rather than a definitive
-            # business failure, so AIOS enters reconciliation instead of
-            # treating uncertainty as a negative effect result.
+            # HOLD certifies that BAA did not release a capability, so no
+            # external attempt occurred. Keep it distinct from transport-
+            # ambiguous OUTCOME_UNKNOWN.
             status = (
-                ProviderExecutionStatus.OUTCOME_UNKNOWN
+                ProviderExecutionStatus.DEFERRED
                 if admission.decision is Decision.HOLD
                 else ProviderExecutionStatus.FAILED
             )
