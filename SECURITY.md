@@ -1,5 +1,7 @@
 # Security Policy
 
+> English | [简体中文](SECURITY.zh-CN.md)
+
 BAA-Protocol is an experimental reference protocol. It is not a production deployment or a certification of the systems it models.
 
 ## Reporting a vulnerability
