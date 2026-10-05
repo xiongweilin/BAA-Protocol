@@ -40,7 +40,23 @@ jobs:
           python-version: "3.12"
       - name: Install pinned AIOS
         run: python -m pip install -e ./aios
-      - name: Run AIOS compatibility tests
+      - name: Check AIOS policy surface
         env:
           PYTHONPATH: baa
-        run: python -m unittest discover -s baa/integration -p "test_*.py" -v
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_01 -v
+      - name: Check AIOS obligation projection
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_02 -v
+      - name: Check AIOS postconditions
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_03 -v
+      - name: Check AIOS runtime capabilities
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_04 -v
+      - name: Check BAA execution on AIOS obligations
+        env:
+          PYTHONPATH: baa
+        run: python -m unittest discover -s baa/integration -p "test_*.py" -k test_05 -v
