@@ -277,6 +277,24 @@ The accepted conclusion is therefore narrower than full cross-mechanism generali
 
 See [prospective-model-v6-result.md](prospective-model-v6-result.md).
 
+### Second-domain deterministic canary frontier
+
+The second task domain now has an executable deterministic frontier over progressive canary traffic exposure.
+
+Under the same strict separation of delivery, attention, risk, and assurance labor:
+
+| Regime | Delegable | Completed | Unsafe transitions |
+|---|---:|---:|---:|
+| self-check | 1/7 | 7/7 | 9 |
+| post-hoc audit | 1/7 | 7/7 | 9 |
+| BAA | **5/7** | 5/7 | **0** |
+
+BAA's four additional delegable fixtures cover evidence-maturation recovery, lost-ack/readback recovery, guardrail-triggered rollback, and an out-of-scope candidate probe. The two negative controls remain non-delegable: terminal insufficient evidence and unavailable rollback.
+
+This is deterministic mechanism evidence only. It establishes neither cross-domain real-model leverage nor production canary safety.
+
+See [canary-delegation-frontier-baseline.md](canary-delegation-frontier-baseline.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -342,6 +360,7 @@ The reference/network/product-composition phase is converged because:
 27. v5 produced the first qualified finite real-model delegation-frontier expansion: C2 self-check/audit 9/12 versus BAA 12/12.
 28. v6 froze a new 24-episode workload across six preregistered strata and accepted the first fully qualified run without resampling.
 29. v6 reproduced a positive aggregate C2 frontier expansion (14/24 direct versus 20/24 BAA) while failing the stronger preregistered evidence-refresh cross-mechanism generalization criterion.
+30. a second task domain, canary release promotion, now has AIOS contract alignment, unknown-effect reconciliation checks, and a deterministic strict frontier of 1/7 direct versus 5/7 BAA; this remains fixture evidence until a preregistered real-model comparison is run.
 
 ## Next phase boundary
 
@@ -366,4 +385,4 @@ The next core falsifiable questions are:
 
 and
 
-> Does the same architectural effect appear in a second task domain or materially different reality-facing interface?
+> Does the same architectural effect appear in the canary-release domain under a preregistered real-model comparison, rather than only in deterministic fixtures?
