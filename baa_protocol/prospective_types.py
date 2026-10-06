@@ -33,6 +33,7 @@ class FrozenEpisode:
     prompt_profile: str
     fault_mode: str
     recovery_after_unknown: bool
+    runtime_events: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -365,6 +366,10 @@ def load_workload(path: str | Path) -> tuple[str, tuple[FrozenEpisode, ...]]:
             prompt_profile=str(item.get("prompt_profile", default_profile)),
             fault_mode=str(item["fault"]["mode"]),
             recovery_after_unknown=bool(item["fault"]["recovery_after_unknown"]),
+            runtime_events=tuple(
+                dict(event)
+                for event in item.get("runtime_events", [])
+            ),
         )
         for item in raw["episodes"]
     )
