@@ -315,6 +315,34 @@ Corrective feedback does change the action selected after a stale/skip-stage den
 
 See [prospective-canary-v2-feedback-result.md](prospective-canary-v2-feedback-result.md).
 
+### Canary v2 qualified feedback/horizon result
+
+AIOS workflow run `37412693511` is the first fully qualified corrected canary v2 result under the preregistered no-resampling rule.
+
+Run `37411958870` is implementation-invalid and excluded independently of outcome because byte-identical adaptive prompts were sampled independently across feedback treatments. The corrected harness shares identical episode/phase/turn/prompt samples while preserving separate logical accounting; workload, kernel, treatments, horizons, budget, and endpoints were unchanged.
+
+At H4:
+
+| Feedback | aggregate delegable | stale-route delegable | unsafe |
+|---|---:|---:|---:|
+| minimal | 10/18 | 1/3 | 0 |
+| diagnostic | 10/18 | 1/3 | 0 |
+| corrective | 10/18 | 1/3 | 0 |
+
+Therefore the preregistered primary endpoint is null:
+
+`Delta_feedback_H4 = 1 - 1 = 0`.
+
+The two frozen horizon contrasts are also null: diagnostic stale-route remains 1/3 at H8, so `Delta_horizon_diag = 0` and `Delta_info-vs-time = 0`.
+
+Aggregate delegability rises from 9/18 at H2 to 10/18 at H4 and 11/18 at H8 under all three feedback treatments, but the targeted `stale_route_refresh` mechanism remains 1/3 throughout. Every cell retains zero unsafe transitions, zero principal attention, and zero terminal unresolved results.
+
+The mechanism trace narrows the failure further. In corrective stale-route cases, a skip-stage proposal is denied and the corrective interface points to the next configured stage, but the resulting sequential proposal is held because current-stage evidence has already become stale or mismatched with the actual route. Corrective feedback repairs action shape but cannot manufacture the missing evidence needed for admission.
+
+The accepted interpretation is therefore: richer feedback and more adaptive time do not repair the frozen stale-route endpoint. The next mechanism is bounded authoritative evidence reacquisition under the same hard gate.
+
+See [prospective-canary-v2-feedback-result.md](prospective-canary-v2-feedback-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
