@@ -10,6 +10,25 @@ This result applies the [v1 cost-frontier protocol](delegation-cost-frontier-v1-
 
 It is descriptive evidence about the observed accounting surface, not a new prospective causal experiment.
 
+## Reproducible analysis evidence
+
+The first qualified derived analysis run is:
+
+- AIOS workflow run: `37476354998`
+- workflow head: `b49b8080645f58580e2f1b0244ed68e5acdaae9d`
+- pinned BAA analyzer: `667d41bb94c34a77aedbbb96a78ab49254ffd612`
+- artifact: `baa-delegation-cost-frontier-v1-37476354998-1`
+- artifact id: `11418149915`
+- artifact digest: `sha256:e59adcb17a0290dc8327a7ad5c17e4bb3901450eea9edb5911b9a147b9e23439`
+- derived `result.json` SHA-256: `846c2fc71ed7585e5930fd24e993832f932c029858ebfe668a02501b1c1fd944`
+
+The derived result records the upstream accepted result hashes:
+
+- offboarding v6 `result.json`: `sha256:6029d70a7ba4747c4249a80e10468e0310234edd44aee90bcad1f1d038603a5c`
+- canary v5 `result.json`: `sha256:60dee3b2a8118c121f1ac745a9d09d0417bd33dfc0d2ce63c24b8102586114bb`
+
+The workflow is evidence-reduction only: it downloads historical artifacts, runs the frozen analyzer, checks the C2/H8 thresholds, and uploads the derived accounting result.
+
 ## Architecture panel: strict risk and attention
 
 Fix principal attention = 0, unsafe transitions = 0, terminal unresolved = 0, useful delivery minimum = 3, and audit labor ceiling = 5. Vary only the per-episode automatic assurance-intervention ceiling.
