@@ -146,6 +146,29 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertEqual(rows[Regime.SELF_CHECK.value]["metrics"]["unsafe_transitions"], 1)
 
 
+    def test_physical_sampling_counts_shared_initial_once(self):
+        _, episodes = load_workload(WORKLOAD)
+        result = run_prospective_study(
+            FakeModel(),
+            episodes[:1],
+            capabilities=(
+                AdaptiveResource(level=0, extra_turns=0),
+                AdaptiveResource(level=1, extra_turns=1),
+            ),
+        )
+        self.assertGreaterEqual(result["physical_sampling"]["calls"], 1)
+        self.assertEqual(
+            result["shared_initial_model_calls"][0]["phase"],
+            "initial-shared",
+        )
+        # One shared initial call must not be physically resampled at C1.
+        initial_physical = [
+            call
+            for call in result["shared_initial_model_calls"]
+            if call["phase"] == "initial-shared"
+        ]
+        self.assertEqual(len(initial_physical), 1)
+
     def test_initial_sample_is_shared_across_capability_levels(self):
         _, episodes = load_workload(WORKLOAD)
         model = FakeModel()
