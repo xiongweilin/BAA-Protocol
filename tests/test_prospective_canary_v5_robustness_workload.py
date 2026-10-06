@@ -8,7 +8,7 @@ from baa_protocol.prospective_canary_study import load_canary_workload
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATOR = ROOT / "scripts" / "generate_prospective_canary_v5_robustness.py"
-EXPECTED_SHA256 = "9e134d07d257a3affa816b57f6fc5d0d94bac88190df059ccaa6c5c97f4318b7"
+EXPECTED_SHA256 = "e1c5802edcbc9c1f33d5a72c18a102d6af406ca7e25962a71a2fb62b2b232bd9"
 EXPECTED_GROUPS = {
     "recoverable_lag_early": 4,
     "recoverable_lag_mid": 4,
@@ -66,24 +66,26 @@ class CanaryV5RobustnessWorkloadTests(unittest.TestCase):
             if not ep["study_group"].startswith("recoverable_lag_"):
                 continue
             events = ep["runtime_events"]
-            self.assertEqual(len(events), 2)
-            self.assertEqual(events[0]["type"], "route_evidence_refresh")
-            self.assertTrue(events[0]["follow_hidden_route"])
-            self.assertIn("0", events[0]["stage_evidence_by_stage"])
-            self.assertEqual(events[1]["type"], "telemetry_update")
-            self.assertEqual(events[1]["stage_evidence"]["stage_index"], 1)
+            self.assertEqual(len(events), 3)
+            self.assertEqual(events[0]["type"], "route_readback")
+            self.assertEqual(events[1]["type"], "observer_evidence_available")
+            self.assertEqual(events[1]["stage_evidence"]["stage_index"], 0)
+            self.assertEqual(events[2]["type"], "observer_evidence_available")
+            self.assertEqual(events[2]["stage_evidence"]["stage_index"], 1)
+            self.assertEqual(events[1]["after_turn"], events[0]["after_turn"])
             self.assertGreaterEqual(
+                events[2]["after_turn"],
                 events[1]["after_turn"],
-                events[0]["after_turn"],
             )
 
     def test_missing_observer_control_never_exposes_current_stage_fixture(self):
         for ep in self.raw["episodes"]:
             if ep["study_group"] != "missing_observer_control":
                 continue
-            route_event, telemetry_event = ep["runtime_events"]
-            self.assertIn("0", route_event["stage_evidence_by_stage"])
-            self.assertEqual(telemetry_event["stage_evidence"]["stage_index"], 2)
+            route_event, observer_event = ep["runtime_events"]
+            self.assertEqual(route_event["type"], "route_readback")
+            self.assertEqual(observer_event["type"], "observer_evidence_available")
+            self.assertEqual(observer_event["stage_evidence"]["stage_index"], 2)
 
     def test_clean_and_guardrail_controls_are_mechanically_distinct(self):
         for ep in self.raw["episodes"]:
