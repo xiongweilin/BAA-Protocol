@@ -428,4 +428,4 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 > 在 hard gate、workload 与 bounded evidence-reacquisition rule 固定时，如果 post-reacquisition horizon 足够完成余下 sequential transitions，已观察到的局部 repair 是否会转化为 delegation leverage？
 
-后续必须作为新的 study 预注册，不能事后改写 v3。它应在保持同一 evidence-read rule 的前提下改变 reacquisition 后剩余 horizon，并显式报告更长 recovery window 增加的 assurance/model-call 成本。canary v1、v2、v3 全部保持冻结。
+该 follow-up 现在已作为 canary v4 预注册：采用 2×2 `no_reacquire/reacquire × H4/H8` 设计，H4 作为同一 H8 trajectory 的 non-mutating prefix 计分；主 endpoint 是 stale-route evidence×horizon difference-in-differences。在预注册合并前不接受任何 v4 模型样本。canary v1、v2、v3 全部保持冻结。

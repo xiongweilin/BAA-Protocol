@@ -444,4 +444,4 @@ The next core falsifiable question is therefore an interaction rather than anoth
 
 > With the hard gate, workload, and bounded evidence-reacquisition rule fixed, does enough post-reacquisition horizon to finish the remaining sequential transitions convert the observed local repair into delegation leverage?
 
-A follow-up must be preregistered as a new study rather than treated as a reinterpretation of v3. It should vary the remaining post-reacquisition horizon while preserving the same evidence-read rule, and it should report the incremental assurance/model-call cost of the longer recovery window. Canary v1, v2, and v3 remain frozen.
+That follow-up is now preregistered as canary v4: a 2×2 `no_reacquire/reacquire × H4/H8` design with H4 scored as a non-mutating prefix of the same H8 trajectory. Its primary endpoint is the stale-route evidence×horizon difference-in-differences. No v4 model sample is accepted before the preregistration merges. Canary v1, v2, and v3 remain frozen.

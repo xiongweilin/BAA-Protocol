@@ -110,6 +110,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-canary-v2-feedback-result.md](experiments/prospective-canary-v2-feedback-result.md) — qualified null feedback/horizon result: stale-route remained 1/3 at H4/H8 with zero unsafe transitions.
 - [experiments/prospective-canary-v3-evidence-protocol.md](experiments/prospective-canary-v3-evidence-protocol.md) — preregistered H4 evidence-reacquisition mechanism study; retention-only draft was superseded before any v3 sampling.
 - [experiments/prospective-canary-v3-evidence-result.md](experiments/prospective-canary-v3-evidence-result.md) — qualified H4 null frontier result with one causal process-level repair from stale-evidence hold to a safely verified sequential transition.
+- [experiments/prospective-canary-v4-evidence-horizon-protocol.md](experiments/prospective-canary-v4-evidence-horizon-protocol.md) — preregistered 2×2 evidence-recovery × H4/H8 interaction study; no v4 model sample is accepted before this protocol merges.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
