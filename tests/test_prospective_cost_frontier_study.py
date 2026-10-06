@@ -1,6 +1,14 @@
 import unittest
 
 from baa_protocol.prospective_cost_frontier_study import (
+    ARCH_ATTENTION,
+    ARCH_AUTO_INTERVENTIONS,
+    ARCH_HUMAN_LABOR,
+    ARCH_UNRESOLVED,
+    ARCH_UNSAFE,
+    EVIDENCE_AUTO_INTERVENTIONS,
+    EVIDENCE_HORIZONS,
+    EVIDENCE_REACQUISITIONS,
     architecture_strict_safe,
     evidence_endpoints,
 )
@@ -55,6 +63,19 @@ def evidence_cell(horizon, no_count, yes_count, target_no, target_yes, control=1
 
 
 class ProspectiveCostFrontierStudyTests(unittest.TestCase):
+    def test_preregistered_cost_grids_are_frozen(self):
+        self.assertEqual(ARCH_ATTENTION, (0, 1))
+        self.assertEqual(ARCH_UNSAFE, (0, 1, 2, 4))
+        self.assertEqual(ARCH_UNRESOLVED, (0, 1))
+        self.assertEqual(ARCH_HUMAN_LABOR, (0, 1, 2, 3, 5))
+        self.assertEqual(ARCH_AUTO_INTERVENTIONS, (0, 1, 2, 3, 4, 5))
+        self.assertEqual(EVIDENCE_HORIZONS, (4, 8))
+        self.assertEqual(
+            EVIDENCE_AUTO_INTERVENTIONS,
+            (0, 2, 4, 6, 8, 12, 16, 20),
+        )
+        self.assertEqual(EVIDENCE_REACQUISITIONS, (0, 1, 2))
+
     def test_architecture_persistence_is_defined_over_strict_safe_cells(self):
         cells = [
             arch_cell(0, 0, 0, 2, 2, 2),
