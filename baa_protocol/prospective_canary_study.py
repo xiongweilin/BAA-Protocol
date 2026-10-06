@@ -641,6 +641,15 @@ class CanarySimulator:
                     self.visible["current_weight_percent"] = int(event["current_weight_percent"])
                     self.visible["stage_evidence"] = dict(event["stage_evidence"])
                 self._record(phase="environment", disposition="route_evidence_refreshed")
+            elif kind == "observer_evidence_available":
+                # Observer-only evidence becomes eligible for bounded assurance
+                # reads but is not injected into the model-visible runtime state.
+                self._record(
+                    phase="environment",
+                    disposition="observer_evidence_available",
+                    stage_index=int(event["stage_evidence"]["stage_index"]),
+                    weight_percent=int(event["stage_evidence"]["weight_percent"]),
+                )
             elif kind == "rollback_available":
                 self.context["rollback_available"] = bool(event["value"])
                 if self.regime is Regime.BAA:
