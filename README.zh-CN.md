@@ -99,6 +99,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-model-v2-result.zh-CN.md](experiments/prospective-model-v2-result.zh-CN.md) —— v2 qualification failure。
 - [experiments/prospective-model-v3-result.zh-CN.md](experiments/prospective-model-v3-result.zh-CN.md) —— v3 structured-output qualification failure 与 forced-function capability probe。
 - [experiments/prospective-model-v4-result.zh-CN.md](experiments/prospective-model-v4-result.zh-CN.md) —— 通过资格检查的 forced-function v4 比较。
+- [experiments/prospective-model-v5-protocol.zh-CN.md](experiments/prospective-model-v5-protocol.zh-CN.md) —— 预注册的 recovery/liveness follow-up。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。

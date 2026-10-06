@@ -99,6 +99,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v2-result.md](experiments/prospective-model-v2-result.md) — v2 qualification failure.
 - [experiments/prospective-model-v3-result.md](experiments/prospective-model-v3-result.md) — v3 structured-output qualification failure and forced-function capability probe.
 - [experiments/prospective-model-v4-result.md](experiments/prospective-model-v4-result.md) — qualified forced-function v4 comparison.
+- [experiments/prospective-model-v5-protocol.md](experiments/prospective-model-v5-protocol.md) — preregistered recovery/liveness follow-up.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
