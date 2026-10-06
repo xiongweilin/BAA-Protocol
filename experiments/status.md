@@ -301,6 +301,34 @@ The accepted interpretation is therefore that second-domain bounded admission pr
 
 See [prospective-canary-v1-result.md](prospective-canary-v1-result.md).
 
+### Canary v2 qualified feedback/horizon result
+
+AIOS workflow run `37412693511` is the first fully qualified corrected canary v2 result under the preregistered no-resampling rule.
+
+Run `37411958870` is implementation-invalid and excluded independently of outcome because byte-identical adaptive prompts were sampled independently across feedback treatments. The corrected harness shares identical episode/phase/turn/prompt samples while preserving separate logical accounting; workload, kernel, treatments, horizons, budget, and endpoints were unchanged.
+
+At H4:
+
+| Feedback | aggregate delegable | stale-route delegable | unsafe |
+|---|---:|---:|---:|
+| minimal | 10/18 | 1/3 | 0 |
+| diagnostic | 10/18 | 1/3 | 0 |
+| corrective | 10/18 | 1/3 | 0 |
+
+Therefore the preregistered primary endpoint is null:
+
+`Delta_feedback_H4 = 1 - 1 = 0`.
+
+The two frozen horizon contrasts are also null: diagnostic stale-route remains 1/3 at H8, so `Delta_horizon_diag = 0` and `Delta_info-vs-time = 0`.
+
+Aggregate delegability rises from 9/18 at H2 to 10/18 at H4 and 11/18 at H8 under all three feedback treatments, but the targeted `stale_route_refresh` mechanism remains 1/3 throughout. Every cell retains zero unsafe transitions, zero principal attention, and zero terminal unresolved results.
+
+The mechanism trace narrows the failure further. In corrective stale-route cases, a skip-stage proposal is denied and the corrective interface points to the next configured stage, but the resulting sequential proposal is held because current-stage evidence has already become stale or mismatched with the actual route. Corrective feedback repairs action shape but cannot manufacture the missing evidence needed for admission.
+
+The accepted interpretation is therefore: richer feedback and more adaptive time do not repair the frozen stale-route endpoint. The next mechanism is bounded authoritative evidence reacquisition under the same hard gate.
+
+See [prospective-canary-v2-feedback-result.md](prospective-canary-v2-feedback-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -323,13 +351,13 @@ The repository does not establish:
 
 Positive acceptance results remain falsification evidence, not open-world probability estimates. The prospective real-model comparison also retains its null result rather than treating absence of advantage as a failed run.
 
-The evidence supports four statements that must remain separate:
+The evidence supports five statements that must remain separate:
 
 - structural/reference: modeled forbidden transitions are mechanically excluded under stated assumptions;
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
 - composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
-- prospective comparison: v1 and v4 retained frontier null results; v4 showed finite safety-trajectory separation; v5 then showed a qualified C2 frontier expansion when preregistered recovery events made later safe completion possible.
+- prospective comparison: v1 and v4 retained frontier null results; v5 showed a qualified C2 frontier expansion under preregistered recovery events; v6 prospectively reproduced an aggregate offboarding expansion without evidence-refresh cross-mechanism generalization; canary v1 produced a negative second-domain frontier result; canary v2 found no stale-route gain from richer mechanical feedback or H8 horizon.
 
 None implies that a production tenant is safe.
 
@@ -367,6 +395,7 @@ The reference/network/product-composition phase is converged because:
 28. v6 froze a new 24-episode workload across six preregistered strata and accepted the first fully qualified run without resampling.
 29. v6 reproduced a positive aggregate C2 frontier expansion (14/24 direct versus 20/24 BAA) while failing the stronger preregistered evidence-refresh cross-mechanism generalization criterion.
 30. canary v1 moved to a second task domain and accepted the first qualified run without resampling; its C2 endpoint was negative (11/18 direct versus 10/18 BAA) while BAA still reduced unsafe transitions from 2 to 0.
+31. canary v2 accepted the first fully qualified corrected shared-sampling run; its feedback endpoint, horizon contrast, and info-vs-time contrast were all 0, localizing the remaining stale-route failure to stale/mismatched current-route evidence.
 
 ## Next phase boundary
 
@@ -385,12 +414,10 @@ A new study should preserve:
 
 It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-The second-domain canary result now falsifies the simple expectation that a safety advantage will automatically translate into delegation leverage at the same horizon. The next core falsifiable questions are therefore:
+Canary v1 falsifies the simple expectation that a safety advantage automatically becomes delegation leverage. Canary v2 further falsifies the narrower expectation that richer denial information or extending the adaptive horizon from H4 to H8 is sufficient to recover the stale-route liveness failure.
 
-> How does the feasible attention-risk-delivery-assurance-cost frontier move as assurance feedback quality, adaptive horizon, and assurance labor ceiling vary?
+v2 shows that corrective feedback can repair the action shape while the next transition still fails because current-stage evidence is stale or mismatched. The next core falsifiable question is therefore:
 
-and
+> With the hard gate, workload, and action policy fixed, can the assurance layer retain or reacquire authoritative evidence keyed to the current independently observed route so that an already-corrected sequential transition can safely complete?
 
-> Can a bounded protocol expose enough structured corrective information for the model to reformulate a denied action into a safe sequential continuation without weakening the hard invariant?
-
-Any changed canary feedback protocol, horizon, or kernel is a new preregistered study version; canary v1 remains frozen.
+The next study should not add more feedback prose or simply extend the horizon again. It should isolate evidence availability / temporal alignment, for example `latest_only` versus `versioned_current_stage`. Any evidence-retention or evidence-reacquisition mechanism is a new preregistered study version; canary v1 and v2 remain frozen.
