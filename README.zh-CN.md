@@ -105,6 +105,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-model-v6-protocol.zh-CN.md](experiments/prospective-model-v6-protocol.zh-CN.md) —— 预注册的 24-episode 前瞻泛化研究。
 - [experiments/prospective-model-v6-result.zh-CN.md](experiments/prospective-model-v6-result.zh-CN.md) —— 通过资格检查的 C2 aggregate frontier +6；预注册 evidence-refresh 跨机制泛化标准未满足。
 - [experiments/prospective-canary-v1-protocol.zh-CN.md](experiments/prospective-canary-v1-protocol.zh-CN.md) —— 第二 BAA 任务域的首个真实模型研究预注册。
+- [experiments/prospective-canary-v1-result.zh-CN.md](experiments/prospective-canary-v1-result.zh-CN.md) —— 通过资格检查的第二域结果：C2 Delta = -1，BAA unsafe=0，未出现跨域 frontier expansion。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
@@ -139,8 +140,9 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 - AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 出现 adaptive unsafe transition，而 BAA 保持 0 unsafe；这是 frontier 零结果，同时包含有限 safety-trajectory 正结果；
 - AIOS workflow run <code>37404551022</code>：通过资格检查的 recovery-focused v5 比较。C0/C1 三种 regime 都是 9/12；C2 self-check/audit 仍为 9/12，而 BAA 达到 **12/12 delegable**，三者 aggregate useful delivery 都为 36，BAA unsafe transition 为 0，direct/audit 为 5。
 - AIOS workflow run <code>37406741476</code>：首个完整通过资格检查的 v6 结果。冻结 24-episode workload 的 C2 中 self-check/audit 为 14/24，BAA 为 **20/24 delegable**，预注册 aggregate endpoint 为 Delta_C2 = +6。增益局限于 time_recovery（+4）与 readback_recovery（+2）；subject/authority evidence-refresh strata 没有 BAA-only gain，因此更强的预注册 cross-mechanism 泛化标准未满足。
+- AIOS workflow run <code>37410377327</code>：首个完整通过资格检查的第二任务域 canary 结果。C2 self-check/audit 为 **11/18 delegable**，BAA 为 10/18，预注册 endpoint 为 Delta_C2 = -1。BAA unsafe transition 为 0，而两种 direct regime 各为 2；但 BAA 在 stale_route_refresh 中没有恢复足够 liveness，因此没有建立跨域 delegation-frontier expansion。
 
-这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。两者都不能用于估计 production frequency。
+这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 offboarding prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。canary v1 随后给出首个通过资格检查的第二域反例：BAA 改善 safety trace，但由于 safe blocking 没有稳定恢复 liveness，C2 frontier endpoint 为负。这些结果都不能用于估计 production frequency。
 
 详见 [experiments/status.zh-CN.md](experiments/status.zh-CN.md)。
 
