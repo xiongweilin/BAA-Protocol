@@ -491,3 +491,18 @@ canary v5 现在已经完成第一个 robustness 轴 follow-up。它在前瞻生
 v5 的长时运行还暴露了未来实验的可观测性要求：运行中应报告 completed physical model call/retry 进度，但不能暴露 prompt，也不能改变 model-visible state。这是基础设施要求，不构成重新解释或重跑 v5 的理由。
 
 canary v1–v5 全部保持冻结。
+
+### Delegation cost-frontier v1 回顾性基线
+
+第一步成本前沿只对已接受的 offboarding v6 与 canary v5 episode trace 使用显式 attention、risk、人工 assurance、自动 intervention 与 evidence-reacquisition ceiling 重新判定，不重采样模型。
+
+已观察成本面显示：
+
+- offboarding v6 C2 中，在同样严格 attention/risk 条件下，BAA 的 automatic-intervention ceiling 为 0、1、2+ 时分别为 13/24、16/24、20/24 delegable；self-check/audit 为 14/24；
+- audit 至少需要每 episode 3 个 human assurance-labor unit，才能保留其 14/24 C2 delegable set；
+- 放宽 unsafe-transition ceiling 会使 direct/audit 从 14/24 增至 19/24，说明 risk 不能被压成 delivery；
+- canary v5 H8 中，reacquire 在 automatic-intervention ceiling 为 0 时仍为 3/24，在 5 时为 5/24，在 11 时为 6/24；完整 6/24 还要求 evidence-reacquisition ceiling=2。
+
+这些 threshold 是从已接受 trace 上回顾性读出的，不是预注册因果 replication。AIOS workflow run `37476354998` 已从两个接受的源 artifact 可重复生成该成本面，并通过冻结的 C2/H8 accounting 检查；派生 artifact id 为 `11418149915`。下一次成本研究必须在生成新 trace 前冻结预算网格。
+
+长实验 progress telemetry 也成为显式基础设施不变量：未来模型研究 runner 输出结构化 call start/completion 与周期 heartbeat，但不改变 prompt、retry rule、model-visible state 或 qualification semantics。

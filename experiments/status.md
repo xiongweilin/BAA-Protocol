@@ -519,6 +519,6 @@ The observed surface makes the cost condition explicit:
 - relaxing the unsafe-transition ceiling increases direct/audit feasibility from 14/24 to 19/24, illustrating why risk cannot be collapsed into delivery;
 - at canary v5 H8, the reacquire treatment remains 3/24 with zero automatic-intervention allowance, reaches 5/24 at five interventions, and 6/24 at eleven; the full 6/24 also requires a two-read evidence-reacquisition ceiling.
 
-These are retrospective thresholds read from accepted traces, not a preregistered causal replication. The next cost study must freeze its grid before generating new traces.
+These are retrospective thresholds read from accepted traces, not a preregistered causal replication. AIOS workflow run `37476354998` reproducibly regenerated the cost surface from the two accepted source artifacts and passed the frozen C2/H8 accounting checks; derived artifact id `11418149915`. The next cost study must freeze its grid before generating new traces.
 
 Long-study progress telemetry is also now an explicit infrastructure invariant: future model-study runners emit structured call start/completion and periodic heartbeat events without changing prompts, retry rules, model-visible state, or qualification semantics.
