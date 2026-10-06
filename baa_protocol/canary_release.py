@@ -122,6 +122,8 @@ class CanaryReleaseKernel:
         guardrails: CanaryGuardrails,
         state_version: int = 1,
         rollback_available: bool = True,
+        current_stage_index: int = 0,
+        current_weight_percent: int = 0,
     ) -> None:
         if not stages:
             raise ValueError("stages are required")
@@ -136,8 +138,14 @@ class CanaryReleaseKernel:
         self.guardrails = guardrails
         self.state_version = state_version
         self.rollback_available = rollback_available
-        self.current_stage_index = 0
-        self.current_weight_percent = 0
+        if not 0 <= current_stage_index < len(stages):
+            raise ValueError("current_stage_index is outside configured stages")
+        if current_weight_percent != 0 and (
+            stages[current_stage_index].weight_percent != current_weight_percent
+        ):
+            raise ValueError("current weight must match the current configured stage")
+        self.current_stage_index = current_stage_index
+        self.current_weight_percent = current_weight_percent
         self.route_knowledge = RouteKnowledge.VERIFIED
         self._capabilities: dict[str, TrafficCapability] = {}
 

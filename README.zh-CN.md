@@ -104,6 +104,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-model-v5-result.zh-CN.md](experiments/prospective-model-v5-result.zh-CN.md) —— 在预注册 recovery event 下通过资格检查的有限 delegation-frontier expansion。
 - [experiments/prospective-model-v6-protocol.zh-CN.md](experiments/prospective-model-v6-protocol.zh-CN.md) —— 预注册的 24-episode 前瞻泛化研究。
 - [experiments/prospective-model-v6-result.zh-CN.md](experiments/prospective-model-v6-result.zh-CN.md) —— 通过资格检查的 C2 aggregate frontier +6；预注册 evidence-refresh 跨机制泛化标准未满足。
+- [experiments/prospective-canary-v1-protocol.zh-CN.md](experiments/prospective-canary-v1-protocol.zh-CN.md) —— 第二 BAA 任务域的首个真实模型研究预注册。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
