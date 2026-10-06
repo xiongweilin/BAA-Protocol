@@ -151,6 +151,7 @@ The run records:
 - model call errors;
 - latency;
 - token usage when supplied by the gateway;
+- actual `physical_sampling` call/token totals, kept separate from each regime's counterfactual `logical_model_calls`;
 - episode execution history;
 - completion;
 - useful delivery;
