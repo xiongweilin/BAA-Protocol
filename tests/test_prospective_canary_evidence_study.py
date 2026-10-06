@@ -117,7 +117,9 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
                 }
 
                 correction = value.get("assurance_feedback") if marker == "Episode state:\n" else None
-                if correction and correction.get("safe_next_action", {}).get("kind") == "apply":
+                if phase == "initial-shared":
+                    action = {"kind": "wait"}
+                elif correction and correction.get("safe_next_action", {}).get("kind") == "apply":
                     next_action = correction["safe_next_action"]
                     action = {
                         "kind": "apply",
