@@ -10,6 +10,7 @@ from pathlib import Path
 from baa_protocol.delegation_frontier import DelegationBudget
 from baa_protocol.prospective_canary_evidence_study import run_canary_evidence_study
 from baa_protocol.prospective_canary_study import canary_model_client, load_canary_workload
+from baa_protocol.prospective_transport import ReplaySafeTransportClient
 
 
 def parse_args() -> argparse.Namespace:
@@ -28,11 +29,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     source_version, episodes = load_canary_workload(args.workload)
-    client = canary_model_client(
+    raw_client = canary_model_client(
         base_url=args.gateway_base,
         model_id=args.model,
         timeout_seconds=args.timeout_seconds,
     )
+    client = ReplaySafeTransportClient(raw_client, max_retries=1)
     result = run_canary_evidence_study(
         client,
         episodes,
@@ -44,6 +46,14 @@ def main() -> None:
         ),
     )
     result["source_workload_version"] = source_version
+    result["physical_sampling"].update(
+        {
+            "http_attempts": client.http_attempts,
+            "transport_failures_seen": client.transport_failures_seen,
+            "transport_retries": client.transport_retries,
+            "recovered_transport_calls": client.recovered_transport_calls,
+        }
+    )
     path = Path(args.output)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
