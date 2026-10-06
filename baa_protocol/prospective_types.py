@@ -95,6 +95,61 @@ class ResponsesGatewayClient:
         self.timeout_seconds = timeout_seconds
 
     @staticmethod
+    def _decode_response(raw: bytes, content_type: str) -> dict[str, Any]:
+        """Decode either a normal Responses JSON body or SSE fallback."""
+        stripped = raw.lstrip()
+        is_sse = (
+            "text/event-stream" in (content_type or "").lower()
+            or stripped.startswith(b"data:")
+            or stripped.startswith(b"event:")
+        )
+        if not is_sse:
+            value = json.loads(raw)
+            if not isinstance(value, dict):
+                raise ValueError("Responses HTTP body must be a JSON object")
+            return value
+
+        completed: dict[str, Any] | None = None
+        output_items: dict[int, dict[str, Any]] = {}
+        text_deltas: list[str] = []
+        for raw_line in raw.splitlines():
+            line = raw_line.strip()
+            if not line.startswith(b"data:"):
+                continue
+            payload = line[5:].strip()
+            if not payload or payload == b"[DONE]":
+                continue
+            try:
+                event = json.loads(payload)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(event, dict):
+                continue
+            event_type = event.get("type")
+            if (
+                event_type in {"response.output_item.added", "response.output_item.done"}
+                and isinstance(event.get("item"), dict)
+                and isinstance(event.get("output_index"), int)
+            ):
+                output_items[event["output_index"]] = event["item"]
+            elif event_type == "response.output_text.delta":
+                delta = event.get("delta")
+                if isinstance(delta, str):
+                    text_deltas.append(delta)
+            elif event_type == "response.completed" and isinstance(event.get("response"), dict):
+                completed = dict(event["response"])
+
+        if completed is not None:
+            if not completed.get("output") and output_items:
+                completed["output"] = [
+                    item for _, item in sorted(output_items.items())
+                ]
+            return completed
+        if text_deltas:
+            return {"output_text": "".join(text_deltas), "usage": {}}
+        raise ValueError("Responses SSE body contained no completed response")
+
+    @staticmethod
     def _extract_text(body: dict[str, Any]) -> str:
         direct = body.get("output_text")
         if isinstance(direct, str) and direct.strip():
@@ -138,7 +193,11 @@ class ResponsesGatewayClient:
         )
         started = time.perf_counter()
         with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
-            body = json.loads(response.read())
+            raw = response.read()
+            body = self._decode_response(
+                raw,
+                response.headers.get("Content-Type", ""),
+            )
         usage = body.get("usage")
         return (
             self._extract_text(body),
