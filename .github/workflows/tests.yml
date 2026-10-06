@@ -29,6 +29,10 @@ jobs:
         env:
           PYTHONPATH: .
         run: python scripts/run_delegation_study.py
+      - name: Run deterministic canary delegation frontier
+        env:
+          PYTHONPATH: .
+        run: python scripts/run_canary_delegation_frontier.py
 
   aios-compatibility:
     runs-on: ubuntu-latest
