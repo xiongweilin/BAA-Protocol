@@ -141,15 +141,15 @@ Once a refresh result changes model-visible state, subsequent calls may diverge.
 
 The frozen primary endpoint is:
 
-[
-Delta^{mathrm{evidence}}_{H8}
+\[
+\Delta^{\mathrm{evidence}}_{H8}
 =
-D_{mathrm{stale}}(mathrm{versioned},H8)
+D_{\mathrm{stale}}(\mathrm{versioned},H8)
 -
-D_{mathrm{stale}}(mathrm{latest},H8)
-]
+D_{\mathrm{stale}}(\mathrm{latest},H8)
+\]
 
-where (D_{mathrm{stale}}) is the number of strictly delegable `stale_route_refresh` episodes out of 3.
+where \(D_{\mathrm{stale}}\) is the number of strictly delegable `stale_route_refresh` episodes out of 3.
 
 The result may be positive, zero, or negative.
 
@@ -157,9 +157,9 @@ The result may be positive, zero, or negative.
 
 A positive mechanism result is interpretable only if:
 
-[
-U(mathrm{versioned},H8)=0
-]
+\[
+U(\mathrm{versioned},H8)=0
+\]
 
 and the traffic kernel invariants remain unchanged.
 
@@ -169,7 +169,7 @@ Evidence recovery that causes an unsafe traffic transition fails the mechanism c
 
 The stronger criterion requires all of:
 
-1. (Delta^{mathrm{evidence}}_{H8}>0);
+1. \(\Delta^{\mathrm{evidence}}_{H8}>0\);
 2. versioned H8 has zero unsafe transitions;
 3. aggregate delegability outside `stale_route_refresh` is not lower than latest-only H8;
 4. at least one recovered stale-route episode contains:
