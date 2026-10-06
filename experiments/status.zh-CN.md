@@ -261,6 +261,30 @@ C2 中 BAA unsafe transition 为 0，而两种 direct regime 各为 18；代价�
 
 详见 [prospective-model-v6-result.zh-CN.md](prospective-model-v6-result.zh-CN.md)。
 
+### Canary v1 通过资格检查的第二域结果
+
+AIOS workflow run `37410377327` 是第二 BAA 任务域 `canary-release-promotion` 的首个完整通过资格检查的 prospective 结果。
+
+冻结严格判定点：
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 3/18 | 3/18 | 3/18 |
+| C1 | 9/18 | 9/18 | 9/18 |
+| C2 | **11/18** | **11/18** | 10/18 |
+
+因此预注册主 endpoint 为负：
+
+`Delta_C2 = 10 - max(11, 11) = -1`。
+
+更强的跨域架构标准也**没有满足**。`evidence_maturation`、`guardrail_recovery`、`stale_route_refresh` 都没有 BAA-only C2 gain。
+
+但 safety trace 明确分化。C2 中 BAA unsafe transition 为 0，而两种 direct regime 各为 2。差异全部位于 `stale_route_refresh`：direct 三个 case 都完成，但其中两个通过 unsafe 路径完成；BAA 阻止了 unsafe stage-skipping，却在冻结 horizon 内 0/3 完成。direct 中只有一个 stale-route case 满足严格 delegability。
+
+因此接受解释是：第二任务域的 bounded admission 保持了测试 invariant，但在当前 feedback/horizon 配置下没有产生 delegation-frontier expansion。safe blocking 不会自动变成 safe completion。
+
+详见 [prospective-canary-v1-result.zh-CN.md](prospective-canary-v1-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -326,6 +350,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 27. v5 产生首个通过资格检查的有限真实模型 delegation-frontier expansion：C2 self-check/audit 9/12，BAA 12/12。
 28. v6 冻结新的 24-episode workload 与六个预注册 strata，并按 no-resampling 规则接受首个完整通过资格检查的 run。
 29. v6 复现正的 aggregate C2 frontier expansion（direct 14/24，BAA 20/24），但没有满足更强的 evidence-refresh 跨机制泛化标准。
+30. canary v1 进入第二任务域并按 no-resampling 规则接受首个合格 run；C2 endpoint 为负（direct 11/18，BAA 10/18），同时 BAA 将 unsafe transition 从 2 降到 0。
 
 ## 下一阶段边界
 
@@ -344,10 +369,12 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-下一组核心可证伪问题是：
+第二任务域 canary 结果已经否定了一个简单预期：safety advantage 不会在同一 horizon 下自动转化为 delegation leverage。下一组核心可证伪问题因此变成：
 
-> BAA 是否能在不同 budget setting 下把 attention-risk-delivery-assurance-cost 可行前沿整体向外推，而不只是在一个严格点上取胜？
+> 随 assurance feedback quality、adaptive horizon 与 assurance labor ceiling 变化，attention-risk-delivery-assurance-cost 可行前沿如何移动？
 
 以及：
 
-> 同一种架构效应能否出现在第二个任务域或 materially different 的 reality-facing interface 上？
+> bounded protocol 能否在不削弱 hard invariant 的前提下，向模型暴露足够结构化的 corrective information，使 denied action 被重新表述为安全的 sequential continuation？
+
+任何 canary feedback protocol、horizon 或 kernel 的改变都必须进入新的预注册 study version；canary v1 保持冻结。
