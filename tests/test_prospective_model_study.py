@@ -184,6 +184,30 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         initial = [call for call in model.calls if call[2].startswith("initial")]
         self.assertEqual(initial, [("E01", 0, "initial-shared", None)])
 
+    def test_c1_is_a_sampling_prefix_of_c2(self):
+        _, episodes = load_workload(WORKLOAD)
+        terminal = tuple(item for item in episodes if item.episode_id == "E04")
+        model = FakeModel()
+        run_prospective_study(
+            model,
+            terminal,
+            capabilities=(
+                AdaptiveResource(level=1, extra_turns=1),
+                AdaptiveResource(level=2, extra_turns=4),
+            ),
+        )
+
+        first_turn = [
+            call for call in model.calls
+            if call[2] == "adaptive-1"
+        ]
+        self.assertEqual(len(first_turn), 2)
+        self.assertEqual(
+            sorted(call[3] or "shared-direct" for call in first_turn),
+            ["bounded_action_protocol", "shared-direct"],
+        )
+        self.assertTrue(all(call[1] == 1 for call in first_turn))
+
     def test_direct_and_audit_share_adaptive_call_when_feedback_matches(self):
         _, episodes = load_workload(WORKLOAD)
         stale = tuple(item for item in episodes if item.episode_id == "E05")
