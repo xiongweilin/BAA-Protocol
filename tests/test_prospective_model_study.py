@@ -312,7 +312,7 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         item = {
             "type": "message",
             "role": "assistant",
-            "content": [{"type": "output_text", "text": "{\\\"actions\\\":[]}"}],
+            "content": [{"type": "output_text", "text": '{"actions":[]}'}],
         }
         newline = bytes([10])
         wire = (
