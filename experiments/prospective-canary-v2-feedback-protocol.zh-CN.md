@@ -106,6 +106,8 @@ initial model call 在三种 feedback treatment 之间共享。
 
 一旦 model-visible feedback 不同，adaptive call 不再共享。
 
+每次 BAA `deny` 或 `hold` 后，三种 treatment 都拥有相同的交互权：**在 environment clock 推进前最多立即提交一次 repair proposal**。因此 minimal、diagnostic、corrective 只改变反馈内容，不改变是否有 same-state repair opportunity。第二次 denial 不会触发无限 retry loop。
+
 prompt 中不写 feedback treatment 名称；模型只能通过实际收到的信息感知 treatment。
 
 ## 主 endpoint
@@ -203,13 +205,14 @@ run 只有在以下条件全部成立时才合格：
 5. horizon 精确为 2、4、8；
 6. forced function interface 为 `submit_canary_proposal`；
 7. model interface 为 `function_tool`；
-8. physical model call > 0；
-9. transport/schema/model-interface error 全为 0；
-10. 每个 feedback/horizon cell denominator=18；
-11. 每个 stale-route cell denominator=3；
-12. model-visible prompt 不含 feedback treatment 名称；
-13. corrective feedback 只来自 model-visible authoritative state 与 deterministic kernel/interface rule；
-14. cell 之间不修改 kernel 或 workload。
+8. 每种 treatment 在 deny/hold 后、environment 推进前最多允许一次 same-state repair proposal；
+9. physical model call > 0；
+10. transport/schema/model-interface error 全为 0；
+11. 每个 feedback/horizon cell denominator=18；
+12. 每个 stale-route cell denominator=3；
+13. model-visible prompt 不含 feedback treatment 名称；
+14. corrective feedback 只来自 model-visible authoritative state 与 deterministic kernel/interface rule；
+15. cell 之间不修改 kernel 或 workload。
 
 首个完整通过资格检查的 run 无论正负都接受。
 
