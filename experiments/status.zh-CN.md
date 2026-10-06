@@ -187,7 +187,21 @@ terminal lost-confirmation 在三种 regime 下都不可委托。BAA 在第一�
 - 剩余失败是模型返回 execute object 时使用 `case_subject`，并遗漏必需的 `obligation_id` 与 `subject_ref`；
 - 因此 artifact 中机械生成的 9/12 frontier summary 不能作为 comparative evidence 接受。
 
-该结果被记录为 qualification failure，不通过反复重采样直到成功。详见 [prospective-model-v2-result.zh-CN.md](prospective-model-v2-result.zh-CN.md)。\n\n### v3 接口资格结果\n\nv3 请求 strict Responses Structured Outputs，但本地 route 并未执行声明的 JSON Schema。run `37399859506` 在 108 个 physical call 中有 107 个 schema failure，transport failure 为 0，因此没有 frontier 结果。随后独立的 forced-function capability probe 成功。详见 [prospective-model-v3-result.zh-CN.md](prospective-model-v3-result.zh-CN.md)。\n\n### v4 通过资格检查的比较\n\nAIOS workflow run `37402587158` 使用强制 `submit_baa_proposal` function interface，通过完整 v4 qualification。physical sampling 共 36 次调用，transport、schema、model/interface error 均为 0。\n\n在冻结严格预算下，三种 regime 在 C0、C1、C2 都是 9/12 delegable。因此 v4 仍是 delegation-frontier 零结果。\n\nadaptive feedback 同时暴露出有限 safety 差异：self-check/audit 在 C1 有 3 次 unsafe transition、C2 有 4 次；BAA 通过 2/3 次自动 assurance intervention 始终保持 0 unsafe。全部 unsafe transition 都发生在三个本来就不可委托的 episode 中，因为安全 completion 仍需要时间推进或缺失的外部证据。BAA 约束了 reality-facing trace，但没有创造 liveness。\n\n详见 [prospective-model-v4-result.zh-CN.md](prospective-model-v4-result.zh-CN.md)。
+该结果被记录为 qualification failure，不通过反复重采样直到成功。详见 [prospective-model-v2-result.zh-CN.md](prospective-model-v2-result.zh-CN.md)。
+
+### v3 接口资格结果
+
+v3 请求 strict Responses Structured Outputs，但本地 route 并未执行声明的 JSON Schema。run `37399859506` 在 108 个 physical call 中有 107 个 schema failure，transport failure 为 0，因此没有 frontier 结果。随后独立的 forced-function capability probe 成功。详见 [prospective-model-v3-result.zh-CN.md](prospective-model-v3-result.zh-CN.md)。
+
+### v4 通过资格检查的比较
+
+AIOS workflow run `37402587158` 使用强制 `submit_baa_proposal` function interface，通过完整 v4 qualification。physical sampling 共 36 次调用，transport、schema、model/interface error 均为 0。
+
+在冻结严格预算下，三种 regime 在 C0、C1、C2 都是 9/12 delegable。因此 v4 仍是 delegation-frontier 零结果。
+
+adaptive feedback 同时暴露出有限 safety 差异：self-check/audit 在 C1 有 3 次 unsafe transition、C2 有 4 次；BAA 通过 2/3 次自动 assurance intervention 始终保持 0 unsafe。全部 unsafe transition 都发生在三个本来就不可委托的 episode 中，因为安全 completion 仍需要时间推进或缺失的外部证据。BAA 约束了 reality-facing trace，但没有创造 liveness。
+
+详见 [prospective-model-v4-result.zh-CN.md](prospective-model-v4-result.zh-CN.md)。
 
 ## 尚未证明
 
@@ -246,7 +260,10 @@ reference/network/product-composition 阶段已经收敛，因为：
 19. Runtime bypass test 保持真实临时产品状态不变；
 20. 文档明确区分已证明与未证明内容；
 21. 一个真实模型 comparative workload 在解释前完成预注册，并保存版本固定证据；
-22. implementation-invalid run 被显式排除，接受的 v1 run 保留零 delegation-frontier result；\n23. v2 与 v3 qualification failure 被保留，没有通过事后放宽 parser 或反复重采样消除；\n24. forced-function proposal channel 先通过独立 capability probe，再用于完整通过资格检查的 v4 比较；\n25. v4 将有限 safety-trajectory 正结果与 delegation-frontier 零结果明确分离。
+22. implementation-invalid run 被显式排除，接受的 v1 run 保留零 delegation-frontier result；
+23. v2 与 v3 qualification failure 被保留，没有通过事后放宽 parser 或反复重采样消除；
+24. forced-function proposal channel 先通过独立 capability probe，再用于完整通过资格检查的 v4 比较；
+25. v4 将有限 safety-trajectory 正结果与 delegation-frontier 零结果明确分离。
 
 ## 下一阶段边界
 
