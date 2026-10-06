@@ -203,7 +203,7 @@ The second preregistered real-model study, `prospective-offboarding-v2`, did not
 - the remaining failure was a model-produced execute object using `case_subject` while omitting required `obligation_id` and `subject_ref`;
 - therefore the mechanically emitted 9/12 frontier summaries are not accepted comparative evidence.
 
-The result is recorded as a qualification failure, not resampled until success. See [prospective-model-v2-result.md](prospective-model-v2-result.md).
+The result is recorded as a qualification failure, not resampled until success. See [prospective-model-v2-result.md](prospective-model-v2-result.md).\n\n### v3 interface qualification outcome\n\nv3 requested strict Responses Structured Outputs, but the local route did not enforce the declared JSON Schema. Run `37399859506` had 107 schema failures in 108 physical calls, with zero transport failures. It therefore has no frontier result. A separate forced-function capability probe subsequently succeeded. See [prospective-model-v3-result.md](prospective-model-v3-result.md).\n\n### v4 qualified comparison\n\nAIOS workflow run `37402587158` passed the full v4 qualification using the forced `submit_baa_proposal` function interface. Physical sampling was 36 calls with zero transport, schema, or model/interface errors.\n\nUnder the frozen strict budget, all three regimes were 9/12 delegable at C0, C1, and C2. Therefore v4 is another delegation-frontier null result.\n\nAdaptive feedback nevertheless exposed a finite safety difference: self-check and audit recorded 3 unsafe transitions at C1 and 4 at C2, while BAA remained at zero through 2 and 3 automatic assurance interventions. All unsafe transitions occurred in three episodes that were already non-delegable because safe completion required time progression or missing external evidence. BAA therefore constrained the reality-facing trace but did not create liveness.\n\nSee [prospective-model-v4-result.md](prospective-model-v4-result.md).
 
 ## What remains unproved
 
@@ -233,7 +233,7 @@ The evidence supports four statements that must remain separate:
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
 - composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
-- prospective comparison: the first frozen real-model workload did not show delegation-frontier expansion, while still showing a stricter BAA trajectory after an unresolved effect.
+- prospective comparison: v1 and v4 both retained frontier null results; v4 additionally showed BAA preventing adaptive unsafe reality-facing transitions while failing to turn those safe stops into additional completion.
 
 None implies that a production tenant is safe.
 
@@ -262,15 +262,15 @@ The reference/network/product-composition phase is converged because:
 19. the Runtime bypass test leaves real ephemeral product state unchanged;
 20. documentation states what is and is not proved;
 21. one real-model comparative workload was preregistered before interpretation and run with version-pinned evidence;
-22. implementation-invalid runs were excluded explicitly, and the final accepted run retained a null delegation-frontier result.
+22. implementation-invalid runs were excluded explicitly, and the accepted v1 run retained a null delegation-frontier result;\n23. v2 and v3 qualification failures were retained rather than repaired by post-hoc parser relaxation or repeated sampling;\n24. a forced-function proposal channel was independently capability-probed and then used in a fully qualified v4 comparison;\n25. v4 separated a positive finite safety-trajectory result from a null delegation-frontier result.
 
 ## Next phase boundary
 
-Connector-only or composition-only expansion remains unjustified. The first prospective comparative study is now complete and produced a null frontier result.
+Connector-only, parser, or proposal-interface expansion is no longer the main research need. The forced-function proposal boundary has now supported a fully qualified real-model comparison.
 
-The next phase is **prospective comparative generalization with a machine-constrained proposal interface**, using a new study version rather than modifying v1 or v2.
+The next phase is **liveness/delegation-leverage testing under a legitimate recovery path**.
 
-It should preserve the hidden-control evidence design, the same three regimes, and the same accounting contract, while replacing free-form JSON compliance with a machine-enforced structured-output proposal schema. Episode assignment must remain prospective, unresolved outcomes must remain in the denominator, and model-visible C must remain only a feedback-horizon resource.
+A new prospective workload should preserve the hidden-control design, the same three regimes, the forced proposal capability, and the same accounting contract, but include episodes where an unsafe shortcut competes with a safe, more expensive recovery path. BAA must be able to reject the shortcut while leaving enough controllable state and evidence for the model to discover and complete the recovery path within the same principal-attention budget.
 
 Primary outcomes remain:
 
