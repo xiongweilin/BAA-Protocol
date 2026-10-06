@@ -336,6 +336,31 @@ treatment 并非过程上完全无作用。`stale-route-refresh-b` 是唯一实�
 
 详见 [prospective-canary-v3-evidence-result.zh-CN.md](prospective-canary-v3-evidence-result.zh-CN.md)。
 
+### Canary v4 通过资格检查的 evidence × horizon interaction
+
+AIOS workflow run `37457822676` 是预注册 no-resampling 规则下首个完整通过资格检查的 v4 run。
+
+四个冻结 cell：
+
+| Evidence policy | H4 stale-route | H8 stale-route | H8 aggregate | unsafe |
+|---|---:|---:|---:|---:|
+| no_reacquire | 0/3 | 0/3 | 11/18 | 0 |
+| reacquire | 0/3 | **1/3** | **12/18** | 0 |
+
+因此：
+
+`C_H4 = 0`，`C_H8 = +1`，预注册 evidence×horizon interaction 为 **+1**。
+
+strong mechanism criterion 满足。`C113 / stale-route-refresh-a` 在 reacquire@H4 不可委托，在 no_reacquire@H8 仍不可委托；而在 `reacquire@H8`，turn 7 的精确 stale-evidence hold 触发 bounded stage-0/10% read，随后安全 admit/verify 到 50%；新 route 再次出现精确 hold，turn 8 触发 bounded stage-1/50% read，随后安全 admit/verify 到 100% 并完成。
+
+增益是局部的：另外两个 stale-route episode 仍不可委托。H8 non-stale delegability 两种 evidence policy 都是 11/15。
+
+H8 treated cell 为 +1 useful/delegable episode 付出 +4 assurance intervention、+3 evidence reacquisition、+1 logical model call、+2,141 logical input token 与 +63 logical output token。
+
+这是 BAA 内部 assurance mechanism 的正 interaction，不是 BAA-versus-direct 比较。
+
+详见 [prospective-canary-v4-evidence-horizon-result.zh-CN.md](prospective-canary-v4-evidence-horizon-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -364,7 +389,7 @@ treatment 并非过程上完全无作用。`stale-route-refresh-b` 是唯一实�
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
 - composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；
-- prospective comparison：v1 与 v4 保留 frontier 零结果；v5 在预注册 recovery event 下显示通过资格检查的 C2 frontier expansion；v6 在新的 offboarding workload 上复现 aggregate expansion 但没有建立 evidence-refresh 跨机制泛化；canary v1 给出第二域负 frontier 结果；canary v2 没有发现 richer mechanical feedback 或 H8 horizon 对 stale-route 的增益；canary v3 保留 H4 frontier 零 endpoint，同时显示一次 bounded evidence reacquisition 后的因果过程级局部修复。
+- prospective comparison：v1 与 v4 保留 frontier 零结果；v5 在预注册 recovery event 下显示通过资格检查的 C2 frontier expansion；v6 在新的 offboarding workload 上复现 aggregate expansion 但没有建立 evidence-refresh 跨机制泛化；canary v1 给出第二域负 frontier 结果；canary v2 没有发现 richer mechanical feedback 或 H8 horizon 对 stale-route 的增益；canary v3 保留 H4 frontier 零 endpoint 并显示一次局部 evidence-recovery repair；canary v4 在 BAA 内部得到预注册正 evidence×horizon interaction（+1），H8 安全恢复 1 个 stale-route episode。
 
 任何一项都不意味着生产租户安全。
 
@@ -404,6 +429,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 30. canary v1 进入第二任务域并按 no-resampling 规则接受首个合格 run；C2 endpoint 为负（direct 11/18，BAA 10/18），同时 BAA 将 unsafe transition 从 2 降到 0。
 31. canary v2 修正 adaptive shared-sampling 后接受首个完整合格 run；feedback 主 endpoint、horizon contrast 与 info-vs-time contrast 全部为 0，同时定位到 current-route evidence stale/mismatched 的 evidence-recovery 瓶颈。
 32. canary v3 在不重采样的前提下接受首个完整通过资格检查的 transport-amended run；两种 evidence treatment 在 H4 都保持 stale-route 1/3、aggregate 11/18，而一次 bounded reacquisition 将 stale-evidence hold 因果修复为安全 verified sequential transition，但没有改变最终 H4 delegable set。
+33. canary v4 在不重采样的前提下接受首个完整通过资格检查的 2×2 evidence×horizon run；预注册 interaction 为 +1：H4 两个 cell 与 no_reacquire@H8 的 stale-route 都是 0/3，而 reacquire@H8 为 1/3；四个 cell unsafe transition 全为 0。
 
 ## 下一阶段边界
 
@@ -422,10 +448,13 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-第二任务域 canary v1 已经否定“safety advantage 会自动转化为 delegation leverage”的简单预期；canary v2 又进一步否定“只增加 denial 信息或把 horizon 从 H4 延长到 H8 就能恢复 stale-route liveness”的预期。canary v3 随后回答了下一层局部机制问题：bounded current-route evidence reacquisition 可以安全解除一次 stale-evidence transition 的阻塞，但 H4 delegation endpoint 仍然不变。
+第二任务域 canary v1 已经否定“safety advantage 会自动转化为 delegation leverage”的简单预期；canary v2 否定“只增加 denial 信息或单独把 horizon 延长到 H8 就足够”的预期；canary v3 显示 bounded current-route evidence reacquisition 可以修复局部 stale-evidence transition，但没有 H4 frontier gain；canary v4 随后在冻结机制 workload 上得到预注册正 interaction：一个 stale-route episode 只有在 evidence recovery 与足够的 H8 remaining interaction time 结合时才安全变为 delegable。
 
-因此下一组核心可证伪问题不再是单一 repair factor，而是 interaction：
+因此，对这组 fixture 而言，局部机制链已经足够收敛。下一实验不应变成 v5 = 再造一个 hand-built stale-route case，而应改变 robustness 或 cost-frontier 轴，同时保持同一 hard gate 与 accounting。可证伪方向包括：
 
-> 在 hard gate、workload 与 bounded evidence-reacquisition rule 固定时，如果 post-reacquisition horizon 足够完成余下 sequential transitions，已观察到的局部 repair 是否会转化为 delegation leverage？
+- +1 interaction 能否在前瞻构造、并非从 C113 已观察轨迹挑选的新 stale/evidence workload 上保持；
+- 随 post-reacquisition horizon 与 assurance-intervention ceiling 改变，delegation gain 如何变化；
+- 在显式限制 assurance labor/model-call cost 后，额外 useful delivery 是否仍存在；
+- 同一 interaction 是否出现在另一个独立规定的 reality-facing interface。
 
-该 follow-up 现在已作为 canary v4 预注册：采用 2×2 `no_reacquire/reacquire × H4/H8` 设计，H4 作为同一 H8 trajectory 的 non-mutating prefix 计分；主 endpoint 是 stale-route evidence×horizon difference-in-differences。在预注册合并前不接受任何 v4 模型样本。canary v1、v2、v3 全部保持冻结。
+任何后续 study 都必须在模型采样前冻结 task distribution 与 cost/horizon grid。canary v1–v4 全部保持冻结。
