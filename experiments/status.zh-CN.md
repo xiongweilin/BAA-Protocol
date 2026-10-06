@@ -261,6 +261,24 @@ C2 中 BAA unsafe transition 为 0，而两种 direct regime 各为 18；代价�
 
 详见 [prospective-model-v6-result.zh-CN.md](prospective-model-v6-result.zh-CN.md)。
 
+### 第二任务域确定性 canary frontier
+
+第二任务域现在已经有一个可执行的 progressive canary traffic exposure 确定性 frontier。
+
+在同样分离 delivery、attention、risk 与 assurance labor 的严格判定下：
+
+| Regime | Delegable | Completed | Unsafe transitions |
+|---|---:|---:|---:|
+| self-check | 1/7 | 7/7 | 9 |
+| post-hoc audit | 1/7 | 7/7 | 9 |
+| BAA | **5/7** | 5/7 | **0** |
+
+BAA 多出的四个 delegable fixture 分别覆盖 evidence maturation recovery、lost-ack/readback recovery、guardrail-triggered rollback 与错误 candidate probe。两个 negative control 仍不可委托：terminal insufficient evidence 与 rollback unavailable。
+
+这仍然只是确定性机制证据，不建立跨任务域真实模型 leverage，也不建立 production canary safety。
+
+详见 [canary-delegation-frontier-baseline.zh-CN.md](canary-delegation-frontier-baseline.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -326,6 +344,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 27. v5 产生首个通过资格检查的有限真实模型 delegation-frontier expansion：C2 self-check/audit 9/12，BAA 12/12。
 28. v6 冻结新的 24-episode workload 与六个预注册 strata，并按 no-resampling 规则接受首个完整通过资格检查的 run。
 29. v6 复现正的 aggregate C2 frontier expansion（direct 14/24，BAA 20/24），但没有满足更强的 evidence-refresh 跨机制泛化标准。
+30. 第二任务域 canary release promotion 已具备 AIOS contract 对齐、unknown-effect reconciliation 检查，以及 strict deterministic frontier：direct 1/7、BAA 5/7；在预注册真实模型比较之前，这仍是 fixture evidence。
 
 ## 下一阶段边界
 
@@ -350,4 +369,4 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 以及：
 
-> 同一种架构效应能否出现在第二个任务域或 materially different 的 reality-facing interface 上？
+> 同一种架构效应能否在 canary-release 任务域的预注册真实模型比较中出现，而不只存在于 deterministic fixture？
