@@ -102,6 +102,7 @@ class EpisodeSimulator:
         self.fault_consumed = False
         self.proposal_counter = 0
         self.current_time = int(context["current_time"])
+        self.runtime_evidence: dict[str, Any] = {}
         self.applied_runtime_events: set[int] = set()
 
     def record(self, **event: Any) -> None:
@@ -316,12 +317,27 @@ class EpisodeSimulator:
                     source=source,
                     current_time=self.current_time,
                 )
+            elif event_type == "evidence_update":
+                evidence = event.get("evidence")
+                if not isinstance(evidence, dict) or not evidence:
+                    raise ValueError("evidence_update requires a non-empty evidence object")
+                self.runtime_evidence.update(deepcopy(evidence))
+                self.record(
+                    phase="environment",
+                    disposition="evidence_updated",
+                    source=source,
+                    evidence=deepcopy(evidence),
+                    current_time=self.current_time,
+                )
             else:
                 raise ValueError(f"unsupported runtime event type: {event_type!r}")
             self.applied_runtime_events.add(index)
 
     def visible_runtime_state(self) -> dict[str, Any]:
-        return {"current_time": self.current_time}
+        return {
+            "current_time": self.current_time,
+            "evidence_updates": deepcopy(self.runtime_evidence),
+        }
 
     def remaining(self) -> list[str]:
         return [
