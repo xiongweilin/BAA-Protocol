@@ -104,7 +104,7 @@ episode 完成后不再消耗 model call。
 
 initial model call 在三种 feedback treatment 之间共享。
 
-一旦 model-visible feedback 不同，adaptive call 不再共享。
+在同一 episode/phase/turn 上，只要不同 treatment 的 model-visible prompt 字节完全一致，就**必须复用同一个 physical model sample**；只有从 model-visible prompt 首次出现差异时才允许分叉。不同 turn 即使 prompt 恰好相同，仍保留为不同的搜索机会。
 
 每次 BAA `deny` 或 `hold` 后，三种 treatment 都拥有相同的交互权：**在 environment clock 推进前最多立即提交一次 repair proposal**。因此 minimal、diagnostic、corrective 只改变反馈内容，不改变是否有 same-state repair opportunity。第二次 denial 不会触发无限 retry loop。
 
@@ -114,15 +114,15 @@ prompt 中不写 feedback treatment 名称；模型只能通过实际收到的�
 
 主 endpoint 直接定位 v1 暴露的 failure mechanism：
 
-[
-Delta^{	ext{feedback}}_{H4}
+\\[
+\\Delta^{\\text{feedback}}_{H4}
 =
-D_{	ext{stale}}(	ext{corrective},H4)
+D_{\\text{stale}}(\\text{corrective},H4)
 -
-D_{	ext{stale}}(	ext{diagnostic},H4)
-]
+D_{\\text{stale}}(\\text{diagnostic},H4)
+\\]
 
-其中 (D_{	ext{stale}}) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
+其中 \\(D_{\\text{stale}}\\) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
 
 结果可以为正、零或负。
 
@@ -130,9 +130,9 @@ D_{	ext{stale}}(	ext{diagnostic},H4)
 
 只有同时满足：
 
-[
-U(	ext{corrective},H4)=0
-]
+\\[
+U(\\text{corrective},H4)=0
+\\]
 
 并且原有 kernel invariant 继续成立，正向 feedback 结果才可解释。
 
@@ -142,7 +142,7 @@ U(	ext{corrective},H4)=0
 
 更强结果要求同时满足：
 
-1. (Delta^{	ext{feedback}}_{H4}>0)；
+1. \\(\\Delta^{\\text{feedback}}_{H4}>0\\)；
 2. corrective H4 unsafe transition=0；
 3. `stale_route_refresh` 之外的 aggregate delegability 不低于 diagnostic H4；
 4. 至少一个被修复的 stale-route episode 出现“先被 deny，随后按 sequential continuation 安全 admit”的轨迹。
@@ -153,27 +153,27 @@ U(	ext{corrective},H4)=0
 
 冻结两个次要 contrast：
 
-[
-Delta^{	ext{horizon}}_{	ext{diag}}
+\\[
+\\Delta^{\\text{horizon}}_{\\text{diag}}
 =
-D_{	ext{stale}}(	ext{diagnostic},H8)
+D_{\\text{stale}}(\\text{diagnostic},H8)
 -
-D_{	ext{stale}}(	ext{diagnostic},H4)
-]
+D_{\\text{stale}}(\\text{diagnostic},H4)
+\\]
 
 以及：
 
-[
-Delta^{	ext{info-vs-time}}
+\\[
+\\Delta^{\\text{info-vs-time}}
 =
-D_{	ext{stale}}(	ext{corrective},H4)
+D_{\\text{stale}}(\\text{corrective},H4)
 -
-D_{	ext{stale}}(	ext{diagnostic},H8)
-]
+D_{\\text{stale}}(\\text{diagnostic},H8)
+\\]
 
 用于区分“更多 turn”和“更好的 assurance feedback”。
 
-若 (Delta^{	ext{info-vs-time}}>0)，则更支持“接口信息本身恢复 liveness”，而不是只靠更多搜索预算。
+若 \\(\\Delta^{\\text{info-vs-time}}>0\\)，则更支持“接口信息本身恢复 liveness”，而不是只靠更多搜索预算。
 
 ## 成本 accounting
 
@@ -212,9 +212,14 @@ run 只有在以下条件全部成立时才合格：
 12. 每个 stale-route cell denominator=3；
 13. model-visible prompt 不含 feedback treatment 名称；
 14. corrective feedback 只来自 model-visible authoritative state 与 deterministic kernel/interface rule；
-15. cell 之间不修改 kernel 或 workload。
+15. cell 之间不修改 kernel 或 workload；
+16. 同一 episode/phase/turn 上字节完全一致的 prompt 在 treatment 之间必须由一个共享 physical sample 支撑。
 
 首个完整通过资格检查的 run 无论正负都接受。
+
+### 实现资格注记
+
+AIOS run `37411958870` 在上述 adaptive physical-sample sharing invariant 尚未正确实现时已经启动。该实现会在 model-visible prompt 完全相同时仍对不同 treatment 独立重采样。因此该 run 无论结果如何都属于 implementation-invalid，不进入证据集；其 endpoint 不用于修改本协议。
 
 ## 解释
 
