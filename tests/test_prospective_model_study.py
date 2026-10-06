@@ -306,6 +306,36 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         )
         self.assertEqual(body["usage"]["input_tokens"], 11)
 
+    def test_gateway_client_accepts_output_item_without_completed_event(self):
+        from baa_protocol.prospective_types import ResponsesGatewayClient
+
+        item = {
+            "type": "message",
+            "role": "assistant",
+            "content": [{"type": "output_text", "text": "{\\\"actions\\\":[]}"}],
+        }
+        wire = (
+            b"event: response.output_item.done\\n"
+            + b"data: "
+            + json.dumps(
+                {
+                    "type": "response.output_item.done",
+                    "output_index": 0,
+                    "item": item,
+                }
+            ).encode()
+            + b"\\n\\n"
+        )
+        body = ResponsesGatewayClient._decode_response(
+            wire,
+            "text/event-stream; charset=utf-8",
+        )
+        self.assertEqual(body["output"], [item])
+        self.assertEqual(
+            ResponsesGatewayClient._extract_text(body),
+            '{"actions":[]}',
+        )
+
     def test_fenced_json_plan_parses(self):
         fence = chr(96) * 3
         plan, _ = parse_plan(
