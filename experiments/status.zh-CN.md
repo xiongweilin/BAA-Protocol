@@ -285,20 +285,6 @@ AIOS workflow run `37410377327` 是第二 BAA 任务域 `canary-release-promotio
 
 详见 [prospective-canary-v1-result.zh-CN.md](prospective-canary-v1-result.zh-CN.md)。
 
-### Canary v2 通过资格检查的 feedback × horizon 结果
-
-AIOS workflow run `37412693511` 是修正 adaptive shared-sampling 后首个完整通过资格检查的 canary v2 结果。更早的 run `37411958870` 因实现层没有对 byte-identical adaptive prompt 强制共享 physical sample 而被判定 implementation-invalid，并在修正提交后由 concurrency 取消；其 outcome 不进入证据。
-
-冻结主 endpoint：
-
-`Delta_feedback_H4 = D_stale(corrective,H4) - D_stale(diagnostic,H4) = 1 - 1 = 0`。
-
-H2/H4/H8 的 aggregate delegability 在三种 feedback treatment 中分别完全相同：9/18、10/18、11/18；`stale_route_refresh` 在所有 cell 中都保持 1/3。预注册 horizon contrast 与 info-vs-time contrast 也都为 0。所有 cell unsafe transition=0、principal attention=0、terminal unresolved=0。
-
-corrective feedback 的确能在 stale-route failure 中把被 deny 的 skip-stage proposal 改成正确 sequential next stage，但修复 proposal 随后被 `stage evidence is stale or mismatched` hold。因此 v2 把局部瓶颈从“模型是否理解 denial”进一步收敛到“与 current realized route 对齐的授权 evidence 是否仍然可取得”。
-
-详见 [prospective-canary-v2-feedback-result.zh-CN.md](prospective-canary-v2-feedback-result.zh-CN.md)。
-
 ### Canary v2 通过资格检查的 feedback/horizon 结果
 
 AIOS workflow run `37412693511` 是预注册 no-resampling 规则下首个完整通过资格检查的 corrected canary v2 结果。
