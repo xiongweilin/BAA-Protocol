@@ -110,6 +110,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-canary-v2-feedback-result.zh-CN.md](experiments/prospective-canary-v2-feedback-result.zh-CN.md) —— 通过资格检查的零 feedback/horizon 结果：H4/H8 stale-route 均保持 1/3，unsafe=0。
 - [experiments/prospective-canary-v3-evidence-protocol.zh-CN.md](experiments/prospective-canary-v3-evidence-protocol.zh-CN.md) —— 预注册 H4 evidence-reacquisition 机制研究；retention-only 草案在任何 v3 采样前已被取代。
 - [experiments/prospective-canary-v3-evidence-result.zh-CN.md](experiments/prospective-canary-v3-evidence-result.zh-CN.md) —— 通过资格检查的 H4 frontier 零结果；同时有一个 stale-evidence hold 到安全 verified sequential transition 的因果过程级修复。
+- [experiments/prospective-canary-v4-evidence-horizon-protocol.zh-CN.md](experiments/prospective-canary-v4-evidence-horizon-protocol.zh-CN.md) —— 预注册 2×2 evidence-recovery × H4/H8 interaction study；在该协议合并前不接受任何 v4 模型样本。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
