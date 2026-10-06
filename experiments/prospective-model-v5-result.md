@@ -160,6 +160,26 @@ C2: 9 / 12 vs 12 / 12 for BAA
 
 This strengthens the mechanistic interpretation because the gain appears only when the study design makes blocked-then-recovered completion possible.
 
+## Resource cost of the positive result
+
+v5 improves the feasible attention-risk-delivery set; it does not reduce every resource dimension.
+
+At C2:
+
+~~~text
+logical model calls:
+  self-check: 21
+  post-hoc audit: 21
+  BAA: 23
+
+BAA automatic assurance interventions: 4
+post-hoc audit labor units: 41
+principal attention:
+  all regimes: 0
+~~~
+
+BAA therefore used two additional logical model calls and four automatic assurance interventions while waiting for legitimate recovery conditions and completing afterward. The cost did not shift into principal attention, but the delegation leverage is not cost-free.
+
 ## Causal-control qualification
 
 The final frozen v5 head removes the regime label from the v5 adaptive prompt.
