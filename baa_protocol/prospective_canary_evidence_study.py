@@ -46,9 +46,11 @@ def _is_stale_evidence_hold(
 
 def _observer_templates(
     episode: CanaryEpisode,
-) -> dict[tuple[str, int, int], dict[str, Any]]:
-    """Build a frozen response corpus from preregistered v1 event payloads."""
-    templates: dict[tuple[str, int, int], dict[str, Any]] = {}
+    *,
+    through_turn: int,
+) -> dict[tuple[str, int, int, int], dict[str, Any]]:
+    """Build the frozen observer response corpus available by this turn."""
+    templates: dict[tuple[str, int, int, int], dict[str, Any]] = {}
 
     def retain(raw: Any) -> None:
         if not isinstance(raw, dict):
@@ -60,6 +62,7 @@ def _observer_templates(
             str(raw["experiment_id"]),
             int(raw["stage_index"]),
             int(raw["weight_percent"]),
+            int(episode.control_context["state_version"]),
         )
         value = copy.deepcopy(raw)
         previous = templates.get(key)
@@ -70,6 +73,8 @@ def _observer_templates(
         templates[key] = value
 
     for event in episode.runtime_events:
+        if int(event.get("after_turn", 0)) > through_turn:
+            continue
         if event.get("type") == "route_evidence_refresh":
             values = event.get("stage_evidence_by_stage", {})
             if isinstance(values, dict):
@@ -84,8 +89,10 @@ def _observer_templates(
 def _reacquire_current_stage_evidence(
     episode: CanaryEpisode,
     simulator: CanarySimulator,
+    *,
+    through_turn: int,
 ) -> bool:
-    """Acquire a fresh fixture observation for the currently verified route."""
+    """Acquire a bounded fixture observation for the currently verified route."""
     if simulator.pending is not None:
         return False
 
@@ -105,8 +112,12 @@ def _reacquire_current_stage_evidence(
         str(simulator.context["experiment_id"]),
         actual_route[0],
         actual_route[1],
+        int(simulator.context["state_version"]),
     )
-    template = _observer_templates(episode).get(key)
+    template = _observer_templates(
+        episode,
+        through_turn=through_turn,
+    ).get(key)
     if template is None:
         return False
 
@@ -124,6 +135,8 @@ def _reacquire_current_stage_evidence(
         stage_index=actual_route[0],
         weight_percent=actual_route[1],
         source="frozen-authoritative-observer-template",
+        observed_turn=through_turn,
+        state_version=int(simulator.context["state_version"]),
     )
     return True
 
@@ -248,6 +261,7 @@ def run_canary_evidence_study(
                     if _reacquire_current_stage_evidence(
                         episode,
                         simulator,
+                        through_turn=turn_level,
                     ):
                         evidence_reacquisitions += 1
 
@@ -467,8 +481,9 @@ def run_canary_evidence_study(
             "Pre-sampling amended canary v3 mechanism study. The v1 "
             "workload, kernel, guardrails, submit_canary_proposal interface, "
             "corrective feedback, strict budget, and H4 remain fixed. The "
-            "only treatment is whether the assurance layer reacquires a "
-            "fresh fixture observation for the currently verified route "
-            "after the exact stale-evidence hold."
+            "only treatment is whether the assurance layer performs a "
+            "bounded observer read for the currently verified route after "
+            "the exact stale-evidence hold. The response corpus is frozen "
+            "before sampling, turn-bounded, and keyed by route plus state version."
         ),
     }
