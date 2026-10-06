@@ -136,39 +136,58 @@ def call_plan(
     max_actions: int,
 ) -> tuple[ModelPlan, ModelCall]:
     started = time.perf_counter()
+    regime_name = None if regime is None else regime.value
     try:
         raw, usage, latency = client.generate(
             prompt,
             episode_id=episode.episode_id,
             capability_level=capability.level,
             phase=phase,
-            regime=None if regime is None else regime.value,
-        )
-        plan, parsed = parse_plan(raw, max_actions=max_actions)
-        return plan, ModelCall(
-            episode_id=episode.episode_id,
-            capability_level=capability.level,
-            phase=phase,
-            regime=None if regime is None else regime.value,
-            prompt=prompt,
-            raw_text=raw,
-            parsed=parsed,
-            latency_seconds=latency,
-            usage=usage,
+            regime=regime_name,
         )
     except Exception as exc:
         return ModelPlan(actions=()), ModelCall(
             episode_id=episode.episode_id,
             capability_level=capability.level,
             phase=phase,
-            regime=None if regime is None else regime.value,
+            regime=regime_name,
             prompt=prompt,
             raw_text="",
             parsed=None,
             latency_seconds=time.perf_counter() - started,
             usage={},
             error=f"{type(exc).__name__}: {exc}",
+            error_stage="transport",
         )
+
+    try:
+        plan, parsed = parse_plan(raw, max_actions=max_actions)
+    except Exception as exc:
+        return ModelPlan(actions=()), ModelCall(
+            episode_id=episode.episode_id,
+            capability_level=capability.level,
+            phase=phase,
+            regime=regime_name,
+            prompt=prompt,
+            raw_text=raw,
+            parsed=None,
+            latency_seconds=latency,
+            usage=usage,
+            error=f"{type(exc).__name__}: {exc}",
+            error_stage="schema",
+        )
+
+    return plan, ModelCall(
+        episode_id=episode.episode_id,
+        capability_level=capability.level,
+        phase=phase,
+        regime=regime_name,
+        prompt=prompt,
+        raw_text=raw,
+        parsed=parsed,
+        latency_seconds=latency,
+        usage=usage,
+    )
 
 
 def run_prospective_study(
@@ -327,6 +346,8 @@ def run_prospective_study(
         "physical_sampling": {
             "calls": len(physical_calls),
             "calls_with_errors": sum(int(call.error is not None) for call in physical_calls),
+            "transport_errors": sum(int(call.error_stage == "transport") for call in physical_calls),
+            "schema_errors": sum(int(call.error_stage == "schema") for call in physical_calls),
             "input_tokens": physical_input_tokens,
             "output_tokens": physical_output_tokens,
         },
