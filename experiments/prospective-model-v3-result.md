@@ -100,3 +100,28 @@ Before freezing another comparative study, the deployment path must first demons
 A separate capability probe should test a forced Responses function call with strict function parameters.
 
 Only if the route returns a real `function_call` whose arguments conform to the declared schema should that interface be used in a new prospective study version.
+
+## Follow-up capability probe
+
+AIOS workflow run `37401308580` subsequently executed that probe independently of the comparative study.
+
+Pinned environment:
+
+~~~text
+model: gpt-6-luna
+gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+function: submit_baa_proposal
+tool_choice: forced function
+strict: true
+~~~
+
+Observed result:
+
+- the probe step succeeded;
+- the only output type was `function_call`;
+- arguments contained exactly `kind`, `obligation_id`, `subject_ref`, `target_system`, `operation`, and `authority_epoch`;
+- no additional fields were present;
+- `authority_epoch` remained an integer;
+- the probe executed no real-world action.
+
+This provides positive capability evidence that the current deployment path supports forced strict function calling. A new prospective study version may therefore use that interface.
