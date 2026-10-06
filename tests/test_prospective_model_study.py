@@ -125,8 +125,11 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         episode = episodes[0]
         prompt = initial_prompt(episode)
         self.assertNotIn(episode.control_context["case_id"], prompt)
-        self.assertNotIn('"authority_epoch": 4', prompt)
+        self.assertNotIn("governance_basis_id", prompt)
+        self.assertNotIn('"state_version": 3', prompt)
+        self.assertNotIn('"expires_at": 260', prompt)
         self.assertNotIn("Use authoritative evidence over cached drafts", prompt)
+        self.assertIn('"authority_epoch": 4', prompt)
         self.assertIn("Infer the next actions from the supplied evidence", prompt)
 
     def test_v1_keeps_original_explicit_prompt_contract(self):
