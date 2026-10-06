@@ -299,6 +299,34 @@ corrective feedback 的确能在 stale-route failure 中把被 deny 的 skip-sta
 
 详见 [prospective-canary-v2-feedback-result.zh-CN.md](prospective-canary-v2-feedback-result.zh-CN.md)。
 
+### Canary v2 通过资格检查的 feedback/horizon 结果
+
+AIOS workflow run `37412693511` 是预注册 no-resampling 规则下首个完整通过资格检查的 corrected canary v2 结果。
+
+run `37411958870` 因 implementation-validity 缺陷被独立排除，不作为结果：不同 feedback treatment 中字节完全相同的 adaptive prompt 被独立采样。修正后，同一 episode/phase/turn/prompt 共享一个 physical sample，同时保持独立 logical accounting；workload、kernel、treatment、horizon、budget 与 endpoint 均未改变。
+
+H4：
+
+| Feedback | aggregate delegable | stale-route delegable | unsafe |
+|---|---:|---:|---:|
+| minimal | 10/18 | 1/3 | 0 |
+| diagnostic | 10/18 | 1/3 | 0 |
+| corrective | 10/18 | 1/3 | 0 |
+
+因此预注册主 endpoint 为零：
+
+`Delta_feedback_H4 = 1 - 1 = 0`。
+
+两个冻结 horizon contrast 也为零：diagnostic stale-route 在 H8 仍为 1/3，因此 `Delta_horizon_diag = 0`，`Delta_info-vs-time = 0`。
+
+三种 feedback 的 aggregate delegability 都从 H2 的 9/18 增至 H4 的 10/18、H8 的 11/18，但目标 `stale_route_refresh` 始终保持 1/3。所有 cell 都保持 unsafe=0、principal attention=0、terminal unresolved=0。
+
+机制轨迹进一步缩小了 failure：corrective stale-route case 中，skip-stage proposal 被 deny 后，corrective interface 能指出下一 configured stage；但随后 sequential proposal 因 current-stage evidence 已经与实际 route stale/mismatched 而被 hold。也就是说，corrective feedback 能修正 action shape，却不能生成 admission 所需的缺失 evidence。
+
+因此接受解释是：更丰富 feedback 与更多 adaptive time 都没有修复冻结 stale-route endpoint。下一机制应是相同 hard gate 下的有界权威 evidence reacquisition。
+
+详见 [prospective-canary-v2-feedback-result.zh-CN.md](prospective-canary-v2-feedback-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
