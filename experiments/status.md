@@ -301,6 +301,27 @@ The accepted interpretation is therefore that second-domain bounded admission pr
 
 See [prospective-canary-v1-result.md](prospective-canary-v1-result.md).
 
+### Cross-domain post-hoc frontier sensitivity
+
+A separate exploratory analysis reclassifies the already observed offboarding-v6 and canary-v1 trajectories by raw completion and independent risk/resource ceilings. It does not alter the preregistered endpoints.
+
+The key C2 sensitivity is:
+
+| Domain | unsafe ceiling | best direct | BAA | delta |
+|---|---:|---:|---:|---:|
+| offboarding v6 | 0 | 14 | 20 | +6 |
+| offboarding v6 | 1 | 16 | 20 | +4 |
+| offboarding v6 | 2 | 19 | 20 | +1 |
+| canary v1 | 0 | 11 | 10 | -1 |
+| canary v1 | 1 | 13 | 10 | -3 |
+| canary v1 | 2 | 13 | 10 | -3 |
+
+The analysis also separates automatic BAA intervention capacity. Under strict risk at offboarding C2, a per-episode intervention ceiling of 0, 1, and 2 yields 13, 16, and 20 BAA completed-within-bounds episodes respectively. In canary C2, ceilings from 0 through 4 all leave BAA at 10.
+
+This is descriptive reclassification, not a counterfactual behavior claim. It shows that intervention capacity produces leverage only when the state/feedback dynamics convert safe blocking into safe continuation.
+
+See [cross-domain-frontier-sensitivity.md](cross-domain-frontier-sensitivity.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -337,7 +358,7 @@ None implies that a production tenant is safe.
 
 The reference/network/product-composition phase is converged because:
 
-1. one task domain is pinned to a source version;
+1. two task domains are pinned to explicit AIOS contract surfaces;
 2. guarantee boundary and semantic-bridge assumptions are explicit;
 3. the protocol is executable;
 4. safety and delivery are measured separately;
@@ -370,27 +391,23 @@ The reference/network/product-composition phase is converged because:
 
 ## Next phase boundary
 
-The single-domain mechanism question has now advanced beyond “can the kernel block unsafe actions?” and “can a safe stop later recover?” v4 and v5 provide finite evidence for both.
+The current evidence now spans two task domains and gives opposite C2 frontier signs under the strict point: offboarding v6 is +6 while canary v1 is -1.
 
-The offboarding prospective-generalization phase is now complete enough to stop adding offboarding episodes. The next phase should change the external-validity or cost-frontier axis rather than introduce a v7 with more cases from the same task domain.
+The post-hoc sensitivity analysis further shows that the offboarding advantage shrinks as unsafe transitions are tolerated and that automatic intervention capacity is productive in offboarding but not in canary.
 
-A new study should preserve:
+The next phase should therefore change a mechanism rather than add workload cases. The most specific hypothesis is **machine-usable assurance feedback**:
 
-- hidden control truth versus model-visible evidence;
-- forced-function proposal capability;
-- regime-label causal control;
-- common exogenous event schedules;
-- strict attention/risk/delivery accounting;
-- complete proposal and unknown-result denominators.
+> Can the kernel expose bounded corrective state after deny/hold — such as the required next stage, missing evidence class, or reconciliation requirement — so that an adaptive model can reformulate a proposal into a safe continuation without weakening the hard invariant?
 
-It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
+Before any new model sampling, a follow-up must freeze:
 
-The second-domain canary result now falsifies the simple expectation that a safety advantage will automatically translate into delegation leverage at the same horizon. The next core falsifiable questions are therefore:
+- the exact corrective-information schema;
+- which fields are mechanically derived rather than semantic advice;
+- whether the information changes only planner observability or also kernel state;
+- the horizon and cost accounting;
+- a primary endpoint that keeps safety and raw completion separate;
+- negative controls where no safe continuation exists.
 
-> How does the feasible attention-risk-delivery-assurance-cost frontier move as assurance feedback quality, adaptive horizon, and assurance labor ceiling vary?
+A canary v2 is justified only by such a new mechanism hypothesis. It must not edit canary v1 episodes merely to seek a positive result.
 
-and
-
-> Can a bounded protocol expose enough structured corrective information for the model to reformulate a denied action into a safe sequential continuation without weakening the hard invariant?
-
-Any changed canary feedback protocol, horizon, or kernel is a new preregistered study version; canary v1 remains frozen.
+In parallel, the structural track can proceed independently: model-check the narrow hard invariants for capability scope, pending-effect retention, no blind replay, guarantee-channel isolation, and conservative terminal settlement.
