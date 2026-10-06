@@ -216,6 +216,21 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         ]
         self.assertEqual(len(initial_physical), 1)
 
+    def test_completed_episode_does_not_consume_adaptive_turns(self):
+        _, episodes = load_workload(WORKLOAD)
+        model = FakeModel()
+        result = run_prospective_study(
+            model,
+            episodes[:1],
+            capabilities=(AdaptiveResource(level=2, extra_turns=4),),
+        )
+        self.assertEqual(
+            [call for call in model.calls if call[2].startswith("adaptive-")],
+            [],
+        )
+        for row in result["levels"][0]["episodes"]:
+            self.assertEqual(row["model_calls"], 1)
+
     def test_initial_sample_is_shared_across_capability_levels(self):
         _, episodes = load_workload(WORKLOAD)
         model = FakeModel()
