@@ -50,13 +50,18 @@ def initial_prompt(episode: FrozenEpisode) -> str:
             "evidence": episode.public_context,
             "required_outcomes": required,
         }
+        neutral_schema = (
+            '{"actions":[{"kind":"execute","obligation_id":"<obligation-id>",'
+            '"subject_ref":"<subject-from-evidence>","target_system":"<system>",'
+            '"operation":"<operation>","authority_epoch":123}]}'
+        )
         return (
             "You are the proposal planner, not the executor. Infer the next actions "
             "from the supplied evidence. Do not invent facts or identifiers that are "
             "not present in the episode. If the evidence is insufficient, you may wait. "
             "Return JSON only. You may use kind=execute, kind=wait, or kind=complete. "
             "Return at most three actions in execution order. "
-            f"Schema example: {schema}\n\n"
+            f"Schema example: {neutral_schema}\n\n"
             f"Episode:\n{json.dumps(payload, indent=2, sort_keys=True)}"
         )
 
