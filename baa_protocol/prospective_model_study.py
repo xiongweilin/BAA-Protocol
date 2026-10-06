@@ -30,7 +30,11 @@ def initial_prompt(episode: FrozenEpisode) -> str:
         '"operation":"identity.disable","authority_epoch":7}]}'
     )
 
-    if episode.prompt_profile in {"evidence-neutral-v2", "evidence-neutral-v3-structured"}:
+    if episode.prompt_profile in {
+        "evidence-neutral-v2",
+        "evidence-neutral-v3-structured",
+        "evidence-neutral-v4-tool",
+    }:
         required = [
             {
                 "obligation_id": "obl:identity",
@@ -55,6 +59,17 @@ def initial_prompt(episode: FrozenEpisode) -> str:
             '"subject_ref":"<subject-from-evidence>","target_system":"<system>",'
             '"operation":"<operation>","authority_epoch":123}]}'
         )
+        if episode.prompt_profile == "evidence-neutral-v4-tool":
+            return (
+                "You are the proposal planner, not the executor. Infer the next actions "
+                "from the supplied evidence. Do not invent facts or identifiers that are "
+                "not present in the episode. If the evidence is insufficient, submit a wait "
+                "action. Submit your proposal only through the submit_baa_proposal function. "
+                "For execute actions, choose obligation_id, subject_ref, target_system, "
+                "operation, and authority_epoch from your own interpretation of the evidence. "
+                "Submit at most three actions in execution order.\n\n"
+                f"Episode:\n{json.dumps(payload, indent=2, sort_keys=True)}"
+            )
         if episode.prompt_profile == "evidence-neutral-v3-structured":
             return (
                 "You are the proposal planner, not the executor. Infer the next actions "
@@ -118,6 +133,13 @@ def adaptive_prompt(
         "feedback_history": history,
         "remaining_obligations": remaining,
     }
+    if episode.prompt_profile == "evidence-neutral-v4-tool":
+        return (
+            "Choose the next proposal from the episode evidence and operational "
+            "feedback. Do not invent facts or identifiers. Submit only through the "
+            "submit_baa_proposal function and submit at most one action.\n\n"
+            f"Episode state:\n{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
     if episode.prompt_profile == "evidence-neutral-v3-structured":
         return (
             "Choose the next proposal from the episode evidence and operational "
