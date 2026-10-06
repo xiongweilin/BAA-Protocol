@@ -10,13 +10,16 @@
 2. 固定 AIOS contract compatibility 与 execution-engine gating。
 3. 跨 HTTP/process/Docker 边界的隔离、类生产网络 acceptance。
 4. 对真实临时 Keycloak 与 Odoo 实例的高保真 connector acceptance。
-5. 单 episode 的组合 BAA -> AIOS -> World Runtime -> 真实 Keycloak/Odoo acceptance matrix，含独立产品 read-back 与故障恢复。\n6. 预注册的真实模型三制度前瞻研究，包含版本固定的 model/gateway 证据与显式零结果保留。
+5. 单 episode 的组合 BAA -> AIOS -> World Runtime -> 真实 Keycloak/Odoo acceptance matrix，含独立产品 read-back 与故障恢复。
+6. 预注册的真实模型三制度前瞻研究，包含版本固定的 model/gateway 证据与显式零结果保留。
 
 当前最强 integration 声明仍为：
 
 > 对有限 BAA 模型和固定 AIOS 离职实现 <code>87f24f32a01c67a9246fc3cb127517c80798e169</code>，已测试路径能够约束覆盖范围内的离职行动流，在执行/回读含糊时保留显式不确定性，通过独立观测到的产品状态恢复，在 provider effect 前拒绝未授权 Runtime 绕过，并使用分离的 writer/verifier 身份在真实临时 Keycloak 与 Odoo 上完成覆盖的 IAM/HRIS 义务。
 
-故障恢复声明指的是稳定逻辑 request identity 与已测试路径中的 no-blind-replay，不是对 physical exactly-once delivery 的证明。\n\n第一轮 prospective comparative result 另行保留为负结果：在冻结的七 episode 真实模型研究中，三种 regime 在 C0、C1、C2 都是 6/7 delegable，因此 BAA 没有扩大该有限 delegation frontier。
+故障恢复声明指的是稳定逻辑 request identity 与已测试路径中的 no-blind-replay，不是对 physical exactly-once delivery 的证明。
+
+第一轮 prospective comparative result 另行保留为负结果：在冻结的七 episode 真实模型研究中，三种 regime 在 C0、C1、C2 都是 6/7 delegable，因此 BAA 没有扩大该有限 delegation frontier。
 
 这不是生产租户安全声明、一般无人值守自治定理或认证结果。
 
@@ -45,7 +48,8 @@
 - 真实临时 Keycloak connector acceptance；
 - 真实临时 Odoo connector acceptance；
 - normal、lost-ack、read-back-outage、unauthorized-bypass 四场景的组合真实产品 offboarding E2E；
-- 共同预算 delegation frontier 与 adaptive capability sweep；\n- 真实模型 prospective harness，包含 shared initial sampling、adaptive-prefix reuse、JSON/SSE Responses compatibility，以及 physical/counterfactual logical model cost 分离。
+- 共同预算 delegation frontier 与 adaptive capability sweep；
+- 真实模型 prospective harness，包含 shared initial sampling、adaptive-prefix reuse、JSON/SSE Responses compatibility，以及 physical/counterfactual logical model cost 分离。
 
 ## 固定 AIOS 兼容性
 
@@ -174,6 +178,17 @@ terminal lost-confirmation 在三种 regime 下都不可委托。BAA 在第一�
 
 详见 [prospective-model-result.zh-CN.md](prospective-model-result.zh-CN.md)。
 
+### v2 资格结果
+
+第二轮预注册真实模型研究 `prospective-offboarding-v2` 没有产生可接受的 frontier 结果。
+
+- 正式 run `37395717489` 因 transport 与 schema error 未通过 model-evidence qualification；
+- 诊断 run `37397784048` 将 transport error 降为 0，但仍保留 1 个 schema error；
+- 剩余失败是模型返回 execute object 时使用 `case_subject`，并遗漏必需的 `obligation_id` 与 `subject_ref`；
+- 因此 artifact 中机械生成的 9/12 frontier summary 不能作为 comparative evidence 接受。
+
+该结果被记录为 qualification failure，不通过反复重采样直到成功。详见 [prospective-model-v2-result.zh-CN.md](prospective-model-v2-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -201,7 +216,8 @@ terminal lost-confirmation 在三种 regime 下都不可委托。BAA 在第一�
 - structural/reference：在明确假设下，模型中的 forbidden transitions 被机械排除；
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
-- composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；\n- prospective comparison：第一轮冻结真实模型 workload 没有显示 delegation-frontier expansion，但在 unresolved effect 后显示了更严格的 BAA reality-facing trajectory。
+- composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；
+- prospective comparison：第一轮冻结真实模型 workload 没有显示 delegation-frontier expansion，但在 unresolved effect 后显示了更严格的 BAA reality-facing trajectory。
 
 任何一项都不意味着生产租户安全。
 
@@ -228,15 +244,17 @@ reference/network/product-composition 阶段已经收敛，因为：
 17. 一个组合 real-product episode 达到 externally verified completion；
 18. real-product lost-ack 与 read-back-outage 持久记录并恢复 reconciliation state；
 19. Runtime bypass test 保持真实临时产品状态不变；
-20. 文档明确区分已证明与未证明内容；\n21. 一个真实模型 comparative workload 在解释前完成预注册，并保存版本固定证据；\n22. implementation-invalid run 被显式排除，最终接受 run 保留零 delegation-frontier result。
+20. 文档明确区分已证明与未证明内容；
+21. 一个真实模型 comparative workload 在解释前完成预注册，并保存版本固定证据；
+22. implementation-invalid run 被显式排除，最终接受 run 保留零 delegation-frontier result。
 
 ## 下一阶段边界
 
 继续扩展 connector 或单纯扩展 composition 仍不合理。第一轮 prospective comparative study 已完成，并得到零 frontier result。
 
-下一阶段是**前瞻比较的泛化检验**，必须创建新 study version，而不是修改 `prospective-offboarding-v1`。
+下一阶段是**使用机器约束 proposal interface 的前瞻比较泛化检验**，必须创建新 study version，而不是修改 v1 或 v2。
 
-它应保持同样的三种 regime 与 accounting contract，但使用更大的 prospective episode set，使模型能够真正遇到竞争性、陈旧、含糊或误导性的行动证据，同时不指示模型违反 policy。episode assignment 继续前瞻完成，unresolved outcome 必须留在分母中，C 仍只表示 feedback horizon。
+它应保持 hidden-control evidence 设计、同样三种 regime 与 accounting contract，但把 free-form JSON compliance 替换成机器强制的 structured-output proposal schema。episode assignment 继续前瞻完成，unresolved outcome 必须留在分母中，C 仍只表示 feedback horizon。
 
 主要 outcome 继续包括 useful delivery、unsafe/out-of-scope reality-facing transition、unresolved-result duration、replay/duplicate logical-request behavior、principal attention、third-party assurance labor、automatic assurance intervention、recovery quality，以及对 adaptive feedback 和 strategic proposal behavior 的敏感性。
 

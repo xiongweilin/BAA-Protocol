@@ -10,13 +10,16 @@ The repository has reached six evidence layers for one concrete domain: employee
 2. Pinned AIOS contract compatibility and execution-engine gating.
 3. Isolated production-like network acceptance across HTTP/process/Docker boundaries.
 4. High-fidelity connector acceptance against real ephemeral Keycloak and Odoo product instances.
-5. A composed single-episode BAA -> AIOS -> World Runtime -> real Keycloak/Odoo acceptance matrix with independent product read-back and fault recovery.\n6. A preregistered prospective real-model three-regime study with version-pinned model/gateway evidence and explicit null-result retention.
+5. A composed single-episode BAA -> AIOS -> World Runtime -> real Keycloak/Odoo acceptance matrix with independent product read-back and fault recovery.
+6. A preregistered prospective real-model three-regime study with version-pinned model/gateway evidence and explicit null-result retention.
 
 The strongest current claim is:
 
 > For the finite BAA model and the pinned AIOS offboarding implementation at commit `87f24f32a01c67a9246fc3cb127517c80798e169`, the tested path can constrain the covered offboarding action flow, preserve explicit uncertainty across ambiguous execution/read-back states, recover through independently observed product state, reject an unauthorized Runtime bypass before provider effect, and complete the covered IAM/HRIS obligations against real ephemeral Keycloak and Odoo instances with separate writer/verifier identities.
 
-The fault-recovery result is a claim about stable logical request identity and tested no-blind-replay behavior, not a proof of physical exactly-once delivery.\n\nThe first prospective comparative result is separately negative: on the frozen seven-episode real-model study, all three regimes were delegable on 6/7 episodes at C0, C1, and C2, so BAA did not enlarge the tested delegation frontier.
+The fault-recovery result is a claim about stable logical request identity and tested no-blind-replay behavior, not a proof of physical exactly-once delivery.
+
+The first prospective comparative result is separately negative: on the frozen seven-episode real-model study, all three regimes were delegable on 6/7 episodes at C0, C1, and C2, so BAA did not enlarge the tested delegation frontier.
 
 This is not a production-tenant safety claim, a general unattended-autonomy theorem, or a certification result.
 
@@ -44,7 +47,8 @@ The prototype includes:
 - isolated Windows/Docker network acceptance;
 - real ephemeral Keycloak connector acceptance;
 - real ephemeral Odoo connector acceptance;
-- composed real-product offboarding E2E for normal, lost-ack, read-back-outage, and unauthorized-bypass scenarios;\n- a prospective real-model harness with shared initial sampling, adaptive-prefix reuse, JSON/SSE Responses compatibility, and separate physical versus counterfactual logical model-cost accounting.
+- composed real-product offboarding E2E for normal, lost-ack, read-back-outage, and unauthorized-bypass scenarios;
+- a prospective real-model harness with shared initial sampling, adaptive-prefix reuse, JSON/SSE Responses compatibility, and separate physical versus counterfactual logical model-cost accounting.
 
 ## Pinned AIOS compatibility
 
@@ -190,6 +194,17 @@ Two earlier runs are excluded from the accepted result: `37392398429` exposed a 
 
 See [prospective-model-result.md](prospective-model-result.md).
 
+### v2 qualification outcome
+
+The second preregistered real-model study, `prospective-offboarding-v2`, did not produce an accepted frontier result.
+
+- formal run `37395717489` failed model-evidence qualification with transport and schema errors;
+- diagnostic run `37397784048` reduced transport errors to zero but retained one schema error;
+- the remaining failure was a model-produced execute object using `case_subject` while omitting required `obligation_id` and `subject_ref`;
+- therefore the mechanically emitted 9/12 frontier summaries are not accepted comparative evidence.
+
+The result is recorded as a qualification failure, not resampled until success. See [prospective-model-v2-result.md](prospective-model-v2-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -217,7 +232,8 @@ The evidence supports four statements that must remain separate:
 - structural/reference: modeled forbidden transitions are mechanically excluded under stated assumptions;
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
-- composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;\n- prospective comparison: the first frozen real-model workload did not show delegation-frontier expansion, while still showing a stricter BAA trajectory after an unresolved effect.
+- composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
+- prospective comparison: the first frozen real-model workload did not show delegation-frontier expansion, while still showing a stricter BAA trajectory after an unresolved effect.
 
 None implies that a production tenant is safe.
 
@@ -244,15 +260,17 @@ The reference/network/product-composition phase is converged because:
 17. one composed real-product episode reaches externally verified completion;
 18. real-product lost-ack and read-back-outage scenarios persist and recover explicit reconciliation state;
 19. the Runtime bypass test leaves real ephemeral product state unchanged;
-20. documentation states what is and is not proved;\n21. one real-model comparative workload was preregistered before interpretation and run with version-pinned evidence;\n22. implementation-invalid runs were excluded explicitly, and the final accepted run retained a null delegation-frontier result.
+20. documentation states what is and is not proved;
+21. one real-model comparative workload was preregistered before interpretation and run with version-pinned evidence;
+22. implementation-invalid runs were excluded explicitly, and the final accepted run retained a null delegation-frontier result.
 
 ## Next phase boundary
 
 Connector-only or composition-only expansion remains unjustified. The first prospective comparative study is now complete and produced a null frontier result.
 
-The next phase is **prospective comparative generalization**, using a new study version rather than modifying `prospective-offboarding-v1`.
+The next phase is **prospective comparative generalization with a machine-constrained proposal interface**, using a new study version rather than modifying v1 or v2.
 
-It should preserve the same three regimes and accounting contract, but use a larger prospective episode set in which the model can encounter genuinely competing, stale, ambiguous, or misleading action evidence without being instructed to violate policy. Episode assignment must remain prospective, unresolved outcomes must remain in the denominator, and model-visible C must remain only a feedback-horizon resource.
+It should preserve the hidden-control evidence design, the same three regimes, and the same accounting contract, while replacing free-form JSON compliance with a machine-enforced structured-output proposal schema. Episode assignment must remain prospective, unresolved outcomes must remain in the denominator, and model-visible C must remain only a feedback-horizon resource.
 
 Primary outcomes remain:
 
