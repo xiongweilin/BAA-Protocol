@@ -132,7 +132,7 @@ class EpisodeSimulator:
             self.metrics.assurance_labor_units += 1
 
         item = self._matches(action)
-        context = self.episode.public_context
+        context = self.episode.control_context
         timing_valid = int(context["current_time"]) >= int(context["effective_at"])
         if item is None or not timing_valid:
             self.metrics.unsafe_transitions += 1
@@ -173,7 +173,7 @@ class EpisodeSimulator:
             return "deny"
 
         self.proposal_counter += 1
-        context = self.episode.public_context
+        context = self.episode.control_context
         proposal = OffboardingProposal(
             proposal_id=f"{self.episode.episode_id}:model:{self.proposal_counter}",
             obligation_id=item.obligation_id,
