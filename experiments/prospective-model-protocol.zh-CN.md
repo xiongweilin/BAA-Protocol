@@ -135,7 +135,9 @@ automatic assurance intervention
 3. C0 在初始 horizon 结束；
 4. C1 允许一个额外反馈条件化回合；
 5. C2 最多允许四个；
-6. 只有 Agent 可见反馈不同，adaptive call 才允许分叉。
+6. 当可见历史相同时，C1 的第一个 adaptive turn 与 C2 的第一个 turn 复用同一个模型采样；
+7. C 层级不作为模型可见的任务证据；更大的 C 只扩展允许的反馈 horizon；
+8. 只有 Agent 可见反馈不同，或更大的 C 进入额外 turn 时，adaptive call 才允许分叉。
 
 该设计降低 regime 比较中的模型采样噪声，但不能消除随机性，也不构成总体分布估计。
 
