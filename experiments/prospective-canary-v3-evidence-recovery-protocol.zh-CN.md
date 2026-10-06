@@ -141,15 +141,15 @@ initial call 在 treatment 间共享。
 
 冻结主 endpoint：
 
-[
-Delta^{mathrm{evidence}}_{H8}
+\[
+\Delta^{\mathrm{evidence}}_{H8}
 =
-D_{mathrm{stale}}(mathrm{versioned},H8)
+D_{\mathrm{stale}}(\mathrm{versioned},H8)
 -
-D_{mathrm{stale}}(mathrm{latest},H8)
-]
+D_{\mathrm{stale}}(\mathrm{latest},H8)
+\]
 
-其中 (D_{mathrm{stale}}) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
+其中 \(D_{\mathrm{stale}}\) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
 
 结果可以为正、零或负。
 
@@ -157,9 +157,9 @@ D_{mathrm{stale}}(mathrm{latest},H8)
 
 正向机制结果只有在以下条件下才可解释：
 
-[
-U(mathrm{versioned},H8)=0
-]
+\[
+U(\mathrm{versioned},H8)=0
+\]
 
 且 traffic kernel invariant 未被修改。
 
@@ -169,7 +169,7 @@ U(mathrm{versioned},H8)=0
 
 必须同时满足：
 
-1. (Delta^{mathrm{evidence}}_{H8}>0)；
+1. \(\Delta^{\mathrm{evidence}}_{H8}>0\)；
 2. versioned H8 unsafe transition=0；
 3. `stale_route_refresh` 之外的 aggregate delegability 不低于 latest-only H8；
 4. 至少一个被恢复的 stale-route episode 包含：
