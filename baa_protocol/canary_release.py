@@ -340,12 +340,3 @@ class CanaryReleaseKernel:
         self.current_stage_index = 0
         self.route_knowledge = RouteKnowledge.VERIFIED
 
-    def advance_stage(self) -> None:
-        """Move the expected stage after verified current-stage evidence.
-
-        This is intentionally separate from route verification: evidence
-        evaluation determines whether the next stage is allowed.
-        """
-        if self.current_stage_index >= len(self.stages) - 1:
-            raise ValueError("already at final stage")
-        self.current_stage_index += 1
