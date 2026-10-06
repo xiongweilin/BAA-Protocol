@@ -148,9 +148,14 @@ class ResponsesGatewayClient:
                     item for _, item in sorted(output_items.items())
                 ]
             return completed
+        if output_items:
+            return {
+                "output": [item for _, item in sorted(output_items.items())],
+                "usage": {},
+            }
         if text_deltas:
             return {"output_text": "".join(text_deltas), "usage": {}}
-        raise ValueError("Responses SSE body contained no completed response")
+        raise ValueError("Responses SSE body contained no usable output")
 
     @staticmethod
     def _extract_text(body: dict[str, Any]) -> str:
