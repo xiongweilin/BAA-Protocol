@@ -50,6 +50,7 @@ def obligations_for(episode: FrozenEpisode) -> tuple[OffboardingObligation, ...]
 class ProspectiveEpisodeResult:
     episode_id: str
     logical_name: str
+    study_group: str
     regime: str
     capability_level: int
     metrics: EpisodeMetrics
@@ -102,6 +103,7 @@ class EpisodeSimulator:
         self.fault_consumed = False
         self.proposal_counter = 0
         self.current_time = int(context["current_time"])
+        self.runtime_evidence: list[dict[str, Any]] = []
         self.applied_runtime_events: set[int] = set()
 
     def record(self, **event: Any) -> None:
@@ -316,12 +318,28 @@ class EpisodeSimulator:
                     source=source,
                     current_time=self.current_time,
                 )
+            elif event_type == "evidence_update":
+                update = {
+                    "source": source,
+                    "status": str(event.get("status", "current")),
+                    "claim": deepcopy(event.get("claim")),
+                }
+                self.runtime_evidence.append(update)
+                self.record(
+                    phase="environment",
+                    disposition="evidence_updated",
+                    current_time=self.current_time,
+                    **deepcopy(update),
+                )
             else:
                 raise ValueError(f"unsupported runtime event type: {event_type!r}")
             self.applied_runtime_events.add(index)
 
     def visible_runtime_state(self) -> dict[str, Any]:
-        return {"current_time": self.current_time}
+        return {
+            "current_time": self.current_time,
+            "evidence_updates": deepcopy(self.runtime_evidence),
+        }
 
     def remaining(self) -> list[str]:
         return [
@@ -363,6 +381,7 @@ class EpisodeSimulator:
         return ProspectiveEpisodeResult(
             episode_id=self.episode.episode_id,
             logical_name=self.episode.logical_name,
+            study_group=self.episode.study_group,
             regime=self.regime.value,
             capability_level=capability_level,
             metrics=self.metrics,
