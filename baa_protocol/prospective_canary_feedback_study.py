@@ -165,6 +165,7 @@ def run_canary_feedback_study(
         for episode in episodes
     }
     physical_calls = [call for _, call in shared_initial.values()]
+    adaptive_cache: dict[tuple[str, str, int, str], tuple[Any, ModelCall]] = {}
     rows: list[dict[str, Any]] = []
 
     for feedback_policy in feedback_policies:
@@ -181,18 +182,29 @@ def run_canary_feedback_study(
                     simulator,
                     feedback_policy=feedback_policy,
                 )
-                plan, call = _call(
-                    client,
+                cache_key = (
+                    episode.episode_id,
+                    phase,
+                    turn_level,
                     prompt,
-                    episode=episode,
-                    capability=AdaptiveResource(
-                        level=turn_level,
-                        extra_turns=turn_level,
-                    ),
-                    phase=phase,
-                    regime=Regime.BAA,
                 )
-                physical_calls.append(call)
+                cached = adaptive_cache.get(cache_key)
+                if cached is None:
+                    plan, call = _call(
+                        client,
+                        prompt,
+                        episode=episode,
+                        capability=AdaptiveResource(
+                            level=turn_level,
+                            extra_turns=turn_level,
+                        ),
+                        phase=phase,
+                        regime=Regime.BAA,
+                    )
+                    adaptive_cache[cache_key] = (plan, call)
+                    physical_calls.append(call)
+                else:
+                    plan, call = cached
                 calls += 1
                 a, b = usage_tokens(call.usage)
                 in_tokens += a
