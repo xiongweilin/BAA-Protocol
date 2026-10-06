@@ -94,7 +94,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [spec/state-machine.zh-CN.md](spec/state-machine.zh-CN.md) —— 协议状态语义。
 - [spec/vsar.zh-CN.md](spec/vsar.zh-CN.md) —— 版本化充分性保证记录（VSAR）。
 - [experiments/design.zh-CN.md](experiments/design.zh-CN.md) —— 可证伪实验设计。
-- [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
+- [experiments/prospective-model-protocol.zh-CN.md](experiments/prospective-model-protocol.zh-CN.md) — 前瞻真实模型研究的预注册协议。\n- [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) —— 员工离职内核。
