@@ -31,6 +31,7 @@ class FrozenEpisode:
     public_context: dict[str, Any]
     fault_mode: str
     recovery_after_unknown: bool
+    recovery_after_turn: int | None = None
 
 
 @dataclass(frozen=True)
@@ -215,6 +216,11 @@ def load_workload(path: str | Path) -> tuple[str, tuple[FrozenEpisode, ...]]:
             public_context=dict(item["public_context"]),
             fault_mode=str(item["fault"]["mode"]),
             recovery_after_unknown=bool(item["fault"]["recovery_after_unknown"]),
+            recovery_after_turn=(
+                int(item["fault"]["recovery_after_turn"])
+                if item["fault"].get("recovery_after_turn") is not None
+                else None
+            ),
         )
         for item in raw["episodes"]
     )
