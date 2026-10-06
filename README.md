@@ -90,6 +90,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 
 - [domains/employee-offboarding.md](domains/employee-offboarding.md) — first task-domain boundary, assumptions, invariants, and experiment.
 - [domains/canary-release-promotion.md](domains/canary-release-promotion.md) — second task domain: progressive traffic exposure with evidence gates and rollback.
+- [experiments/canary-delegation-frontier-baseline.md](experiments/canary-delegation-frontier-baseline.md) — deterministic second-domain delegation-frontier baseline.
 - [spec/protocol.md](spec/protocol.md) — admission and execution protocol.
 - [spec/guarantees.md](spec/guarantees.md) — proof obligations and claim language.
 - [spec/state-machine.md](spec/state-machine.md) — protocol state semantics.
@@ -139,7 +140,7 @@ The evidence chain now includes:
 - AIOS workflow run `37404551022`: qualified recovery-focused v5 comparison. C0/C1 remained 9/12 for all regimes; at C2 self-check/audit remained 9/12 while BAA reached **12/12 delegable**, with equal aggregate useful delivery (36), zero BAA unsafe transitions, and five direct/audit unsafe transitions.
 - AIOS workflow run `37406741476`: first fully qualified v6 result on the frozen 24-episode workload. At C2 self-check/audit were 14/24 delegable and BAA was **20/24**, so the preregistered aggregate endpoint was Delta_C2 = +6. The gain was localized to time_recovery (+4) and readback_recovery (+2); subject/authority evidence-refresh strata showed no BAA-only gain, so the stronger preregistered cross-mechanism generalization criterion was not met.
 
-These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion. v6 prospectively reproduces an aggregate expansion on a new workload but does not establish the stronger preregistered evidence-refresh cross-mechanism generalization claim. Neither result estimates production frequency.
+These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. The second canary-release domain currently has only structural/integration checks plus a deterministic 7-episode frontier fixture; it has not yet produced a real-model comparative result. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion. v6 prospectively reproduces an aggregate expansion on a new workload but does not establish the stronger preregistered evidence-refresh cross-mechanism generalization claim. Neither result estimates production frequency.
 
 See [experiments/status.md](experiments/status.md).
 
