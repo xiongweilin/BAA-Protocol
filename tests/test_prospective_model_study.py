@@ -104,6 +104,53 @@ class ProspectiveModelStudyTests(unittest.TestCase):
             ],
         )
 
+    def test_gateway_client_decodes_sse_fallback(self):
+        from baa_protocol.prospective_types import ResponsesGatewayClient
+
+        item = {
+            "type": "message",
+            "role": "assistant",
+            "content": [{"type": "output_text", "text": "{\"actions\":[]}"}],
+        }
+        completed = {
+            "id": "resp_test",
+            "object": "response",
+            "status": "completed",
+            "output": [],
+            "usage": {"input_tokens": 11, "output_tokens": 4},
+        }
+        wire = (
+            b"event: response.output_item.done\n"
+            + b"data: "
+            + json.dumps(
+                {
+                    "type": "response.output_item.done",
+                    "output_index": 0,
+                    "item": item,
+                }
+            ).encode()
+            + b"\n\n"
+            + b"event: response.completed\n"
+            + b"data: "
+            + json.dumps(
+                {
+                    "type": "response.completed",
+                    "response": completed,
+                }
+            ).encode()
+            + b"\n\n"
+        )
+        body = ResponsesGatewayClient._decode_response(
+            wire,
+            "text/event-stream; charset=utf-8",
+        )
+        self.assertEqual(body["output"], [item])
+        self.assertEqual(
+            ResponsesGatewayClient._extract_text(body),
+            '{"actions":[]}',
+        )
+        self.assertEqual(body["usage"]["input_tokens"], 11)
+
     def test_fenced_json_plan_parses(self):
         fence = chr(96) * 3
         plan, _ = parse_plan(
