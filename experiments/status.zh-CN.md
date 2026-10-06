@@ -361,6 +361,36 @@ H8 treated cell 为 +1 useful/delegable episode 付出 +4 assurance intervention
 
 详见 [prospective-canary-v4-evidence-horizon-result.zh-CN.md](prospective-canary-v4-evidence-horizon-result.zh-CN.md)。
 
+### Canary v5 通过资格检查的 robustness 结果
+
+AIOS workflow run `37466492295` 是确定性 24-episode robustness grid 上首个完整通过资格检查的 canary v5 run。
+
+aggregate recoverable interaction 为正：
+
+[
+C_{H4}=+2,qquad C_{H8}=+3,qquad Delta_R=+1.
+]
+
+但预注册 timing-stratum interaction 为：
+
+| Recovery stratum | H4 contrast | H8 contrast | Interaction |
+|---|---:|---:|---:|
+| early | +2 | +2 | 0 |
+| mid | 0 | +1 | **+1** |
+| late | 0 | 0 | 0 |
+
+只有 1/3 timing stratum 为正，因此预注册 strong robustness criterion **未满足**。
+
+所有 logical cell unsafe transition=0、principal attention=0、terminal unresolved=0。H8 control delegability 在两种 evidence policy 下都保持 3/12。
+
+正确解释是混合结果：
+
+> 正 evidence×horizon interaction 在 aggregate 层面前瞻复现，但当前证据还没有建立跨冻结 timing 参数网格的 robust interaction。
+
+该 run 使用 293 个 physical model sample、300 次 HTTP attempt；7 次 pre-response transport failure 全部按预注册 replay-safe retry rule 恢复，未解决 transport/schema/model error 均为 0。
+
+详见 [prospective-canary-v5-robustness-result.zh-CN.md](prospective-canary-v5-robustness-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -389,7 +419,7 @@ H8 treated cell 为 +1 useful/delegable episode 付出 +4 assurance intervention
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
 - composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；
-- prospective comparison：v1 与 v4 保留 frontier 零结果；v5 在预注册 recovery event 下显示通过资格检查的 C2 frontier expansion；v6 在新的 offboarding workload 上复现 aggregate expansion 但没有建立 evidence-refresh 跨机制泛化；canary v1 给出第二域负 frontier 结果；canary v2 没有发现 richer mechanical feedback 或 H8 horizon 对 stale-route 的增益；canary v3 保留 H4 frontier 零 endpoint 并显示一次局部 evidence-recovery repair；canary v4 在 BAA 内部得到预注册正 evidence×horizon interaction（+1），H8 安全恢复 1 个 stale-route episode。
+- prospective comparison：v1 与 v4 保留 frontier 零结果；v5 在预注册 recovery event 下显示通过资格检查的 C2 frontier expansion；v6 在新的 offboarding workload 上复现 aggregate expansion 但没有建立 evidence-refresh 跨机制泛化；canary v1 给出第二域负 frontier 结果；canary v2 没有发现 richer mechanical feedback 或 H8 horizon 对 stale-route 的增益；canary v3 保留 H4 frontier 零 endpoint 并显示一次局部 evidence-recovery repair；canary v4 在 BAA 内部得到预注册正 evidence×horizon interaction（+1）；canary v5 在前瞻生成的 24-episode workload 上复现 aggregate +1 interaction，但只有 1/3 recovery stratum 为正，因此更强 timing-robustness criterion 未满足。
 
 任何一项都不意味着生产租户安全。
 
@@ -430,6 +460,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 31. canary v2 修正 adaptive shared-sampling 后接受首个完整合格 run；feedback 主 endpoint、horizon contrast 与 info-vs-time contrast 全部为 0，同时定位到 current-route evidence stale/mismatched 的 evidence-recovery 瓶颈。
 32. canary v3 在不重采样的前提下接受首个完整通过资格检查的 transport-amended run；两种 evidence treatment 在 H4 都保持 stale-route 1/3、aggregate 11/18，而一次 bounded reacquisition 将 stale-evidence hold 因果修复为安全 verified sequential transition，但没有改变最终 H4 delegable set。
 33. canary v4 在不重采样的前提下接受首个完整通过资格检查的 2×2 evidence×horizon run；预注册 interaction 为 +1：H4 两个 cell 与 no_reacquire@H8 的 stale-route 都是 0/3，而 reacquire@H8 为 1/3；四个 cell unsafe transition 全为 0。
+34. canary v5 接受首个完整通过资格检查的 generated-workload robustness run；aggregate interaction 仍为 +1，unsafe=0 且 control 不退化，但只有 mid timing stratum 为正，因此预注册 strong robustness criterion 未满足。
 
 ## 下一阶段边界
 
@@ -450,10 +481,13 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 第二任务域 canary v1 已经否定“safety advantage 会自动转化为 delegation leverage”的简单预期；canary v2 否定“只增加 denial 信息或单独把 horizon 延长到 H8 就足够”的预期；canary v3 显示 bounded current-route evidence reacquisition 可以修复局部 stale-evidence transition，但没有 H4 frontier gain；canary v4 随后在冻结机制 workload 上得到预注册正 interaction：一个 stale-route episode 只有在 evidence recovery 与足够的 H8 remaining interaction time 结合时才安全变为 delegable。
 
-因此，原始 fixture family 的局部机制链已经足够收敛。第一个 robustness 轴 follow-up 现在已预注册为 canary v5，而不是继续增加 hand-built stale-route case。
+canary v5 现在已经完成第一个 robustness 轴 follow-up。它在前瞻生成的 24-episode workload 上复现 aggregate 正 interaction（+1），但预注册更强 robustness criterion 未满足：只有 mid timing stratum interaction 为正；early 的 treatment effect 在 H4 已经出现，late 则始终没有把 bounded read 转化为 completion。
 
-canary v5 冻结一个确定性 24-episode generator，包含六个各 4 个 episode 的 strata：三个前瞻参数化的 recoverable evidence-lag timing，以及 missing-observer、guardrail、clean 三类 control。canonical workload SHA-256 为 `e1c5802edcbc9c1f33d5a72c18a102d6af406ca7e25962a71a2fb62b2b232bd9`。hard gate、bounded reacquisition rule、forced-function interface、H4/H8 prefix design、budget 与 transport qualification 保持不变。
+因此，不应继续增加 evidence-lag timing fixture。下一实验应切换到两个不同轴之一：
 
-主 endpoint 仍是 12 个 recoverable episode 上的 evidence×horizon difference-in-differences。只有至少 2/3 预注册 recovery-timing strata 各自 interaction 为正、所有 cell unsafe=0，且 12 个 control 在 reacquire@H8 下 delegability 不下降，才允许称为正 robustness 结果。
+- 预注册 cost/horizon surface，同时改变 remaining horizon 与显式 assurance-intervention/model-call ceiling，直接测可行 delegation frontier，而不是单点；或
+- 另一个独立规定的 reality-facing action interface，同时保持同一 hard-gate/evidence-accounting 结构。
 
-在预注册合并前不接受任何 canary v5 模型样本。canary v1–v4 全部保持冻结。
+v5 的长时运行还暴露了未来实验的可观测性要求：运行中应报告 completed physical model call/retry 进度，但不能暴露 prompt，也不能改变 model-visible state。这是基础设施要求，不构成重新解释或重跑 v5 的理由。
+
+canary v1–v5 全部保持冻结。
