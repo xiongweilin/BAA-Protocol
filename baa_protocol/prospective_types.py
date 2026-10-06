@@ -62,6 +62,7 @@ class ModelCall:
     latency_seconds: float
     usage: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
+    error_stage: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
