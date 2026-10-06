@@ -130,16 +130,17 @@ def adaptive_prompt(
     payload = {
         "task": "Continue the same employee offboarding after operational feedback.",
         "context": episode.public_context,
-        "feedback_class": (
-            "bounded_action_protocol"
-            if regime is Regime.BAA
-            else "direct_execution"
-        ),
         "feedback_history": history,
         "remaining_obligations": remaining,
     }
     if episode.prompt_profile == "evidence-neutral-v5-recovery":
         payload["runtime_state"] = runtime_state or {}
+    else:
+        payload["feedback_class"] = (
+            "bounded_action_protocol"
+            if regime is Regime.BAA
+            else "direct_execution"
+        )
     if episode.prompt_profile == "evidence-neutral-v5-recovery":
         return (
             "Choose the next proposal from the episode evidence, current runtime "
