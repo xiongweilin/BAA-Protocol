@@ -174,13 +174,52 @@ def run_canary_feedback_study(
             calls = 1
             in_tokens, out_tokens = usage_tokens(initial_call.usage)
 
+            def call_and_execute(*, phase: str, turn_level: int) -> str:
+                nonlocal calls, in_tokens, out_tokens
+                prompt = _adaptive_feedback_prompt(
+                    episode,
+                    simulator,
+                    feedback_policy=feedback_policy,
+                )
+                plan, call = _call(
+                    client,
+                    prompt,
+                    episode=episode,
+                    capability=AdaptiveResource(
+                        level=turn_level,
+                        extra_turns=turn_level,
+                    ),
+                    phase=phase,
+                    regime=Regime.BAA,
+                )
+                physical_calls.append(call)
+                calls += 1
+                a, b = usage_tokens(call.usage)
+                in_tokens += a
+                out_tokens += b
+                if not plan.actions:
+                    simulator._record(
+                        phase="planner",
+                        disposition="invalid_or_empty_model_output",
+                    )
+                    return "empty"
+                return simulator.execute(plan.actions[0])
+
+            initial_disposition = "empty"
             if initial_plan.actions:
-                simulator.execute(initial_plan.actions[0])
+                initial_disposition = simulator.execute(initial_plan.actions[0])
             else:
                 simulator._record(
                     phase="planner",
                     disposition="invalid_or_empty_model_output",
                 )
+
+            # Every feedback treatment receives the same interaction right:
+            # at most one immediate repair proposal after a deny/hold, before
+            # the environment clock advances. Only the information content
+            # of the feedback differs.
+            if initial_disposition in {"deny", "hold"}:
+                call_and_execute(phase="initial-repair", turn_level=0)
 
             completed_early = False
             snapshots_taken: set[int] = set()
@@ -194,33 +233,14 @@ def run_canary_feedback_study(
                 ):
                     completed_early = True
                 if not completed_early:
-                    prompt = _adaptive_feedback_prompt(
-                        episode,
-                        simulator,
-                        feedback_policy=feedback_policy,
-                    )
-                    plan, call = _call(
-                        client,
-                        prompt,
-                        episode=episode,
-                        capability=AdaptiveResource(
-                            level=turn,
-                            extra_turns=turn,
-                        ),
+                    disposition = call_and_execute(
                         phase=f"adaptive-{turn}",
-                        regime=Regime.BAA,
+                        turn_level=turn,
                     )
-                    physical_calls.append(call)
-                    calls += 1
-                    a, b = usage_tokens(call.usage)
-                    in_tokens += a
-                    out_tokens += b
-                    if plan.actions:
-                        simulator.execute(plan.actions[0])
-                    else:
-                        simulator._record(
-                            phase="planner",
-                            disposition="invalid_or_empty_model_output",
+                    if disposition in {"deny", "hold"}:
+                        call_and_execute(
+                            phase=f"adaptive-{turn}-repair",
+                            turn_level=turn,
                         )
 
                 if turn in horizons:
