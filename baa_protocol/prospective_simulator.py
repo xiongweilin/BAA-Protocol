@@ -101,6 +101,8 @@ class EpisodeSimulator:
         self.pending: str | None = None
         self.fault_consumed = False
         self.proposal_counter = 0
+        self.current_time = int(context["current_time"])
+        self.applied_runtime_events: set[int] = set()
 
     def record(self, **event: Any) -> None:
         self.history.append(event)
@@ -133,7 +135,7 @@ class EpisodeSimulator:
 
         item = self._matches(action)
         context = self.episode.control_context
-        timing_valid = int(context["current_time"]) >= int(context["effective_at"])
+        timing_valid = self.current_time >= int(context["effective_at"])
         if item is None or not timing_valid:
             self.metrics.unsafe_transitions += 1
             self.record(phase="execution", disposition="unsafe", action=asdict(action))
@@ -191,7 +193,7 @@ class EpisodeSimulator:
             bridge_valid=True,
         )
         assert self.kernel is not None
-        admission = self.kernel.admit(proposal, now=int(context["current_time"]))
+        admission = self.kernel.admit(proposal, now=self.current_time)
         self.record(
             phase="admission",
             disposition=admission.decision.value,
@@ -212,7 +214,7 @@ class EpisodeSimulator:
         assert capability is not None
         self.kernel.execute(
             capability,
-            now=int(context["current_time"]),
+            now=self.current_time,
             case_id=str(context["case_id"]),
             authority_epoch=int(context["authoritative_authority_epoch"]),
             state_version=int(context["state_version"]),
@@ -255,8 +257,8 @@ class EpisodeSimulator:
             return "complete"
         return self._baa(action) if self.regime is Regime.BAA else self._direct(action)
 
-    def recover_unknown(self) -> bool:
-        if self.pending is None or not self.episode.recovery_after_unknown:
+    def _resolve_pending(self, *, source: str) -> bool:
+        if self.pending is None:
             return False
         obligation_id = self.pending
         item = self.by_id[obligation_id]
@@ -274,9 +276,52 @@ class EpisodeSimulator:
             phase="recovery",
             disposition="verified",
             obligation_id=obligation_id,
-            source="independent_readback",
+            source=source,
         )
         return True
+
+    def recover_unknown(self) -> bool:
+        if self.pending is None or not self.episode.recovery_after_unknown:
+            return False
+        return self._resolve_pending(source="independent_readback")
+
+    def apply_runtime_events(self, turn_number: int) -> None:
+        for index, event in enumerate(self.episode.runtime_events):
+            if index in self.applied_runtime_events:
+                continue
+            if int(event.get("after_turn", -1)) != turn_number:
+                continue
+            event_type = str(event.get("type", ""))
+            source = str(event.get("source", "runtime"))
+            if event_type == "advance_time":
+                new_time = int(event["current_time"])
+                if new_time < self.current_time:
+                    raise ValueError("runtime time cannot move backwards")
+                self.current_time = new_time
+                self.record(
+                    phase="environment",
+                    disposition="time_advanced",
+                    source=source,
+                    current_time=self.current_time,
+                )
+            elif event_type == "independent_readback":
+                resolved = self._resolve_pending(source=source)
+                self.record(
+                    phase="environment",
+                    disposition=(
+                        "readback_resolved"
+                        if resolved
+                        else "readback_no_pending"
+                    ),
+                    source=source,
+                    current_time=self.current_time,
+                )
+            else:
+                raise ValueError(f"unsupported runtime event type: {event_type!r}")
+            self.applied_runtime_events.add(index)
+
+    def visible_runtime_state(self) -> dict[str, Any]:
+        return {"current_time": self.current_time}
 
     def remaining(self) -> list[str]:
         return [
