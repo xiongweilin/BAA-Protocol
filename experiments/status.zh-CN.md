@@ -285,6 +285,27 @@ AIOS workflow run `37410377327` 是第二 BAA 任务域 `canary-release-promotio
 
 详见 [prospective-canary-v1-result.zh-CN.md](prospective-canary-v1-result.zh-CN.md)。
 
+### 跨任务域事后前沿敏感性
+
+单独的探索性分析对已经观察到的 offboarding-v6 与 canary-v1 trajectory 使用 raw completion 和独立 risk/resource ceiling 重新分类；它不修改任何预注册 endpoint。
+
+C2 的关键敏感性结果：
+
+| Domain | unsafe ceiling | best direct | BAA | delta |
+|---|---:|---:|---:|---:|
+| offboarding v6 | 0 | 14 | 20 | +6 |
+| offboarding v6 | 1 | 16 | 20 | +4 |
+| offboarding v6 | 2 | 19 | 20 | +1 |
+| canary v1 | 0 | 11 | 10 | -1 |
+| canary v1 | 1 | 13 | 10 | -3 |
+| canary v1 | 2 | 13 | 10 | -3 |
+
+分析还单独考察 BAA 自动 intervention capacity。offboarding C2 在 strict risk 下，每 episode intervention ceiling 为 0、1、2 时，BAA completed-within-bounds 分别为 13、16、20；canary C2 中，从 0 到 4 的 ceiling 都保持 BAA=10。
+
+这只是描述性重分类，不是不同 policy 下模型行为的 counterfactual claim。它说明 intervention capacity 只有在 state/feedback dynamics 能把 safe blocking 转换成 safe continuation 时才产生 leverage。
+
+详见 [cross-domain-frontier-sensitivity.zh-CN.md](cross-domain-frontier-sensitivity.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -321,7 +342,7 @@ AIOS workflow run `37410377327` 是第二 BAA 任务域 `canary-release-promotio
 
 reference/network/product-composition 阶段已经收敛，因为：
 
-1. 一个 task domain 固定到 source version；
+1. 两个 task domain 固定到明确的 AIOS contract surface；
 2. guarantee boundary 与 semantic-bridge assumption 明确；
 3. protocol 可执行；
 4. safety 与 delivery 分开测量；
@@ -354,27 +375,23 @@ reference/network/product-composition 阶段已经收敛，因为：
 
 ## 下一阶段边界
 
-单一任务域的机制问题已经从“能否挡住 unsafe action”推进到“safe stop 是否能在后续恢复并完成”；v4 与 v5 分别提供了有限证据。
+当前证据已经覆盖两个任务域，而且 strict C2 frontier 的符号相反：offboarding v6 为 +6，canary v1 为 -1。
 
-offboarding 的 prospective-generalization 阶段已经足够完成，不应继续增加 offboarding episode。下一阶段应改变外部有效性轴或成本前沿轴，而不是做 v7 = 更多同域 case。
+事后敏感性分析进一步显示：随着允许 unsafe transition，offboarding 的优势快速缩小；自动 intervention capacity 在 offboarding 中能产生 delivery leverage，但在 canary 中没有恢复 liveness。
 
-新研究应继续保持：
+因此下一阶段应改变机制，而不是继续增加 workload case。最具体的假说是 **machine-usable assurance feedback**：
 
-- hidden control truth 与 model-visible evidence 分离；
-- forced-function proposal capability；
-- regime-label causal control；
-- 三种 regime 使用共同外生 event schedule；
-- 严格 attention/risk/delivery accounting；
-- 完整 proposal 与 unknown-result 分母。
+> kernel 在 deny/hold 后，能否暴露受限的 corrective state——例如 required next stage、missing evidence class 或 reconciliation requirement——让 adaptive model 把 proposal 重构成安全 continuation，同时不放松 hard invariant？
 
-但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
+任何新的模型采样之前，follow-up 必须冻结：
 
-第二任务域 canary 结果已经否定了一个简单预期：safety advantage 不会在同一 horizon 下自动转化为 delegation leverage。下一组核心可证伪问题因此变成：
+- corrective-information schema；
+- 哪些字段是机械推导，而不是 semantic advice；
+- 这些信息只改变 planner observability，还是也改变 kernel state；
+- horizon 与 cost accounting；
+- 一个保持 safety 与 raw completion 分离的 primary endpoint；
+- 没有 safe continuation 的 negative control。
 
-> 随 assurance feedback quality、adaptive horizon 与 assurance labor ceiling 变化，attention-risk-delivery-assurance-cost 可行前沿如何移动？
+只有基于这种新机制假说，canary v2 才有研究意义；不能只是修改 canary v1 episode 以追求正结果。
 
-以及：
-
-> bounded protocol 能否在不削弱 hard invariant 的前提下，向模型暴露足够结构化的 corrective information，使 denied action 被重新表述为安全的 sequential continuation？
-
-任何 canary feedback protocol、horizon 或 kernel 的改变都必须进入新的预注册 study version；canary v1 保持冻结。
+与此同时，结构保证路线可以独立推进：对 capability scope、pending-effect retention、no blind replay、guarantee-channel isolation 与 conservative terminal settlement 等窄 hard invariant 做模型检查。
