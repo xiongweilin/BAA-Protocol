@@ -155,6 +155,9 @@ class ResponsesGatewayClient:
         timeout_seconds: float = 180.0,
         structured_output: bool = False,
         proposal_tool: bool = False,
+        tool_name: str = "submit_baa_proposal",
+        tool_schema: dict[str, Any] | None = None,
+        tool_description: str | None = None,
     ) -> None:
         if structured_output and proposal_tool:
             raise ValueError("structured_output and proposal_tool are mutually exclusive")
@@ -163,6 +166,12 @@ class ResponsesGatewayClient:
         self.timeout_seconds = timeout_seconds
         self.structured_output = structured_output
         self.proposal_tool = proposal_tool
+        self.tool_name = tool_name
+        self.tool_schema = tool_schema or proposal_output_schema()
+        self.tool_description = tool_description or (
+            "Submit the next bounded-action proposal selected from the "
+            "episode evidence and operational feedback."
+        )
         if proposal_tool:
             self.interface_mode = "function_tool"
         elif structured_output:
@@ -301,18 +310,15 @@ class ResponsesGatewayClient:
             payload["tools"] = [
                 {
                     "type": "function",
-                    "name": "submit_baa_proposal",
-                    "description": (
-                        "Submit the next bounded-action proposal selected from the "
-                        "episode evidence and operational feedback."
-                    ),
-                    "parameters": proposal_output_schema(),
+                    "name": self.tool_name,
+                    "description": self.tool_description,
+                    "parameters": self.tool_schema,
                     "strict": True,
                 }
             ]
             payload["tool_choice"] = {
                 "type": "function",
-                "name": "submit_baa_proposal",
+                "name": self.tool_name,
             }
             payload["parallel_tool_calls"] = False
         return payload
@@ -345,7 +351,7 @@ class ResponsesGatewayClient:
             )
         usage = body.get("usage")
         if self.proposal_tool:
-            raw_output = self._extract_function_arguments(body)
+            raw_output = self._extract_function_arguments(body, name=self.tool_name)
         else:
             raw_output = self._extract_text(body)
         return (
