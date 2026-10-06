@@ -15,7 +15,7 @@ from typing import Any
 
 
 VERSION = "prospective-canary-v5-robustness"
-CANONICAL_SHA256 = "9e134d07d257a3affa816b57f6fc5d0d94bac88190df059ccaa6c5c97f4318b7"
+CANONICAL_SHA256 = "TO_BE_FROZEN"
 TIMING_GRID = {
     "recoverable_lag_early": (1, 2),
     "recoverable_lag_mid": (2, 3),
@@ -213,16 +213,22 @@ def recoverable(
     ep["runtime_events"] = [
         {
             "after_turn": align_turn,
-            "type": "route_evidence_refresh",
-            "follow_hidden_route": True,
-            "stage_evidence_by_stage": {
-                "0": evidence(experiment_id, profile, 0)
-            },
+            "type": "route_readback",
             "source": "prospective-route-observer",
         },
         {
+            "after_turn": align_turn,
+            "type": "observer_evidence_available",
+            "stage_evidence": evidence(
+                experiment_id,
+                profile,
+                0,
+            ),
+            "source": "prospective-stage-observer",
+        },
+        {
             "after_turn": stale_turn,
-            "type": "telemetry_update",
+            "type": "observer_evidence_available",
             "stage_evidence": evidence(
                 experiment_id,
                 profile,
@@ -246,16 +252,12 @@ def missing_observer(n: int, profile: int) -> dict[str, Any]:
     ep["runtime_events"] = [
         {
             "after_turn": 1 + (profile % 2),
-            "type": "route_evidence_refresh",
-            "follow_hidden_route": True,
-            "stage_evidence_by_stage": {
-                "0": evidence(experiment_id, profile, 0)
-            },
+            "type": "route_readback",
             "source": "prospective-route-observer",
         },
         {
             "after_turn": 3,
-            "type": "telemetry_update",
+            "type": "observer_evidence_available",
             "stage_evidence": evidence(
                 experiment_id,
                 profile,
