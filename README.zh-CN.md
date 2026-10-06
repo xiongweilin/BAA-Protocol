@@ -114,7 +114,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-canary-v4-evidence-horizon-result.zh-CN.md](experiments/prospective-canary-v4-evidence-horizon-result.zh-CN.md) —— 通过资格检查的正 interaction：stale-route contrast 从 H4 的 0 增至 H8 的 +1，四个 cell unsafe 均为 0。
 - [experiments/prospective-canary-v5-robustness-protocol.zh-CN.md](experiments/prospective-canary-v5-robustness-protocol.zh-CN.md) —— 预注册 24-episode robustness study，workload 由冻结参数网格生成。
 - [experiments/prospective-canary-v5-robustness-result.zh-CN.md](experiments/prospective-canary-v5-robustness-result.zh-CN.md) —— 通过资格检查的混合 robustness 结果：aggregate interaction=+1，但仅 1/3 预注册 timing stratum 为正，因此 strong robustness criterion 未满足。
-- [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
+- [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。\n- [experiments/delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/delegation-cost-frontier-v1-protocol.zh-CN.md) —— 基于已接受真实模型 trace 的冻结回顾性成本前沿 accounting contract。\n- [experiments/delegation-cost-frontier-v1-baseline.zh-CN.md](experiments/delegation-cost-frontier-v1-baseline.zh-CN.md) —— 从 offboarding v6 与 canary v5 得到的 attention/risk/assurance 成本面。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) —— 员工离职内核。

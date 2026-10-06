@@ -114,7 +114,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-canary-v4-evidence-horizon-result.md](experiments/prospective-canary-v4-evidence-horizon-result.md) — qualified positive interaction: stale-route contrast grows from 0 at H4 to +1 at H8 with zero unsafe transitions.
 - [experiments/prospective-canary-v5-robustness-protocol.md](experiments/prospective-canary-v5-robustness-protocol.md) — preregistered 24-episode robustness study generated from a frozen parameter grid.
 - [experiments/prospective-canary-v5-robustness-result.md](experiments/prospective-canary-v5-robustness-result.md) — qualified mixed robustness result: aggregate interaction +1, but only 1/3 preregistered timing strata is positive, so the strong robustness criterion is not met.
-- [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
+- [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.\n- [experiments/delegation-cost-frontier-v1-protocol.md](experiments/delegation-cost-frontier-v1-protocol.md) — frozen retrospective cost-frontier accounting contract over accepted real-model traces.\n- [experiments/delegation-cost-frontier-v1-baseline.md](experiments/delegation-cost-frontier-v1-baseline.md) — observed attention/risk/assurance cost surface from offboarding v6 and canary v5.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — employee-offboarding kernel.

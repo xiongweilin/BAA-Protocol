@@ -507,3 +507,18 @@ This is enough to stop increasing the number of evidence-lag timing fixtures. Th
 The v5 runtime also exposed an observability requirement for future long runs: progress must report completed physical model calls/retries during execution without exposing prompts or changing model-visible state. This is an infrastructure requirement, not a reason to reinterpret or rerun v5.
 
 Canary v1–v5 remain frozen.
+
+### Delegation cost-frontier v1 retrospective baseline
+
+The first cost-frontier step now reclassifies the already accepted offboarding v6 and canary v5 episode traces under explicit attention, risk, human-assurance, automatic-intervention, and evidence-reacquisition ceilings. It performs no model resampling.
+
+The observed surface makes the cost condition explicit:
+
+- at offboarding v6 C2, BAA is 13/24 delegable with zero automatic-intervention allowance, 16/24 with one, and 20/24 with two or more, versus 14/24 for self-check/audit under the same strict attention/risk limits;
+- audit preserves its 14/24 C2 delegable set only when at least 3 human assurance-labor units per episode are allowed;
+- relaxing the unsafe-transition ceiling increases direct/audit feasibility from 14/24 to 19/24, illustrating why risk cannot be collapsed into delivery;
+- at canary v5 H8, the reacquire treatment remains 3/24 with zero automatic-intervention allowance, reaches 5/24 at five interventions, and 6/24 at eleven; the full 6/24 also requires a two-read evidence-reacquisition ceiling.
+
+These are retrospective thresholds read from accepted traces, not a preregistered causal replication. The next cost study must freeze its grid before generating new traces.
+
+Long-study progress telemetry is also now an explicit infrastructure invariant: future model-study runners emit structured call start/completion and periodic heartbeat events without changing prompts, retry rules, model-visible state, or qualification semantics.

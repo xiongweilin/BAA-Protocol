@@ -85,11 +85,11 @@ Only **1 of 3** recovery timing strata has a positive interaction.
 
 Therefore:
 
-[
-oxed{
-	ext{strong robustness criterion} = 	ext{false}
+\[
+\boxed{
+\text{strong robustness criterion} = \text{false}
 }
-]
+\]
 
 The aggregate positive interaction does **not** satisfy the preregistered robustness standard, which required positive interaction in at least two of the three timing strata.
 

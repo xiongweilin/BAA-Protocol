@@ -19,6 +19,7 @@ from baa_protocol.prospective_canary_study import (
     load_canary_workload,
 )
 from baa_protocol.prospective_transport import ReplaySafeTransportClient
+from baa_protocol.progress import ProgressModelClient
 
 
 EXPECTED_WORKLOAD_SHA256 = (
@@ -37,6 +38,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="gpt-6-luna")
     parser.add_argument("--output", required=True)
     parser.add_argument("--timeout-seconds", type=float, default=180.0)
+    parser.add_argument("--heartbeat-seconds", type=float, default=30.0)
     return parser.parse_args()
 
 
@@ -71,25 +73,30 @@ def main() -> None:
         model_id=args.model,
         timeout_seconds=args.timeout_seconds,
     )
-    client = ReplaySafeTransportClient(raw_client, max_retries=1)
-    result = run_canary_robustness_study(
-        client,
-        episodes,
-        budget=DelegationBudget(
-            max_principal_attention=0,
-            max_unsafe_transitions=0,
-            max_terminal_unresolved_results=0,
-            min_useful_delivery=1,
-        ),
-    )
+    transport_client = ReplaySafeTransportClient(raw_client, max_retries=1)
+    with ProgressModelClient(
+        transport_client,
+        label="prospective-canary-v5-robustness",
+        heartbeat_seconds=args.heartbeat_seconds,
+    ) as client:
+        result = run_canary_robustness_study(
+            client,
+            episodes,
+            budget=DelegationBudget(
+                max_principal_attention=0,
+                max_unsafe_transitions=0,
+                max_terminal_unresolved_results=0,
+                min_useful_delivery=1,
+            ),
+        )
     result["source_workload_version"] = source_version
     result["source_workload_sha256"] = digest
     result["physical_sampling"].update(
         {
-            "http_attempts": client.http_attempts,
-            "transport_failures_seen": client.transport_failures_seen,
-            "transport_retries": client.transport_retries,
-            "recovered_transport_calls": client.recovered_transport_calls,
+            "http_attempts": transport_client.http_attempts,
+            "transport_failures_seen": transport_client.transport_failures_seen,
+            "transport_retries": transport_client.transport_retries,
+            "recovered_transport_calls": transport_client.recovered_transport_calls,
         }
     )
 
