@@ -14,7 +14,7 @@ from .prospective_types import FrozenEpisode, ModelAction
 
 
 def obligations_for(episode: FrozenEpisode) -> tuple[OffboardingObligation, ...]:
-    context = episode.public_context
+    context = episode.control_context
     common = dict(
         case_id=str(context["case_id"]),
         authority_epoch=int(context["authoritative_authority_epoch"]),
@@ -83,7 +83,7 @@ class EpisodeSimulator:
         self.budget = budget
         self.obligations = obligations_for(episode)
         self.by_id = {item.obligation_id: item for item in self.obligations}
-        context = episode.public_context
+        context = episode.control_context
         self.kernel = (
             OffboardingKernel(
                 case_id=str(context["case_id"]),
