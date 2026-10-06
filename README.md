@@ -105,6 +105,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v6-protocol.md](experiments/prospective-model-v6-protocol.md) — preregistered 24-episode prospective generalization study.
 - [experiments/prospective-model-v6-result.md](experiments/prospective-model-v6-result.md) — qualified +6 C2 aggregate frontier expansion; preregistered cross-mechanism evidence-refresh generalization criterion not met.
 - [experiments/prospective-canary-v1-protocol.md](experiments/prospective-canary-v1-protocol.md) — preregistered first real-model study in the second BAA task domain.
+- [experiments/prospective-canary-v1-result.md](experiments/prospective-canary-v1-result.md) — qualified second-domain negative result: C2 direct 11/18 versus BAA 10/18, with zero BAA unsafe transitions.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
@@ -121,7 +122,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 
 [guide](https://github.com/xiongweilin/guide) supplies conceptual inputs such as local sufficiency, action-semantic separation, revision, and reopening.
 
-[AIOS](https://github.com/xiongweilin/aios) supplies the first concrete domain contract surface.
+[AIOS](https://github.com/xiongweilin/aios) supplies the concrete contract surfaces for the first two task domains.
 
 BAA does not treat a sufficiency declaration as execution authority and does not redefine AIOS semantics.
 
@@ -139,8 +140,9 @@ The evidence chain now includes:
 - AIOS workflow run `37402587158`: qualified forced-function v4 comparison; all three regimes were 9/12 delegable at C0/C1/C2. Direct/audit produced adaptive unsafe transitions while BAA remained at 0; this is a frontier null result with a positive finite safety-trajectory result;
 - AIOS workflow run `37404551022`: qualified recovery-focused v5 comparison. C0/C1 remained 9/12 for all regimes; at C2 self-check/audit remained 9/12 while BAA reached **12/12 delegable**, with equal aggregate useful delivery (36), zero BAA unsafe transitions, and five direct/audit unsafe transitions.
 - AIOS workflow run `37406741476`: first fully qualified v6 result on the frozen 24-episode workload. At C2 self-check/audit were 14/24 delegable and BAA was **20/24**, so the preregistered aggregate endpoint was Delta_C2 = +6. The gain was localized to time_recovery (+4) and readback_recovery (+2); subject/authority evidence-refresh strata showed no BAA-only gain, so the stronger preregistered cross-mechanism generalization criterion was not met.
+- AIOS workflow run `37410377327`: first fully qualified real-model comparison in the canary-release domain. C0 was 3/18 for every regime, C1 was 9/18 for every regime, and at C2 self-check/audit reached **11/18** while BAA reached 10/18 (`Delta_C2 = -1`). BAA had zero unsafe transitions versus two for each direct regime, but the preregistered cross-domain delegation-leverage criterion was not met.
 
-These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion. v6 prospectively reproduces an aggregate expansion on a new workload but does not establish the stronger preregistered evidence-refresh cross-mechanism generalization claim. Neither result estimates production frequency.
+These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion. v6 prospectively reproduces an aggregate expansion on a new offboarding workload but does not establish the stronger evidence-refresh cross-mechanism claim. The first qualified canary-domain study is a negative frontier result despite a cleaner BAA risk trace. None of these studies estimates production frequency.
 
 See [experiments/status.md](experiments/status.md).
 
