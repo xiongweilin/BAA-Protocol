@@ -28,13 +28,13 @@ run `37411958870` 不作为证据。它在发现 implementation-validity 缺陷�
 
 预注册主 endpoint：
 
-[
-Delta^{mathrm{feedback}}_{H4}
+\\[
+\\Delta^{\\mathrm{feedback}}_{H4}
 =
-D_{mathrm{stale}}(mathrm{corrective},H4)
+D_{\\mathrm{stale}}(\\mathrm{corrective},H4)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H4)
-]
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H4)
+\\]
 
 H4：
 
@@ -46,9 +46,9 @@ H4：
 
 因此：
 
-[
-Delta^{mathrm{feedback}}_{H4}=1-1=0
-]
+\\[
+\\Delta^{\\mathrm{feedback}}_{H4}=1-1=0
+\\]
 
 主 endpoint 为零效应。
 
@@ -60,25 +60,25 @@ safety gate 通过：corrective H4 unsafe transition=0。
 
 两个冻结的次要 contrast 同样为零：
 
-[
-Delta^{mathrm{horizon}}_{mathrm{diag}}
+\\[
+\\Delta^{\\mathrm{horizon}}_{\\mathrm{diag}}
 =
-D_{mathrm{stale}}(mathrm{diagnostic},H8)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H8)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H4)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H4)
 =
 1-1=0
-]
+\\]
 
-[
-Delta^{mathrm{info-vs-time}}
+\\[
+\\Delta^{\\mathrm{info-vs-time}}
 =
-D_{mathrm{stale}}(mathrm{corrective},H4)
+D_{\\mathrm{stale}}(\\mathrm{corrective},H4)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H8)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H8)
 =
 1-1=0
-]
+\\]
 
 因此，增加 adaptive turn 到 H8，或加入机械 corrective feedback，都没有改善预注册 stale-route endpoint。
 
