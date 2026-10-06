@@ -108,7 +108,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-canary-v1-result.md](experiments/prospective-canary-v1-result.md) — qualified second-domain result: C2 Delta = -1, zero BAA unsafe transitions, and no cross-domain frontier expansion.
 - [experiments/prospective-canary-v2-feedback-protocol.md](experiments/prospective-canary-v2-feedback-protocol.md) — preregistered mechanism study of assurance-feedback quality versus adaptive horizon.
 - [experiments/prospective-canary-v2-feedback-result.md](experiments/prospective-canary-v2-feedback-result.md) — qualified null feedback/horizon result: stale-route remained 1/3 at H4/H8 with zero unsafe transitions.
-- [experiments/prospective-canary-v3-evidence-protocol.md](experiments/prospective-canary-v3-evidence-protocol.md) — preregistered evidence-availability study: latest-only versus versioned current-stage retention.
+- [experiments/prospective-canary-v3-evidence-protocol.md](experiments/prospective-canary-v3-evidence-protocol.md) — preregistered H4 evidence-reacquisition mechanism study; retention-only draft was superseded before any v3 sampling.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
