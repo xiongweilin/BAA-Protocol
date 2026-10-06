@@ -94,6 +94,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [spec/state-machine.zh-CN.md](spec/state-machine.zh-CN.md) —— 协议状态语义。
 - [spec/vsar.zh-CN.md](spec/vsar.zh-CN.md) —— 版本化充分性保证记录（VSAR）。
 - [experiments/design.zh-CN.md](experiments/design.zh-CN.md) —— 可证伪实验设计。
+- [experiments/prospective-model-protocol.zh-CN.md](experiments/prospective-model-protocol.zh-CN.md) — 前瞻真实模型研究的预注册协议。\n- [experiments/prospective-model-result.zh-CN.md](experiments/prospective-model-result.zh-CN.md) —— 第一轮接受的真实模型结果与零结果解释。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
@@ -116,15 +117,15 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 
 ## 状态
 
-**当前是可执行参考原型：具备固定 AIOS 兼容性、执行引擎 gate、隔离网络恢复、真实产品 connector acceptance，以及成功的单 episode 真实产品端到端离职 acceptance。**
+**当前是可执行参考原型：具备固定 AIOS 兼容性、执行引擎 gate、隔离网络恢复、真实产品 connector acceptance、组合真实产品 E2E acceptance，以及已完成的预注册真实模型比较。**
 
 现有证据链包括：
 
 - AIOS workflow run <code>37302243172</code>：隔离 HTTP/process/Docker 网络 acceptance，包括确认丢失、read-back outage 与未授权 Runtime 绕过；
 - AIOS workflow runs <code>37306648690</code>、<code>37307582025</code>：对真实临时 Keycloak 与 Odoo 实例分别完成 connector acceptance，并分离 writer/verifier 身份；
-- AIOS workflow run <code>37315551794</code>：完成一个 BAA -> AIOS -> World Runtime -> 真实临时 Keycloak/Odoo 的组合 episode，覆盖正常完成、lost-ack 恢复、read-back-outage 恢复与未授权 Runtime 绕过，并记录独立产品 read-back、持久化恢复状态转移、稳定逻辑 request identity 与经验证的外部完成。
+- AIOS workflow run <code>37315551794</code>：完成一个 BAA -> AIOS -> World Runtime -> 真实临时 Keycloak/Odoo 的组合 episode，覆盖正常完成、lost-ack 恢复、read-back-outage 恢复与未授权 Runtime 绕过，并记录独立产品 read-back、持久化恢复状态转移、稳定逻辑 request identity 与经验证的外部完成；\n- AIOS workflow run <code>37393917221</code>：接受的 <code>prospective-offboarding-v1</code> 预注册真实模型比较；self-check、post-hoc audit 与 BAA 在 C0/C1/C2 都是 6/7 delegable。这是保留的 delegation-frontier expansion 零结果，不是 BAA 优势证据。
 
-这些都是临时测试产品上的有界 acceptance 结果。它们**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或委托杠杆。
+这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或 production delegation leverage。第一轮有限真实模型比较明确没有显示 delegation-frontier expansion。
 
 详见 [experiments/status.zh-CN.md](experiments/status.zh-CN.md)。
 

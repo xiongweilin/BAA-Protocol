@@ -94,6 +94,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [spec/state-machine.md](spec/state-machine.md) — protocol state semantics.
 - [spec/vsar.md](spec/vsar.md) — Versioned Sufficiency Assurance Record.
 - [experiments/design.md](experiments/design.md) — falsifiable experiment design.
+- [experiments/prospective-model-protocol.md](experiments/prospective-model-protocol.md) — preregistered real-model study protocol.\n- [experiments/prospective-model-result.md](experiments/prospective-model-result.md) — accepted first real-model result and null-result interpretation.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
@@ -116,15 +117,15 @@ BAA does not treat a sufficiency declaration as execution authority and does not
 
 ## Status
 
-**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, isolated network recovery, real-product connector acceptance, and a successful single-episode real-product end-to-end offboarding acceptance.**
+**Executable reference prototype with pinned AIOS compatibility, execution-engine gating, isolated network recovery, real-product connector acceptance, composed real-product E2E acceptance, and a completed preregistered real-model comparison.**
 
 The evidence chain now includes:
 
 - AIOS workflow run `37302243172`: isolated HTTP/process/Docker network acceptance on `aios-windows-docker-desktop`, including lost acknowledgement, read-back outage, and unauthorized Runtime bypass;
 - AIOS workflow runs `37306648690` and `37307582025`: standalone real ephemeral Keycloak and Odoo connector acceptance with separated writer/verifier identities;
-- AIOS workflow run `37315551794`: one composed BAA -> AIOS -> World Runtime -> real ephemeral Keycloak/Odoo episode, with normal completion, lost-ack recovery, read-back-outage recovery, and unauthorized Runtime bypass. The composed run records independent product read-back, persisted recovery transitions, stable logical request identity, and verified external completion.
+- AIOS workflow run `37315551794`: one composed BAA -> AIOS -> World Runtime -> real ephemeral Keycloak/Odoo episode, with normal completion, lost-ack recovery, read-back-outage recovery, and unauthorized Runtime bypass. The composed run records independent product read-back, persisted recovery transitions, stable logical request identity, and verified external completion;\n- AIOS workflow run `37393917221`: accepted preregistered real-model comparison on `prospective-offboarding-v1`; self-check, post-hoc audit, and BAA were each delegable on 6/7 episodes at C0/C1/C2. This is a retained null result for delegation-frontier expansion, not evidence of a BAA advantage.
 
-These are bounded acceptance results for ephemeral test products. They do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or delegation leverage.
+These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or production delegation leverage. The first finite real-model comparison specifically did not show delegation-frontier expansion.
 
 See [experiments/status.md](experiments/status.md).
 

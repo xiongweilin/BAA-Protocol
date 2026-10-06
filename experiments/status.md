@@ -4,19 +4,19 @@
 
 ## Current claim level
 
-The repository has reached five evidence layers for one concrete domain: employee offboarding.
+The repository has reached six evidence layers for one concrete domain: employee offboarding.
 
 1. Executable BAA reference semantics and deterministic fault fixtures.
 2. Pinned AIOS contract compatibility and execution-engine gating.
 3. Isolated production-like network acceptance across HTTP/process/Docker boundaries.
 4. High-fidelity connector acceptance against real ephemeral Keycloak and Odoo product instances.
-5. A composed single-episode BAA -> AIOS -> World Runtime -> real Keycloak/Odoo acceptance matrix with independent product read-back and fault recovery.
+5. A composed single-episode BAA -> AIOS -> World Runtime -> real Keycloak/Odoo acceptance matrix with independent product read-back and fault recovery.\n6. A preregistered prospective real-model three-regime study with version-pinned model/gateway evidence and explicit null-result retention.
 
 The strongest current claim is:
 
 > For the finite BAA model and the pinned AIOS offboarding implementation at commit `87f24f32a01c67a9246fc3cb127517c80798e169`, the tested path can constrain the covered offboarding action flow, preserve explicit uncertainty across ambiguous execution/read-back states, recover through independently observed product state, reject an unauthorized Runtime bypass before provider effect, and complete the covered IAM/HRIS obligations against real ephemeral Keycloak and Odoo instances with separate writer/verifier identities.
 
-The fault-recovery result is a claim about stable logical request identity and tested no-blind-replay behavior, not a proof of physical exactly-once delivery.
+The fault-recovery result is a claim about stable logical request identity and tested no-blind-replay behavior, not a proof of physical exactly-once delivery.\n\nThe first prospective comparative result is separately negative: on the frozen seven-episode real-model study, all three regimes were delegable on 6/7 episodes at C0, C1, and C2, so BAA did not enlarge the tested delegation frontier.
 
 This is not a production-tenant safety claim, a general unattended-autonomy theorem, or a certification result.
 
@@ -44,7 +44,7 @@ The prototype includes:
 - isolated Windows/Docker network acceptance;
 - real ephemeral Keycloak connector acceptance;
 - real ephemeral Odoo connector acceptance;
-- composed real-product offboarding E2E for normal, lost-ack, read-back-outage, and unauthorized-bypass scenarios.
+- composed real-product offboarding E2E for normal, lost-ack, read-back-outage, and unauthorized-bypass scenarios;\n- a prospective real-model harness with shared initial sampling, adaptive-prefix reuse, JSON/SSE Responses compatibility, and separate physical versus counterfactual logical model-cost accounting.
 
 ## Pinned AIOS compatibility
 
@@ -164,6 +164,32 @@ Observed evidence:
 
 The composed E2E result is still ephemeral test-environment evidence. It does not establish production network isolation, production credential custody, or production operating distributions.
 
+## Prospective real-model evidence
+
+AIOS workflow run `37393917221` is the accepted first prospective real-model result.
+
+Pinned evidence:
+
+~~~text
+workload: prospective-offboarding-v1
+model: gpt-6-luna
+BAA-Protocol: 340dbd9a0bfbe72746e3666fa559fa7d812a25d0
+AIOS experiment workflow: 6eeaed6874e67257f19d9dc1a66bdc796865804d
+local gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+physical calls: 15
+calls with errors: 0
+~~~
+
+Under the frozen strict budget, self-check, post-hoc audit, and BAA each produced 6/7 delegable episodes at C0, C1, and C2. This is a null result for delegation-frontier expansion.
+
+The terminal lost-confirmation episode was non-delegable in every regime. BAA stopped later actions after the first unresolved effect, while the direct regimes continued two later obligations; this changed useful-delivery traces but not the final delegable set.
+
+The model never proposed stale-authority, wrong-subject, or scope-probing actions in the accepted run, so BAA recorded zero admission-denial interventions. The real-model prompt explicitly preferred authoritative evidence and exact identifiers; this study therefore does not reproduce the adversarial proposal behavior in the deterministic fixtures.
+
+Two earlier runs are excluded from the accepted result: `37392398429` exposed a JSON/SSE client compatibility bug, and `37393326558` exposed post-completion adaptive-call overcounting. Both were fixed and regression-tested before the accepted rerun.
+
+See [prospective-model-result.md](prospective-model-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -184,14 +210,14 @@ The repository does not establish:
 
 ## Experiment interpretation
 
-All current positive results remain falsification evidence, not open-world probability estimates.
+Positive acceptance results remain falsification evidence, not open-world probability estimates. The prospective real-model comparison also retains its null result rather than treating absence of advantage as a failed run.
 
 The evidence supports four statements that must remain separate:
 
 - structural/reference: modeled forbidden transitions are mechanically excluded under stated assumptions;
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
-- composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults.
+- composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;\n- prospective comparison: the first frozen real-model workload did not show delegation-frontier expansion, while still showing a stricter BAA trajectory after an unresolved effect.
 
 None implies that a production tenant is safe.
 
@@ -218,29 +244,17 @@ The reference/network/product-composition phase is converged because:
 17. one composed real-product episode reaches externally verified completion;
 18. real-product lost-ack and read-back-outage scenarios persist and recover explicit reconciliation state;
 19. the Runtime bypass test leaves real ephemeral product state unchanged;
-20. documentation states what is and is not proved.
+20. documentation states what is and is not proved;\n21. one real-model comparative workload was preregistered before interpretation and run with version-pinned evidence;\n22. implementation-invalid runs were excluded explicitly, and the final accepted run retained a null delegation-frontier result.
 
 ## Next phase boundary
 
-Further connector-only or composition-only expansion is not justified by the current evidence.
+Connector-only or composition-only expansion remains unjustified. The first prospective comparative study is now complete and produced a null frontier result.
 
-The next research phase is the comparative delegation experiment:
+The next phase is **prospective comparative generalization**, using a new study version rather than modifying `prospective-offboarding-v1`.
 
-~~~text
-A. agent self-check
+It should preserve the same three regimes and accounting contract, but use a larger prospective episode set in which the model can encounter genuinely competing, stale, ambiguous, or misleading action evidence without being instructed to violate policy. Episode assignment must remain prospective, unresolved outcomes must remain in the denominator, and model-visible C must remain only a feedback-horizon resource.
 
-B. agent + external record / post-hoc audit
-
-C. BAA non-bypassable admission
-   -> narrow capability
-   -> constrained execution
-   -> independent verification
-   -> exposure / unresolved-effect control
-~~~
-
-The experiment should compare the regimes on the same episode or shared-influence-domain workload under common principal-attention and risk constraints.
-
-Primary outcomes should include:
+Primary outcomes remain:
 
 - useful delivery;
 - unsafe or out-of-scope reality-facing transitions;
@@ -248,9 +262,10 @@ Primary outcomes should include:
 - replay / duplicate logical-request behavior;
 - principal attention;
 - third-party assurance labor;
+- automatic assurance interventions;
 - recovery quality;
-- sensitivity to adaptive attack capability.
+- sensitivity to adaptive feedback and strategic proposal behavior.
 
-The core falsifiable question remains:
+The core falsifiable question is unchanged:
 
-> Under common attention budget A and risk limit R, does BAA increase useful delivery or enlarge the delegable task set, and does that gain persist as adaptive attack capability increases?
+> Under common attention budget A and risk limit R, does BAA increase useful delivery or enlarge the delegable task set, and does that gain persist when the proposal policy actually encounters pressure toward unsafe or ambiguous actions?

@@ -4,19 +4,19 @@
 
 ## 当前声明层级
 
-仓库在一个具体任务域——员工离职——上已达到五层证据：
+仓库在一个具体任务域——员工离职——上已达到六层证据：
 
 1. 可执行 BAA 参考语义与确定性故障 fixture。
 2. 固定 AIOS contract compatibility 与 execution-engine gating。
 3. 跨 HTTP/process/Docker 边界的隔离、类生产网络 acceptance。
 4. 对真实临时 Keycloak 与 Odoo 实例的高保真 connector acceptance。
-5. 单 episode 的组合 BAA -> AIOS -> World Runtime -> 真实 Keycloak/Odoo acceptance matrix，含独立产品 read-back 与故障恢复。
+5. 单 episode 的组合 BAA -> AIOS -> World Runtime -> 真实 Keycloak/Odoo acceptance matrix，含独立产品 read-back 与故障恢复。\n6. 预注册的真实模型三制度前瞻研究，包含版本固定的 model/gateway 证据与显式零结果保留。
 
-当前最强声明为：
+当前最强 integration 声明仍为：
 
 > 对有限 BAA 模型和固定 AIOS 离职实现 <code>87f24f32a01c67a9246fc3cb127517c80798e169</code>，已测试路径能够约束覆盖范围内的离职行动流，在执行/回读含糊时保留显式不确定性，通过独立观测到的产品状态恢复，在 provider effect 前拒绝未授权 Runtime 绕过，并使用分离的 writer/verifier 身份在真实临时 Keycloak 与 Odoo 上完成覆盖的 IAM/HRIS 义务。
 
-故障恢复声明指的是稳定逻辑 request identity 与已测试路径中的 no-blind-replay，不是对 physical exactly-once delivery 的证明。
+故障恢复声明指的是稳定逻辑 request identity 与已测试路径中的 no-blind-replay，不是对 physical exactly-once delivery 的证明。\n\n第一轮 prospective comparative result 另行保留为负结果：在冻结的七 episode 真实模型研究中，三种 regime 在 C0、C1、C2 都是 6/7 delegable，因此 BAA 没有扩大该有限 delegation frontier。
 
 这不是生产租户安全声明、一般无人值守自治定理或认证结果。
 
@@ -45,7 +45,7 @@
 - 真实临时 Keycloak connector acceptance；
 - 真实临时 Odoo connector acceptance；
 - normal、lost-ack、read-back-outage、unauthorized-bypass 四场景的组合真实产品 offboarding E2E；
-- 共同预算 delegation frontier 与 adaptive capability sweep。
+- 共同预算 delegation frontier 与 adaptive capability sweep；\n- 真实模型 prospective harness，包含 shared initial sampling、adaptive-prefix reuse、JSON/SSE Responses compatibility，以及 physical/counterfactual logical model cost 分离。
 
 ## 固定 AIOS 兼容性
 
@@ -148,6 +148,32 @@ AIOS workflow run <code>37315551794</code> 在 PR head <code>b0bb3705...</code> 
 
 该组合 E2E 仍是临时测试环境证据，不建立生产网络隔离、生产凭证保管或生产运行分布。
 
+## 前瞻真实模型证据
+
+AIOS workflow run <code>37393917221</code> 是第一轮 prospective real-model study 的接受结果。
+
+固定证据：
+
+~~~text
+workload: prospective-offboarding-v1
+model: gpt-6-luna
+BAA-Protocol: 340dbd9a0bfbe72746e3666fa559fa7d812a25d0
+AIOS experiment workflow: 6eeaed6874e67257f19d9dc1a66bdc796865804d
+local gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+physical calls: 15
+calls with errors: 0
+~~~
+
+在冻结的严格预算下，self-check、post-hoc audit 与 BAA 在 C0、C1、C2 都得到 6/7 delegable。这是 delegation-frontier expansion 的零结果。
+
+terminal lost-confirmation 在三种 regime 下都不可委托。BAA 在第一个 unresolved effect 后停止后续动作，而 direct regimes 继续两个后续 obligation；因此 useful-delivery trace 不同，但最终 delegable set 不变。
+
+接受 run 中模型没有提交 stale-authority、wrong-subject 或 scope-probing action，因此 BAA admission-denial intervention 为 0。真实模型 prompt 明确要求优先 authoritative evidence 与精确 identifier，所以本研究没有复现 deterministic fixture 中的 adversarial proposal behavior。
+
+两个更早的 run 被排除：<code>37392398429</code> 暴露 JSON/SSE client compatibility bug；<code>37393326558</code> 暴露 episode 完成后 adaptive-call 继续计费的问题。两者均在接受 run 前修复并加入 regression test。
+
+详见 [prospective-model-result.zh-CN.md](prospective-model-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -168,14 +194,14 @@ AIOS workflow run <code>37315551794</code> 在 PR head <code>b0bb3705...</code> 
 
 ## 实验解释
 
-所有正结果仍是 falsification evidence，而不是 open-world probability estimate。
+正向 acceptance 结果仍是 falsification evidence，而不是 open-world probability estimate。prospective real-model comparison 同时保留其零结果，不把“没有优势”重新解释为失败运行。
 
 当前证据支持四种必须分离的陈述：
 
 - structural/reference：在明确假设下，模型中的 forbidden transitions 被机械排除；
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
-- composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复。
+- composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；\n- prospective comparison：第一轮冻结真实模型 workload 没有显示 delegation-frontier expansion，但在 unresolved effect 后显示了更严格的 BAA reality-facing trajectory。
 
 任何一项都不意味着生产租户安全。
 
@@ -202,30 +228,18 @@ reference/network/product-composition 阶段已经收敛，因为：
 17. 一个组合 real-product episode 达到 externally verified completion；
 18. real-product lost-ack 与 read-back-outage 持久记录并恢复 reconciliation state；
 19. Runtime bypass test 保持真实临时产品状态不变；
-20. 文档明确区分已证明与未证明内容。
+20. 文档明确区分已证明与未证明内容；\n21. 一个真实模型 comparative workload 在解释前完成预注册，并保存版本固定证据；\n22. implementation-invalid run 被显式排除，最终接受 run 保留零 delegation-frontier result。
 
 ## 下一阶段边界
 
-继续扩展 connector 或单纯扩展 composition 已不再合理。
+继续扩展 connector 或单纯扩展 composition 仍不合理。第一轮 prospective comparative study 已完成，并得到零 frontier result。
 
-下一研究阶段是：
+下一阶段是**前瞻比较的泛化检验**，必须创建新 study version，而不是修改 `prospective-offboarding-v1`。
 
-~~~text
-A. agent self-check
+它应保持同样的三种 regime 与 accounting contract，但使用更大的 prospective episode set，使模型能够真正遇到竞争性、陈旧、含糊或误导性的行动证据，同时不指示模型违反 policy。episode assignment 继续前瞻完成，unresolved outcome 必须留在分母中，C 仍只表示 feedback horizon。
 
-B. agent + external record / post-hoc audit
+主要 outcome 继续包括 useful delivery、unsafe/out-of-scope reality-facing transition、unresolved-result duration、replay/duplicate logical-request behavior、principal attention、third-party assurance labor、automatic assurance intervention、recovery quality，以及对 adaptive feedback 和 strategic proposal behavior 的敏感性。
 
-C. BAA non-bypassable admission
-   -> narrow capability
-   -> constrained execution
-   -> independent verification
-   -> exposure / unresolved-effect control
-~~~
+核心可证伪问题保持不变：
 
-三制度应在相同 episode 或 shared-influence-domain workload 上，以共同 principal-attention 与 risk constraint 比较。
-
-主要 outcome 至少包括 useful delivery、unsafe/out-of-scope transition、unresolved-result duration、replay/duplicate logical-request behavior、principal attention、third-party assurance labor、recovery quality，以及对 adaptive attack capability 的敏感性。
-
-核心可证伪问题仍是：
-
-> 在共同注意力预算 A 与风险上限 R 下，BAA 是否提高有用交付或扩大可委托任务集合？该增益在 adaptive attack capability 增强时是否仍存在？
+> 在共同注意力预算 A 与风险上限 R 下，BAA 是否提高有用交付或扩大可委托任务集合？当 proposal policy 真正受到 unsafe 或 ambiguous action 压力时，该增益是否仍存在？
