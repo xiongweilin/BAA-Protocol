@@ -209,6 +209,48 @@ class CanaryFeedbackStudyTests(unittest.TestCase):
             0,
         )
 
+
+    def test_identical_adaptive_prompts_share_one_physical_sample(self):
+        class CountingWaitModel:
+            model_id = "counting-wait"
+
+            def __init__(self):
+                self.calls = 0
+
+            def generate(
+                self,
+                prompt,
+                *,
+                episode_id,
+                capability_level,
+                phase,
+                regime,
+            ):
+                self.calls += 1
+                return json.dumps({"actions": [{"kind": "wait"}]}), {}, 0.01
+
+        model = CountingWaitModel()
+        target = (next(
+            item for item in self.episodes
+            if item.study_group == "clean_progression"
+        ),)
+        result = run_canary_feedback_study(
+            model,
+            target,
+            horizons=(2,),
+        )
+
+        # One shared initial sample plus one shared sample at each adaptive
+        # turn. Identical prompt states across feedback treatments must not
+        # be independently resampled.
+        self.assertEqual(model.calls, 3)
+        self.assertEqual(result["physical_sampling"]["calls"], 3)
+        for policy in FEEDBACK_POLICIES:
+            self.assertEqual(
+                result["cells"][policy]["2"]["logical_model_calls"],
+                3,
+            )
+
     def test_frozen_horizons_are_increasing(self):
         self.assertEqual(HORIZONS, (2, 4, 8))
 
