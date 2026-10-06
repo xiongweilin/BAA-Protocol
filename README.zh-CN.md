@@ -95,7 +95,10 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [spec/vsar.zh-CN.md](spec/vsar.zh-CN.md) —— 版本化充分性保证记录（VSAR）。
 - [experiments/design.zh-CN.md](experiments/design.zh-CN.md) —— 可证伪实验设计。
 - [experiments/prospective-model-protocol.zh-CN.md](experiments/prospective-model-protocol.zh-CN.md) — 前瞻真实模型研究的预注册协议。
-- [experiments/prospective-model-result.zh-CN.md](experiments/prospective-model-result.zh-CN.md) —— v1 接受的真实模型零结果。\n- [experiments/prospective-model-v2-result.zh-CN.md](experiments/prospective-model-v2-result.zh-CN.md) —— v2 qualification failure。\n- [experiments/prospective-model-v3-result.zh-CN.md](experiments/prospective-model-v3-result.zh-CN.md) —— v3 structured-output qualification failure 与 forced-function capability probe。\n- [experiments/prospective-model-v4-result.zh-CN.md](experiments/prospective-model-v4-result.zh-CN.md) —— 通过资格检查的 forced-function v4 比较。
+- [experiments/prospective-model-result.zh-CN.md](experiments/prospective-model-result.zh-CN.md) —— v1 接受的真实模型零结果。
+- [experiments/prospective-model-v2-result.zh-CN.md](experiments/prospective-model-v2-result.zh-CN.md) —— v2 qualification failure。
+- [experiments/prospective-model-v3-result.zh-CN.md](experiments/prospective-model-v3-result.zh-CN.md) —— v3 structured-output qualification failure 与 forced-function capability probe。
+- [experiments/prospective-model-v4-result.zh-CN.md](experiments/prospective-model-v4-result.zh-CN.md) —— 通过资格检查的 forced-function v4 比较。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
@@ -125,7 +128,9 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 - AIOS workflow run <code>37302243172</code>：隔离 HTTP/process/Docker 网络 acceptance，包括确认丢失、read-back outage 与未授权 Runtime 绕过；
 - AIOS workflow runs <code>37306648690</code>、<code>37307582025</code>：对真实临时 Keycloak 与 Odoo 实例分别完成 connector acceptance，并分离 writer/verifier 身份；
 - AIOS workflow run <code>37315551794</code>：完成一个 BAA -> AIOS -> World Runtime -> 真实临时 Keycloak/Odoo 的组合 episode，覆盖正常完成、lost-ack 恢复、read-back-outage 恢复与未授权 Runtime 绕过，并记录独立产品 read-back、持久化恢复状态转移、稳定逻辑 request identity 与经验证的外部完成；
-- AIOS workflow run <code>37393917221</code>：接受的 v1 比较；三种 regime 在 C0/C1/C2 都是 6/7 delegable，保留为 frontier 零结果；\n- v2 未通过 model-evidence qualification；v3 未通过 structured-output interface qualification；\n- AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 在 C1 出现 3 次 unsafe transition、C2 出现 4 次；BAA 通过 2/3 次自动干预始终保持 0 unsafe。这是 frontier 零结果，同时包含有限的 safety-trajectory 正结果。
+- AIOS workflow run <code>37393917221</code>：接受的 v1 比较；三种 regime 在 C0/C1/C2 都是 6/7 delegable，保留为 frontier 零结果；
+- v2 未通过 model-evidence qualification；v3 未通过 structured-output interface qualification；
+- AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 在 C1 出现 3 次 unsafe transition、C2 出现 4 次；BAA 通过 2/3 次自动干预始终保持 0 unsafe。这是 frontier 零结果，同时包含有限的 safety-trajectory 正结果。
 
 这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或 production delegation leverage。已接受的 v1 与 v4 有限比较都没有显示 delegation-frontier expansion。v2 与 v3 保留为 qualification failure。v4 同时显示：BAA 能阻止已经不可委托 episode 中随 adaptive feedback 出现的 unsafe reality-facing transition。
 
