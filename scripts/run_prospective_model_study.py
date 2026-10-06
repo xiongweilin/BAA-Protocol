@@ -27,6 +27,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-terminal-unresolved", type=int, default=0)
     parser.add_argument("--min-useful-delivery", type=int, default=3)
     parser.add_argument("--max-assurance-labor", type=int)
+    parser.add_argument(
+        "--structured-output",
+        action="store_true",
+        help="Use Responses Structured Outputs with the BAA proposal JSON schema.",
+    )
     return parser.parse_args()
 
 
@@ -37,6 +42,7 @@ def main() -> None:
         base_url=args.gateway_base,
         model_id=args.model,
         timeout_seconds=args.timeout_seconds,
+        structured_output=args.structured_output,
     )
     result = run_prospective_study(
         client,

@@ -83,6 +83,65 @@ class ModelClient(Protocol):
         ...
 
 
+def proposal_output_schema() -> dict[str, Any]:
+    """Return the syntax-only proposal schema for Structured Outputs.
+
+    The schema constrains shape, not policy. Subject, target, operation, authority,
+    and obligation values remain model-chosen strings/integers so BAA can still
+    observe and reject semantically unsafe proposals.
+    """
+    execute = {
+        "type": "object",
+        "properties": {
+            "kind": {"type": "string", "enum": ["execute"]},
+            "obligation_id": {"type": "string"},
+            "subject_ref": {"type": "string"},
+            "target_system": {"type": "string"},
+            "operation": {"type": "string"},
+            "authority_epoch": {"type": "integer"},
+        },
+        "required": [
+            "kind",
+            "obligation_id",
+            "subject_ref",
+            "target_system",
+            "operation",
+            "authority_epoch",
+        ],
+        "additionalProperties": False,
+    }
+    wait = {
+        "type": "object",
+        "properties": {"kind": {"type": "string", "enum": ["wait"]}},
+        "required": ["kind"],
+        "additionalProperties": False,
+    }
+    complete = {
+        "type": "object",
+        "properties": {"kind": {"type": "string", "enum": ["complete"]}},
+        "required": ["kind"],
+        "additionalProperties": False,
+    }
+    return {
+        "type": "object",
+        "properties": {
+            "actions": {
+                "type": "array",
+                "items": {"anyOf": [execute, wait, complete]},
+                "maxItems": 3,
+            }
+        },
+        "required": ["actions"],
+        "additionalProperties": False,
+    }
+
+
+class ModelResponseError(RuntimeError):
+    """A model-level response failure distinct from HTTP/transport failure."""
+
+    error_stage = "model"
+
+
 class ResponsesGatewayClient:
     """Minimal Responses client for the local 4101 Agent entry."""
 
@@ -92,10 +151,13 @@ class ResponsesGatewayClient:
         base_url: str = "http://127.0.0.1:4101",
         model_id: str = "gpt-6-luna",
         timeout_seconds: float = 180.0,
+        structured_output: bool = False,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.model_id = model_id
         self.timeout_seconds = timeout_seconds
+        self.structured_output = structured_output
+        self.interface_mode = "json_schema" if structured_output else "freeform_json"
 
     @staticmethod
     def _decode_response(raw: bytes, content_type: str) -> dict[str, Any]:
@@ -163,17 +225,44 @@ class ResponsesGatewayClient:
         if isinstance(direct, str) and direct.strip():
             return direct
         chunks: list[str] = []
+        refusals: list[str] = []
         for item in body.get("output") or []:
             if not isinstance(item, dict) or item.get("type") != "message":
                 continue
             for part in item.get("content") or []:
-                if isinstance(part, dict) and part.get("type") in {"output_text", "text"}:
+                if not isinstance(part, dict):
+                    continue
+                if part.get("type") in {"output_text", "text"}:
                     value = part.get("text")
                     if isinstance(value, str):
                         chunks.append(value)
+                elif part.get("type") == "refusal":
+                    value = part.get("refusal")
+                    if isinstance(value, str):
+                        refusals.append(value)
+        if not chunks and refusals:
+            raise ModelResponseError("model refusal: " + " | ".join(refusals))
         if not chunks:
             raise ValueError("Responses payload contains no assistant output text")
         return "\n".join(chunks)
+
+    def _request_payload(self, prompt: str) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "model": self.model_id,
+            "input": prompt,
+            "stream": False,
+            "store": False,
+        }
+        if self.structured_output:
+            payload["text"] = {
+                "format": {
+                    "type": "json_schema",
+                    "name": "baa_proposal",
+                    "strict": True,
+                    "schema": proposal_output_schema(),
+                }
+            }
+        return payload
 
     def generate(
         self,
@@ -184,12 +273,7 @@ class ResponsesGatewayClient:
         phase: str,
         regime: str | None,
     ) -> tuple[str, dict[str, Any], float]:
-        payload = {
-            "model": self.model_id,
-            "input": prompt,
-            "stream": False,
-            "store": False,
-        }
+        payload = self._request_payload(prompt)
         request = urllib.request.Request(
             f"{self.base_url}/v1/responses",
             data=json.dumps(payload).encode("utf-8"),
