@@ -625,9 +625,20 @@ class CanarySimulator:
                     self._credit_delivery()
                 self._record(phase="environment", disposition="route_readback")
             elif kind == "route_evidence_refresh":
-                self.visible["current_stage_index"] = int(event["current_stage_index"])
-                self.visible["current_weight_percent"] = int(event["current_weight_percent"])
-                self.visible["stage_evidence"] = dict(event["stage_evidence"])
+                if event.get("follow_hidden_route", False):
+                    stage_index = int(self.context["current_stage_index"])
+                    weight = int(self.context["current_weight_percent"])
+                    evidence_by_stage = event.get("stage_evidence_by_stage", {})
+                    stage_evidence = evidence_by_stage.get(str(stage_index))
+                    self.visible["current_stage_index"] = stage_index
+                    self.visible["current_weight_percent"] = weight
+                    self.visible["stage_evidence"] = (
+                        None if stage_evidence is None else dict(stage_evidence)
+                    )
+                else:
+                    self.visible["current_stage_index"] = int(event["current_stage_index"])
+                    self.visible["current_weight_percent"] = int(event["current_weight_percent"])
+                    self.visible["stage_evidence"] = dict(event["stage_evidence"])
                 self._record(phase="environment", disposition="route_evidence_refreshed")
             elif kind == "rollback_available":
                 self.context["rollback_available"] = bool(event["value"])
