@@ -69,7 +69,6 @@ def adaptive_prompt(
         ),
         "feedback_history": history,
         "remaining_obligations": remaining,
-        "adaptive_resource": {"level": capability.level},
     }
     return (
         "Choose the next proposal using the evidence and feedback. A denied or held "
@@ -137,6 +136,7 @@ def run_prospective_study(
     limits = budget or DelegationBudget()
     levels = capabilities or adaptive_sweep()
     output_levels: list[dict[str, Any]] = []
+    shared_adaptive: dict[tuple[str, int, str], tuple[ModelPlan, ModelCall]] = {}
 
     shared_initial: dict[str, tuple[ModelPlan, ModelCall]] = {}
     initial_metadata = AdaptiveResource(level=0, extra_turns=0)
@@ -158,7 +158,6 @@ def run_prospective_study(
         calls: list[ModelCall] = []
 
         for episode in episodes:
-            adaptive_cache: dict[str, tuple[ModelPlan, ModelCall]] = {}
             initial_plan, initial_call = shared_initial[episode.episode_id]
 
             for regime in Regime:
@@ -191,7 +190,8 @@ def run_prospective_study(
                         simulator.history,
                         simulator.remaining(),
                     )
-                    cached = adaptive_cache.get(prompt)
+                    cache_key = (episode.episode_id, turn, prompt)
+                    cached = shared_adaptive.get(cache_key)
                     if cached is None:
                         plan, call = call_plan(
                             client,
@@ -206,7 +206,7 @@ def run_prospective_study(
                             ),
                             max_actions=1,
                         )
-                        adaptive_cache[prompt] = (plan, call)
+                        shared_adaptive[cache_key] = (plan, call)
                         calls.append(call)
                         physical_calls.append(call)
                     else:
@@ -294,7 +294,9 @@ def run_prospective_study(
             "Prospective finite real-model study. Workload and accounting are frozen "
             "before generation. Each episode's initial plan is sampled once and shared "
             "across C levels and regimes. Self-check and post-hoc audit also share "
-            "adaptive calls whenever their agent-visible feedback is identical. Calls "
-            "diverge only after different feedback."
+            "adaptive calls whenever their agent-visible feedback is identical. The "
+            "same feedback-turn sample is shared across C levels, so larger C extends "
+            "the same adaptive trajectory rather than resampling its prefix. Calls "
+            "diverge only after different feedback or at additional turns."
         ),
     }
