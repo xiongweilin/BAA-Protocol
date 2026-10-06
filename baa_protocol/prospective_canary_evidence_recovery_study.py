@@ -486,6 +486,8 @@ def _latest_feedback(simulator: EvidenceRecoverySimulator) -> dict[str, Any] | N
     for item in reversed(simulator.history):
         if item.get("phase") != "admission":
             continue
+        if item.get("disposition") not in {"deny", "hold"}:
+            continue
         reason = str(item.get("reason", ""))
         value: dict[str, Any] = {
             "disposition": item.get("disposition"),
