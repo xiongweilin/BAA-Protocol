@@ -94,7 +94,8 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [spec/state-machine.md](spec/state-machine.md) — protocol state semantics.
 - [spec/vsar.md](spec/vsar.md) — Versioned Sufficiency Assurance Record.
 - [experiments/design.md](experiments/design.md) — falsifiable experiment design.
-- [experiments/prospective-model-protocol.md](experiments/prospective-model-protocol.md) — preregistered real-model study protocol.\n- [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
+- [experiments/prospective-model-protocol.md](experiments/prospective-model-protocol.md) — preregistered real-model study protocol.
+- [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — employee-offboarding kernel.
