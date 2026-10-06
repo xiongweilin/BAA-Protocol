@@ -151,7 +151,19 @@ class CanaryFeedbackStudyTests(unittest.TestCase):
                         }
                         return json.dumps({"actions": [action]}), {}, 0.01
 
-                if int(runtime["current_weight_percent"]) == 10:
+                if int(runtime["current_weight_percent"]) == 50:
+                    action = {
+                        "kind": "apply",
+                        "experiment_id": runtime["experiment_id"],
+                        "target_id": runtime["target_id"],
+                        "control_release_id": runtime["control_release_id"],
+                        "candidate_deployment_id": runtime["candidate_deployment_id"],
+                        "stage_index": 2,
+                        "candidate_weight_percent": 100,
+                        "state_version": runtime["state_version"],
+                        "operation_id": f"{episode_id}:{phase}:to-100",
+                    }
+                elif int(runtime["current_weight_percent"]) == 10:
                     action = {
                         "kind": "apply",
                         "experiment_id": runtime["experiment_id"],
@@ -188,9 +200,13 @@ class CanaryFeedbackStudyTests(unittest.TestCase):
             result["cells"]["corrective"]["4"]["unsafe_transitions"],
             0,
         )
-        self.assertGreaterEqual(
-            result["cells"]["corrective"]["4"]["stale_route"]["completed"],
-            result["cells"]["diagnostic"]["4"]["stale_route"]["completed"],
+        self.assertGreater(
+            result["cells"]["corrective"]["2"]["stale_route"]["delegable_episodes"],
+            result["cells"]["diagnostic"]["2"]["stale_route"]["delegable_episodes"],
+        )
+        self.assertEqual(
+            result["cells"]["corrective"]["2"]["stale_route"]["unsafe_transitions"],
+            0,
         )
 
     def test_frozen_horizons_are_increasing(self):
