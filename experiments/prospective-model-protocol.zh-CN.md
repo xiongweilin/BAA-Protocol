@@ -151,6 +151,7 @@ automatic assurance intervention
 - 模型调用错误；
 - 延迟；
 - gateway 提供时的 token usage；
+- 实际 `physical_sampling` 调用/token 总量，并与各 regime 的 counterfactual `logical_model_calls` 分开；
 - episode 执行历史；
 - completion；
 - useful delivery；
