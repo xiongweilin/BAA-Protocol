@@ -1,10 +1,11 @@
+from dataclasses import replace
 import json
 from pathlib import Path
 import unittest
 
 from baa_protocol.delegation_frontier import DelegationBudget
 from baa_protocol.experiment import Regime
-from baa_protocol.prospective_model_study import run_prospective_study
+from baa_protocol.prospective_model_study import initial_prompt, run_prospective_study
 from baa_protocol.prospective_types import (
     AdaptiveResource,
     load_workload,
@@ -14,6 +15,7 @@ from baa_protocol.prospective_types import (
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKLOAD = ROOT / "experiments" / "prospective_offboarding_v1.json"
+WORKLOAD_V2 = ROOT / "experiments" / "prospective_offboarding_v2.json"
 
 
 def action(obligation, subject="employee:1", epoch=7):
@@ -102,6 +104,56 @@ class ProspectiveModelStudyTests(unittest.TestCase):
                 "wrong-subject",
                 "adaptive-scope-probing",
             ],
+        )
+
+    def test_v2_workload_hides_kernel_binding_from_required_obligations(self):
+        version, episodes = load_workload(WORKLOAD_V2)
+        self.assertEqual(version, "prospective-offboarding-v2")
+        self.assertEqual(len(episodes), 12)
+        prompt = initial_prompt(episodes[1])
+        payload = json.loads(prompt.split("Episode:\n", 1)[1])
+        self.assertEqual(
+            payload["required_obligations"],
+            [
+                {"obligation_id": "obl:identity"},
+                {"obligation_id": "obl:sessions"},
+                {"obligation_id": "obl:hris"},
+            ],
+        )
+        self.assertNotIn("case_id", payload["context"])
+        self.assertNotIn("governance_basis_id", payload["context"])
+        self.assertIn("case_records", payload["context"])
+        self.assertIn("cached_drafts", payload["context"])
+
+    def test_delayed_recovery_exposes_one_feedback_decision(self):
+        _, episodes = load_workload(WORKLOAD)
+        terminal = next(item for item in episodes if item.episode_id == "E04")
+        delayed = replace(
+            terminal,
+            recovery_after_unknown=True,
+            recovery_after_turn=1,
+        )
+        result = run_prospective_study(
+            FakeModel(),
+            (delayed,),
+            budget=DelegationBudget(),
+            capabilities=(AdaptiveResource(level=1, extra_turns=1),),
+        )
+        rows = {
+            row["regime"]: row
+            for row in result["levels"][0]["episodes"]
+        }
+        self.assertTrue(rows[Regime.BAA.value]["delegable"])
+        self.assertEqual(rows[Regime.BAA.value]["metrics"]["unsafe_transitions"], 0)
+        self.assertGreaterEqual(
+            rows[Regime.BAA.value]["metrics"]["assurance_interventions"],
+            1,
+        )
+        self.assertFalse(rows[Regime.SELF_CHECK.value]["delegable"])
+        self.assertTrue(rows[Regime.SELF_CHECK.value]["completed"])
+        self.assertGreaterEqual(
+            rows[Regime.SELF_CHECK.value]["metrics"]["unsafe_transitions"],
+            1,
         )
 
     def test_gateway_client_decodes_sse_fallback(self):
