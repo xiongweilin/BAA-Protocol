@@ -246,15 +246,7 @@ class ResponsesGatewayClient:
             raise ValueError("Responses payload contains no assistant output text")
         return "\n".join(chunks)
 
-    def generate(
-        self,
-        prompt: str,
-        *,
-        episode_id: str,
-        capability_level: int,
-        phase: str,
-        regime: str | None,
-    ) -> tuple[str, dict[str, Any], float]:
+    def _request_payload(self, prompt: str) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "model": self.model_id,
             "input": prompt,
@@ -270,6 +262,18 @@ class ResponsesGatewayClient:
                     "schema": proposal_output_schema(),
                 }
             }
+        return payload
+
+    def generate(
+        self,
+        prompt: str,
+        *,
+        episode_id: str,
+        capability_level: int,
+        phase: str,
+        regime: str | None,
+    ) -> tuple[str, dict[str, Any], float]:
+        payload = self._request_payload(prompt)
         request = urllib.request.Request(
             f"{self.base_url}/v1/responses",
             data=json.dumps(payload).encode("utf-8"),
