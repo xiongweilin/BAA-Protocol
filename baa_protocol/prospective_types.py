@@ -152,12 +152,21 @@ class ResponsesGatewayClient:
         model_id: str = "gpt-6-luna",
         timeout_seconds: float = 180.0,
         structured_output: bool = False,
+        proposal_tool: bool = False,
     ) -> None:
+        if structured_output and proposal_tool:
+            raise ValueError("structured_output and proposal_tool are mutually exclusive")
         self.base_url = base_url.rstrip("/")
         self.model_id = model_id
         self.timeout_seconds = timeout_seconds
         self.structured_output = structured_output
-        self.interface_mode = "json_schema" if structured_output else "freeform_json"
+        self.proposal_tool = proposal_tool
+        if proposal_tool:
+            self.interface_mode = "function_tool"
+        elif structured_output:
+            self.interface_mode = "json_schema"
+        else:
+            self.interface_mode = "freeform_json"
 
     @staticmethod
     def _decode_response(raw: bytes, content_type: str) -> dict[str, Any]:
@@ -246,6 +255,30 @@ class ResponsesGatewayClient:
             raise ValueError("Responses payload contains no assistant output text")
         return "\n".join(chunks)
 
+    @staticmethod
+    def _extract_function_arguments(
+        body: dict[str, Any],
+        *,
+        name: str = "submit_baa_proposal",
+    ) -> str:
+        calls = [
+            item
+            for item in body.get("output") or []
+            if isinstance(item, dict)
+            and item.get("type") == "function_call"
+            and item.get("name") == name
+        ]
+        if len(calls) != 1:
+            raise ModelResponseError(
+                f"expected exactly one {name} function call, got {len(calls)}"
+            )
+        arguments = calls[0].get("arguments")
+        if isinstance(arguments, str) and arguments.strip():
+            return arguments
+        if isinstance(arguments, dict):
+            return json.dumps(arguments, ensure_ascii=False, separators=(",", ":"))
+        raise ModelResponseError(f"{name} function call has no usable arguments")
+
     def _request_payload(self, prompt: str) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "model": self.model_id,
@@ -262,6 +295,24 @@ class ResponsesGatewayClient:
                     "schema": proposal_output_schema(),
                 }
             }
+        if self.proposal_tool:
+            payload["tools"] = [
+                {
+                    "type": "function",
+                    "name": "submit_baa_proposal",
+                    "description": (
+                        "Submit the next bounded-action proposal selected from the "
+                        "episode evidence and operational feedback."
+                    ),
+                    "parameters": proposal_output_schema(),
+                    "strict": True,
+                }
+            ]
+            payload["tool_choice"] = {
+                "type": "function",
+                "name": "submit_baa_proposal",
+            }
+            payload["parallel_tool_calls"] = False
         return payload
 
     def generate(
@@ -291,8 +342,12 @@ class ResponsesGatewayClient:
                 response.headers.get("Content-Type", ""),
             )
         usage = body.get("usage")
+        if self.proposal_tool:
+            raw_output = self._extract_function_arguments(body)
+        else:
+            raw_output = self._extract_text(body)
         return (
-            self._extract_text(body),
+            raw_output,
             usage if isinstance(usage, dict) else {},
             time.perf_counter() - started,
         )
