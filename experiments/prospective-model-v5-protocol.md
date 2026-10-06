@@ -83,6 +83,19 @@ The adaptive planner receives current runtime state and event history after the 
 
 Therefore BAA does not manufacture favorable evidence. It only determines what reality-facing actions are allowed before and after the common environment change.
 
+## Regime-label causal control
+
+v5 no longer exposes `feedback_class=bounded_action_protocol/direct_execution` as an explicit adaptive-planner field.
+
+The model sees only:
+
+- the actual admission / execution / verification history;
+- remaining obligations;
+- current runtime state;
+- common environment events.
+
+Adaptive-policy divergence must therefore arise from realized feedback rather than from an extra label announcing which regime is active. This constraint applies only to v5; earlier studies remain frozen.
+
 ## Expected causal structure
 
 The study permits:
@@ -149,6 +162,7 @@ A run is accepted only if:
 - the three runtime recovery events match the frozen workload;
 - every physical model call is valid;
 - transport, schema, and model/interface errors are zero;
+- adaptive prompts contain no explicit regime label;
 - no implementation defect changes event timing, actions, outcomes, or accounting.
 
 ## Interpretation boundary
