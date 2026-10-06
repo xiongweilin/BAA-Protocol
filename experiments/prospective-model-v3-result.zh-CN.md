@@ -100,3 +100,28 @@ artifact 中机械生成的 0/12 regime summary 只是 proposal parse failure �
 下一步先做独立 capability probe：使用 strict function parameters 强制 Responses function call。
 
 只有当 route 返回真实 `function_call`，且 arguments 符合声明 schema 时，才把该接口用于新的 prospective study version。
+
+## 后续 capability probe
+
+AIOS workflow run `37401308580` 随后完成了该独立 probe。
+
+固定环境：
+
+~~~text
+model: gpt-6-luna
+gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+function: submit_baa_proposal
+tool_choice: forced function
+strict: true
+~~~
+
+结果：
+
+- probe step 成功；
+- 唯一 output type 为 `function_call`；
+- arguments 精确包含 `kind`、`obligation_id`、`subject_ref`、`target_system`、`operation`、`authority_epoch`；
+- 没有额外字段；
+- `authority_epoch` 保持 integer；
+- probe 不执行任何现实动作。
+
+因此该 deployment path 已对 forced strict function calling 给出正向 capability evidence。下一轮 prospective study 可以在新版本中使用这一接口。
