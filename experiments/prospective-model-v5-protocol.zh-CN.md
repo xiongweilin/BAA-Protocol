@@ -71,6 +71,8 @@ operator message 本身不授权提前执行；后续 clock event 才真正改�
 
 其他 episode 不增加 runtime event。
 
+`after_turn: 1` 按字面执行：adaptive turn 1 先被处理，随后 runtime event 才发生。因此 C1 会到达 event，但没有后续 adaptive action 可以利用它；C2 在 event 后仍有三个 adaptive turn，是第一个能够展示 event-driven recovery completion 的 horizon。
+
 ## Recovery event 的公平性
 
 runtime event 在模型生成前冻结。
