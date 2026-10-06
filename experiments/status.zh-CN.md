@@ -237,6 +237,30 @@ C2 三种 regime 都完成 12/12 episode，并产生 36 个 useful-delivery unit
 
 详见 [prospective-model-v5-result.zh-CN.md](prospective-model-v5-result.zh-CN.md)。
 
+### v6 通过资格检查的前瞻泛化结果
+
+AIOS workflow run `37406741476` 是预注册 no-resampling 规则下首个完整通过资格检查的 v6 结果。
+
+冻结严格判定点：
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 4/24 | 4/24 | 4/24 |
+| C1 | 6/24 | 6/24 | 4/24 |
+| C2 | 14/24 | 14/24 | **20/24** |
+
+因此预注册主 endpoint 为正：
+
+`Delta_C2 = 20 - max(14, 14) = +6`。
+
+但更强的 cross-mechanism endpoint **没有满足**。BAA-only C2 gain 出现在 `time_recovery`（+4）与 `readback_recovery`（+2）；`subject_evidence_refresh` 与 `authority_evidence_refresh` 在三种 regime 下都为 4/4 delegable，没有增量 BAA gain。
+
+C2 中 BAA unsafe transition 为 0，而两种 direct regime 各为 18；代价是 BAA 使用 18 次自动 assurance intervention 和 100 次 logical model call，direct 为 92。BAA aggregate useful delivery 为 60，direct 为 61。2 个 principal-attention 与 terminal-unresolved case 位于预注册 irrecoverable-control stratum，在所有 regime 下都不可委托。
+
+因此接受结论比“全面跨机制泛化”更窄：aggregate delegation-frontier expansion 在新的 prospective workload 上复现，但仍局限于 time/readback recovery。
+
+详见 [prospective-model-v6-result.zh-CN.md](prospective-model-v6-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -300,12 +324,14 @@ reference/network/product-composition 阶段已经收敛，因为：
 25. v4 将有限 safety-trajectory 正结果与 delegation-frontier 零结果明确分离；
 26. v5 在接受 run 之前冻结公共 recovery-event 时序，并移除 adaptive prompt 中的 regime-name cue；
 27. v5 产生首个通过资格检查的有限真实模型 delegation-frontier expansion：C2 self-check/audit 9/12，BAA 12/12。
+28. v6 冻结新的 24-episode workload 与六个预注册 strata，并按 no-resampling 规则接受首个完整通过资格检查的 run。
+29. v6 复现正的 aggregate C2 frontier expansion（direct 14/24，BAA 20/24），但没有满足更强的 evidence-refresh 跨机制泛化标准。
 
 ## 下一阶段边界
 
 单一任务域的机制问题已经从“能否挡住 unsafe action”推进到“safe stop 是否能在后续恢复并完成”；v4 与 v5 分别提供了有限证据。
 
-下一阶段是**delegation leverage 的前瞻泛化检验**，而不是继续调整这十二个 episode。
+offboarding 的 prospective-generalization 阶段已经足够完成，不应继续增加 offboarding episode。下一阶段应改变外部有效性轴或成本前沿轴，而不是做 v7 = 更多同域 case。
 
 新研究应继续保持：
 
@@ -318,6 +344,10 @@ reference/network/product-composition 阶段已经收敛，因为：
 
 但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-核心可证伪问题：
+下一组核心可证伪问题是：
 
-> 在共同注意力预算 A 与风险上限 R 下，BAA 是否能在更广 prospective task distribution 上扩大 delegable set？该增益在 adaptive feedback 下是否持续存在，而不依赖手工挑选 recovery case？
+> BAA 是否能在不同 budget setting 下把 attention-risk-delivery-assurance-cost 可行前沿整体向外推，而不只是在一个严格点上取胜？
+
+以及：
+
+> 同一种架构效应能否出现在第二个任务域或 materially different 的 reality-facing interface 上？

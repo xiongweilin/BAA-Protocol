@@ -253,6 +253,30 @@ This is the first qualified finite delegation-frontier expansion in the prospect
 
 See [prospective-model-v5-result.md](prospective-model-v5-result.md).
 
+### v6 qualified prospective generalization result
+
+AIOS workflow run `37406741476` is the first fully qualified v6 result under the preregistered no-resampling rule.
+
+At the frozen strict point:
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 4/24 | 4/24 | 4/24 |
+| C1 | 6/24 | 6/24 | 4/24 |
+| C2 | 14/24 | 14/24 | **20/24** |
+
+Therefore the preregistered primary endpoint is positive:
+
+`Delta_C2 = 20 - max(14, 14) = +6`.
+
+The stronger cross-mechanism endpoint is **not met**. BAA-only C2 gains occur in `time_recovery` (+4) and `readback_recovery` (+2), while both `subject_evidence_refresh` and `authority_evidence_refresh` are 4/4 delegable in every regime and contribute no incremental BAA gain.
+
+At C2 BAA has zero unsafe transitions versus 18 for each direct regime, but uses 18 automatic assurance interventions and 100 logical model calls versus 92 for the direct regimes. Aggregate useful delivery is 60 for BAA versus 61 for the direct regimes. The two principal-attention and terminal-unresolved cases are in the preregistered irrecoverable-control stratum and remain non-delegable in every regime.
+
+The accepted conclusion is therefore narrower than full cross-mechanism generalization: the aggregate delegation-frontier expansion prospectively reproduces on a new workload, but remains localized to time/readback recovery.
+
+See [prospective-model-v6-result.md](prospective-model-v6-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -316,12 +340,14 @@ The reference/network/product-composition phase is converged because:
 25. v4 separated a positive finite safety-trajectory result from a null delegation-frontier result;
 26. v5 froze common recovery-event timing and removed regime-name cues from adaptive prompts before the accepted run;
 27. v5 produced the first qualified finite real-model delegation-frontier expansion: C2 self-check/audit 9/12 versus BAA 12/12.
+28. v6 froze a new 24-episode workload across six preregistered strata and accepted the first fully qualified run without resampling.
+29. v6 reproduced a positive aggregate C2 frontier expansion (14/24 direct versus 20/24 BAA) while failing the stronger preregistered evidence-refresh cross-mechanism generalization criterion.
 
 ## Next phase boundary
 
 The single-domain mechanism question has now advanced beyond “can the kernel block unsafe actions?” and “can a safe stop later recover?” v4 and v5 provide finite evidence for both.
 
-The next phase is **prospective generalization of delegation leverage** rather than further tuning of the same twelve episodes.
+The offboarding prospective-generalization phase is now complete enough to stop adding offboarding episodes. The next phase should change the external-validity or cost-frontier axis rather than introduce a v7 with more cases from the same task domain.
 
 A new study should preserve:
 
@@ -334,6 +360,10 @@ A new study should preserve:
 
 It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-The core falsifiable question remains:
+The next core falsifiable questions are:
 
-> Under common attention budget A and risk limit R, does BAA enlarge the delegable task set across a broader prospective task distribution, and does that gain persist under adaptive feedback without relying on hand-selected recovery cases?
+> Does BAA shift the feasible attention-risk-delivery-assurance-cost frontier across budget settings, rather than only at one strict point?
+
+and
+
+> Does the same architectural effect appear in a second task domain or materially different reality-facing interface?

@@ -101,6 +101,8 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v4-result.md](experiments/prospective-model-v4-result.md) — qualified forced-function v4 comparison.
 - [experiments/prospective-model-v5-protocol.md](experiments/prospective-model-v5-protocol.md) — preregistered recovery/liveness follow-up.
 - [experiments/prospective-model-v5-result.md](experiments/prospective-model-v5-result.md) — qualified finite delegation-frontier expansion under preregistered recovery events.
+- [experiments/prospective-model-v6-protocol.md](experiments/prospective-model-v6-protocol.md) — preregistered 24-episode prospective generalization study.
+- [experiments/prospective-model-v6-result.md](experiments/prospective-model-v6-result.md) — qualified +6 C2 aggregate frontier expansion; preregistered cross-mechanism evidence-refresh generalization criterion not met.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
@@ -134,8 +136,9 @@ The evidence chain now includes:
 - v2 failed model-evidence qualification; v3 failed structured-output interface qualification;
 - AIOS workflow run `37402587158`: qualified forced-function v4 comparison; all three regimes were 9/12 delegable at C0/C1/C2. Direct/audit produced adaptive unsafe transitions while BAA remained at 0; this is a frontier null result with a positive finite safety-trajectory result;
 - AIOS workflow run `37404551022`: qualified recovery-focused v5 comparison. C0/C1 remained 9/12 for all regimes; at C2 self-check/audit remained 9/12 while BAA reached **12/12 delegable**, with equal aggregate useful delivery (36), zero BAA unsafe transitions, and five direct/audit unsafe transitions.
+- AIOS workflow run `37406741476`: first fully qualified v6 result on the frozen 24-episode workload. At C2 self-check/audit were 14/24 delegable and BAA was **20/24**, so the preregistered aggregate endpoint was Delta_C2 = +6. The gain was localized to time_recovery (+4) and readback_recovery (+2); subject/authority evidence-refresh strata showed no BAA-only gain, so the stronger preregistered cross-mechanism generalization criterion was not met.
 
-These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion, but its three recovery mechanisms were intentionally constructed from v4 failure modes and therefore constitute mechanistic evidence rather than an estimate of production frequency.
+These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion. v6 prospectively reproduces an aggregate expansion on a new workload but does not establish the stronger preregistered evidence-refresh cross-mechanism generalization claim. Neither result estimates production frequency.
 
 See [experiments/status.md](experiments/status.md).
 
