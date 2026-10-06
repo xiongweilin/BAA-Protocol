@@ -41,11 +41,17 @@ def _is_stale_evidence_hold(simulator: CanarySimulator, disposition: str) -> boo
     )
 
 
-def _evidence_bank(episode: CanaryEpisode) -> dict[int, dict[str, Any]]:
-    """Return only preregistered authoritative evidence snapshots already in v1."""
+def _evidence_bank(
+    episode: CanaryEpisode,
+    *,
+    through_turn: int,
+) -> dict[int, dict[str, Any]]:
+    """Return authoritative snapshots whose frozen event time has already occurred."""
     bank: dict[int, dict[str, Any]] = {}
 
     for event in episode.runtime_events:
+        if int(event.get("after_turn", 0)) > through_turn:
+            continue
         if event.get("type") == "route_evidence_refresh":
             by_stage = event.get("stage_evidence_by_stage", {})
             if isinstance(by_stage, dict):
@@ -63,9 +69,11 @@ def _evidence_bank(episode: CanaryEpisode) -> dict[int, dict[str, Any]]:
 def _reacquire_current_stage_evidence(
     episode: CanaryEpisode,
     simulator: CanarySimulator,
+    *,
+    through_turn: int,
 ) -> bool:
-    """Refresh visible evidence only; never mutate hidden route or kernel policy."""
-    bank = _evidence_bank(episode)
+    """Refresh visible evidence only from already-available authoritative snapshots."""
+    bank = _evidence_bank(episode, through_turn=through_turn)
     stage_index = int(simulator.context["current_stage_index"])
     weight = int(simulator.context["current_weight_percent"])
     evidence = bank.get(stage_index)
@@ -158,12 +166,17 @@ def run_canary_evidence_recovery_study(
             in_tokens, out_tokens = usage_tokens(initial_call.usage)
             evidence_reacquisitions = 0
 
-            def call_and_execute(*, phase: str, turn_level: int) -> str:
+            def call_and_execute(
+                *,
+                phase: str,
+                turn_level: int,
+                feedback_policy: str = "corrective",
+            ) -> str:
                 nonlocal calls, in_tokens, out_tokens
                 prompt = _adaptive_feedback_prompt(
                     episode,
                     simulator,
-                    feedback_policy="corrective",
+                    feedback_policy=feedback_policy,
                 )
                 cache_key = (episode.episode_id, phase, turn_level, prompt)
                 cached = adaptive_cache.get(cache_key)
@@ -199,11 +212,19 @@ def run_canary_evidence_recovery_study(
             def post_hold_repair(*, phase: str, turn_level: int) -> str:
                 nonlocal evidence_reacquisitions
                 if evidence_policy == "reacquire":
-                    if _reacquire_current_stage_evidence(episode, simulator):
+                    if _reacquire_current_stage_evidence(
+                        episode,
+                        simulator,
+                        through_turn=turn_level,
+                    ):
                         evidence_reacquisitions += 1
+                # At the intervention point both policies receive the same
+                # diagnostic replan interface. The treatment difference is
+                # only whether authoritative evidence was refreshed first.
                 return call_and_execute(
                     phase=f"{phase}-post-hold",
                     turn_level=turn_level,
+                    feedback_policy="diagnostic",
                 )
 
             def process_disposition(
