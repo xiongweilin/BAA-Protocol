@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run preregistered canary v3 evidence-recovery study."""
+"""Run the preregistered canary v3 evidence-recovery study."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 from baa_protocol.delegation_frontier import DelegationBudget
-from baa_protocol.prospective_canary_evidence_recovery_study import (
+from baa_protocol.prospective_canary_evidence_study import (
     evidence_model_client,
     run_canary_evidence_recovery_study,
 )
@@ -60,6 +60,8 @@ def main() -> None:
                 "source_workload_version": source_version,
                 "model_id": result["model_id"],
                 "model_interface": result["model_interface"],
+                "evidence_policies": result["evidence_policies"],
+                "horizons": result["horizons"],
                 "physical_sampling": result["physical_sampling"],
                 "cells": result["cells"],
             },
