@@ -104,6 +104,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v5-result.md](experiments/prospective-model-v5-result.md) — qualified finite delegation-frontier expansion under preregistered recovery events.
 - [experiments/prospective-model-v6-protocol.md](experiments/prospective-model-v6-protocol.md) — preregistered 24-episode prospective generalization study.
 - [experiments/prospective-model-v6-result.md](experiments/prospective-model-v6-result.md) — qualified +6 C2 aggregate frontier expansion; preregistered cross-mechanism evidence-refresh generalization criterion not met.
+- [experiments/prospective-canary-v1-protocol.md](experiments/prospective-canary-v1-protocol.md) — preregistered first real-model study in the second BAA task domain.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
