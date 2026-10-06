@@ -315,7 +315,7 @@ class ProspectiveModelStudyTests(unittest.TestCase):
             "content": [{"type": "output_text", "text": "{\\\"actions\\\":[]}"}],
         }
         wire = (
-            b"event: response.output_item.done\\n"
+            b"event: response.output_item.done\n"
             + b"data: "
             + json.dumps(
                 {
