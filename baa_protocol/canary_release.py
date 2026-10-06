@@ -226,7 +226,9 @@ class CanaryReleaseKernel:
         stage = self.stages[proposal.stage_index]
         if proposal.candidate_weight_percent != stage.weight_percent:
             return Admission(Decision.DENY, "weight does not match configured stage")
-        if proposal.stage_index != self.current_stage_index:
+
+        expected_stage = 0 if self.current_weight_percent == 0 else self.current_stage_index + 1
+        if proposal.stage_index != expected_stage:
             return Admission(Decision.DENY, "proposal is stale or skips a stage")
 
         # Entering the first stage is allowed from zero after the prior quality
@@ -246,9 +248,6 @@ class CanaryReleaseKernel:
             current = self.stages[self.current_stage_index]
             if not self._evidence_sufficient(evidence, current):
                 return Admission(Decision.HOLD, "insufficient canary evidence")
-            if proposal.stage_index != self.current_stage_index + 1:
-                return Admission(Decision.DENY, "next stage is not sequential")
-
         capability = TrafficCapability(
             capability_id=f"traffic:{proposal.proposal_id}",
             proposal_id=proposal.proposal_id,
