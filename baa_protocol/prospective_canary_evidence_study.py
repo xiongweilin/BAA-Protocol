@@ -80,7 +80,10 @@ def _observer_templates(
             if isinstance(values, dict):
                 for raw in values.values():
                     retain(raw)
-        elif event.get("type") == "telemetry_update":
+        elif event.get("type") in {
+            "telemetry_update",
+            "observer_evidence_available",
+        }:
             retain(event.get("stage_evidence"))
 
     return templates
