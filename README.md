@@ -106,6 +106,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v6-result.md](experiments/prospective-model-v6-result.md) — qualified +6 C2 aggregate frontier expansion; preregistered cross-mechanism evidence-refresh generalization criterion not met.
 - [experiments/prospective-canary-v1-protocol.md](experiments/prospective-canary-v1-protocol.md) — preregistered first real-model study in the second BAA task domain.
 - [experiments/prospective-canary-v1-result.md](experiments/prospective-canary-v1-result.md) — qualified second-domain result: C2 Delta = -1, zero BAA unsafe transitions, and no cross-domain frontier expansion.
+- [experiments/cross-domain-frontier-sensitivity.md](experiments/cross-domain-frontier-sensitivity.md) — post-hoc risk/horizon/intervention sensitivity over the accepted offboarding-v6 and canary-v1 artifacts.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
