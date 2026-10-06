@@ -80,3 +80,7 @@ jobs:
         env:
           PYTHONPATH: baa:aios
         run: python -m unittest discover -s baa/integration -p "test_aios_canary_release_contract.py" -v
+      - name: Check canary unknown-effect reconciliation
+        env:
+          PYTHONPATH: baa:aios
+        run: python -m unittest discover -s baa/integration -p "test_aios_canary_runtime_reconciliation.py" -v
