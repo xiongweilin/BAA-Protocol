@@ -595,6 +595,7 @@ class CanarySimulator:
         if (
             int(self.context["current_weight_percent"]) == self._goal_weight()
             and self.pending is None
+            and self.metrics.unsafe_transitions == 0
         ):
             self.metrics.useful_delivery = 1
 
