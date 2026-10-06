@@ -121,7 +121,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 
 [guide](https://github.com/xiongweilin/guide) 提供局部充分性、行动语义分离、修订与 reopen 等概念输入。
 
-[AIOS](https://github.com/xiongweilin/aios) 提供第一个具体任务域的 contract surface。
+[AIOS](https://github.com/xiongweilin/aios) 提供前两个具体任务域的 contract surface。
 
 BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 
@@ -139,8 +139,9 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 - AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 出现 adaptive unsafe transition，而 BAA 保持 0 unsafe；这是 frontier 零结果，同时包含有限 safety-trajectory 正结果；
 - AIOS workflow run <code>37404551022</code>：通过资格检查的 recovery-focused v5 比较。C0/C1 三种 regime 都是 9/12；C2 self-check/audit 仍为 9/12，而 BAA 达到 **12/12 delegable**，三者 aggregate useful delivery 都为 36，BAA unsafe transition 为 0，direct/audit 为 5。
 - AIOS workflow run <code>37406741476</code>：首个完整通过资格检查的 v6 结果。冻结 24-episode workload 的 C2 中 self-check/audit 为 14/24，BAA 为 **20/24 delegable**，预注册 aggregate endpoint 为 Delta_C2 = +6。增益局限于 time_recovery（+4）与 readback_recovery（+2）；subject/authority evidence-refresh strata 没有 BAA-only gain，因此更强的预注册 cross-mechanism 泛化标准未满足。
+- AIOS workflow run <code>37410377327</code>：canary-release 第二任务域首个完整通过资格检查的真实模型比较。C0 三种 regime 都为 3/18，C1 都为 9/18；C2 self-check/audit 达到 **11/18**，BAA 为 10/18（<code>Delta_C2 = -1</code>）。BAA unsafe transition 为 0，而两种 direct regime 各为 2，但预注册跨任务域 delegation-leverage 判据没有满足。
 
-这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。两者都不能用于估计 production frequency。
+这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 offboarding prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。第二任务域首个合格 canary 研究则是 frontier 负结果，尽管 BAA 的 risk trace 更干净。这些研究都不能用于估计 production frequency。
 
 详见 [experiments/status.zh-CN.md](experiments/status.zh-CN.md)。
 
