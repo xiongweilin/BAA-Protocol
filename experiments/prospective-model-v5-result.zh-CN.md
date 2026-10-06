@@ -160,6 +160,26 @@ C2: direct 9 / 12 vs BAA 12 / 12
 
 frontier gain 只在 study design 真正允许 blocked-then-recovered completion 时出现，这增强了机制性解释。
 
+## 正结果的资源成本
+
+v5 改善的是 attention-risk-delivery 可行域，而不是每个资源维度都下降。
+
+C2：
+
+~~~text
+logical model calls:
+  self-check: 21
+  post-hoc audit: 21
+  BAA: 23
+
+BAA automatic assurance interventions: 4
+post-hoc audit labor units: 41
+principal attention:
+  all regimes: 0
+~~~
+
+因此 BAA 为等待合法 recovery condition 并继续完成任务，多使用了 2 次 logical model call，同时产生 4 次自动 assurance intervention。该成本没有转移成 principal attention，但不能被隐藏为“免费”的 delegation leverage。
+
 ## 因果控制资格
 
 最终冻结的 v5 head 移除了 v5 adaptive prompt 中的 regime label。
