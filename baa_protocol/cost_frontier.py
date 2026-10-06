@@ -38,6 +38,88 @@ def load_frontier_source(path: str | Path) -> dict[str, Any]:
     return data
 
 
+
+def source_from_results(
+    offboarding: dict[str, Any],
+    canary: dict[str, Any],
+    *,
+    provenance: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Normalize accepted result JSON into the cost-frontier row schema."""
+
+    offboarding_rows: list[dict[str, Any]] = []
+    for level in offboarding["levels"]:
+        for row in level["episodes"]:
+            metrics = row["metrics"]
+            offboarding_rows.append(
+                {
+                    "episode_id": row["episode_id"],
+                    "logical_name": row["logical_name"],
+                    "study_group": row["study_group"],
+                    "regime": row["regime"],
+                    "capability_level": row["capability_level"],
+                    "completed": row["completed"],
+                    "useful_delivery": metrics["useful_delivery"],
+                    "principal_attention": metrics["principal_attention"],
+                    "unsafe_transitions": metrics["unsafe_transitions"],
+                    "terminal_unresolved_results": metrics[
+                        "terminal_unresolved_results"
+                    ],
+                    "assurance_labor_units": metrics["assurance_labor_units"],
+                    "assurance_interventions": metrics[
+                        "assurance_interventions"
+                    ],
+                    "logical_model_calls": row["model_calls"],
+                    "model_input_tokens": row["model_input_tokens"],
+                    "model_output_tokens": row["model_output_tokens"],
+                }
+            )
+
+    canary_rows: list[dict[str, Any]] = []
+    for row in canary["episodes"]:
+        metrics = row["metrics"]
+        canary_rows.append(
+            {
+                "episode_id": row["episode_id"],
+                "logical_name": row["logical_name"],
+                "study_group": row["study_group"],
+                "evidence_policy": row["evidence_policy"],
+                "horizon": row["horizon"],
+                "completed": row["completed"],
+                "useful_delivery": metrics["useful_delivery"],
+                "principal_attention": metrics["principal_attention"],
+                "unsafe_transitions": metrics["unsafe_transitions"],
+                "terminal_unresolved_results": metrics[
+                    "terminal_unresolved_results"
+                ],
+                "assurance_labor_units": metrics["assurance_labor_units"],
+                "assurance_interventions": metrics[
+                    "assurance_interventions"
+                ],
+                "evidence_reacquisitions": row["evidence_reacquisitions"],
+                "logical_model_calls": row["model_calls"],
+                "model_input_tokens": row["model_input_tokens"],
+                "model_output_tokens": row["model_output_tokens"],
+            }
+        )
+
+    return {
+        "version": "delegation-cost-frontier-v1-source",
+        "provenance": dict(provenance or {}),
+        "sources": [
+            {
+                "study": "prospective-offboarding-v6",
+                "source_kind": "architecture",
+                "rows": offboarding_rows,
+            },
+            {
+                "study": "prospective-canary-v5-robustness",
+                "source_kind": "assurance_mechanism",
+                "rows": canary_rows,
+            },
+        ],
+    }
+
 def _source(data: dict[str, Any], study: str) -> dict[str, Any]:
     matches = [item for item in data["sources"] if item["study"] == study]
     if len(matches) != 1:
