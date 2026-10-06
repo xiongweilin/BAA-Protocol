@@ -209,11 +209,12 @@ def run_canary_evidence_horizon_study(
                 turn_level: int,
             ) -> None:
                 nonlocal evidence_reacquisitions
-                # v4 preserves v3's intended bounded intervention: at most
-                # one fresh evidence reacquisition per episode, even at H8.
+                # Preserve v3 exactly: each exact stale-evidence hold may
+                # trigger one bounded current-route read before the same
+                # post-hold proposal right. Longer horizon may therefore
+                # encounter another later hold after a verified route change.
                 if (
                     evidence_policy == "reacquire"
-                    and evidence_reacquisitions == 0
                     and _reacquire_current_stage_evidence(
                         episode,
                         simulator,
