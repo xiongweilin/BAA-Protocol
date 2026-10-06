@@ -126,15 +126,15 @@ useful_delivery >= 1
 
 The preregistered primary endpoint is:
 
-[
-Delta^{mathrm{reacquire}}_{H4}
+\[
+\Delta^{\mathrm{reacquire}}_{H4}
 =
-D_{mathrm{stale}}(mathrm{reacquire})
+D_{\mathrm{stale}}(\mathrm{reacquire})
 -
-D_{mathrm{stale}}(mathrm{no_reacquire})
-]
+D_{\mathrm{stale}}(\mathrm{no\_reacquire})
+\]
 
-where (D_{mathrm{stale}}) is the number of strictly delegable `stale_route_refresh` episodes out of 3.
+where \(D_{\mathrm{stale}}\) is the number of strictly delegable `stale_route_refresh` episodes out of 3.
 
 The first fully qualified run is accepted whether the endpoint is positive, zero, or negative.
 
@@ -152,7 +152,7 @@ and no traffic-kernel rule is weakened.
 
 A stronger mechanism result requires all of:
 
-1. (Delta^{mathrm{reacquire}}_{H4} > 0);
+1. \(\Delta^{\mathrm{reacquire}}_{H4} > 0\);
 2. reacquire has zero unsafe transitions;
 3. non-stale delegability is not lower than no_reacquire;
 4. at least one recovered stale-route episode contains:
