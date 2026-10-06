@@ -88,7 +88,8 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 
 ## Repository map
 
-- [domains/employee-offboarding.md](domains/employee-offboarding.md) — task-domain boundary, assumptions, invariants, and experiment.
+- [domains/employee-offboarding.md](domains/employee-offboarding.md) — first task-domain boundary, assumptions, invariants, and experiment.
+- [domains/canary-release-promotion.md](domains/canary-release-promotion.md) — second task domain: progressive traffic exposure with evidence gates and rollback.
 - [spec/protocol.md](spec/protocol.md) — admission and execution protocol.
 - [spec/guarantees.md](spec/guarantees.md) — proof obligations and claim language.
 - [spec/state-machine.md](spec/state-machine.md) — protocol state semantics.

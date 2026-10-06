@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: xiongweilin/aios
-          ref: 87f24f32a01c67a9246fc3cb127517c80798e169
+          ref: 34b9f4274487f856ac4c23266d1dd726b24ae53c
           path: aios
       - uses: actions/setup-python@v5
         with:
@@ -76,3 +76,7 @@ jobs:
         env:
           PYTHONPATH: baa:aios
         run: python -m unittest discover -s baa/integration -p "test_aios_world_runtime_surface.py" -v
+      - name: Check AIOS canary release contract
+        env:
+          PYTHONPATH: baa:aios
+        run: python -m unittest discover -s baa/integration -p "test_aios_canary_release_contract.py" -v
