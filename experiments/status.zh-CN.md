@@ -261,6 +261,30 @@ C2 中 BAA unsafe transition 为 0，而两种 direct regime 各为 18；代价�
 
 详见 [prospective-model-v6-result.zh-CN.md](prospective-model-v6-result.zh-CN.md)。
 
+### 通过资格检查的第二任务域 canary 结果
+
+AIOS workflow run `37410377327` 是第二任务域首个完整通过资格检查的真实模型比较。
+
+冻结严格 contract 下：
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 3/18 | 3/18 | 3/18 |
+| C1 | 9/18 | 9/18 | 9/18 |
+| C2 | **11/18** | **11/18** | 10/18 |
+
+因此预注册主 endpoint 为负：
+
+`Delta_C2 = 10 - max(11, 11) = -1`。
+
+更强的跨任务域 architectural criterion 也没有满足。C2 中，`evidence_maturation`、`guardrail_recovery`、`lost_ack_recovery` 在三种 regime 下均为 3/3；`clean_progression` 均为 1/3；`irrecoverable_control` 均为 0/3；`stale_route_refresh` 则是两种 direct regime 各 1/3，而 BAA 0/3。
+
+BAA 仍保持有限 safety separation：C2 unsafe transition 为 0，而两种 direct regime 各为 2。其代价是 5 次自动 assurance intervention 和多 2 次 logical model call，同时 completed 为 10，而 direct 为 13。
+
+这是接受的 frontier 负结果，不是 qualification failure。它说明在明显不同的第二任务域中，safety-trajectory 改善不会自动转化为 delegation leverage。
+
+详见 [prospective-canary-v1-result.zh-CN.md](prospective-canary-v1-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -326,6 +350,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 27. v5 产生首个通过资格检查的有限真实模型 delegation-frontier expansion：C2 self-check/audit 9/12，BAA 12/12。
 28. v6 冻结新的 24-episode workload 与六个预注册 strata，并按 no-resampling 规则接受首个完整通过资格检查的 run。
 29. v6 复现正的 aggregate C2 frontier expansion（direct 14/24，BAA 20/24），但没有满足更强的 evidence-refresh 跨机制泛化标准。
+30. 首个预注册 canary-release 真实模型研究以 C2 frontier 负结果被接受：direct 11/18，BAA 10/18。BAA unsafe transition 保持 0，而 direct 为 2，因此两个任务域的结果已经实证分离了 safety separation 与 delegation leverage。
 
 ## 下一阶段边界
 
@@ -344,10 +369,8 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-下一组核心可证伪问题是：
+下一组核心可证伪问题现在应收敛为：
 
-> BAA 是否能在不同 budget setting 下把 attention-risk-delivery-assurance-cost 可行前沿整体向外推，而不只是在一个严格点上取胜？
+> 在已经接受的 offboarding 与 canary workload 上，BAA 是否能在不同 budget setting 下把 attention-risk-delivery-assurance-cost 可行前沿向外推，还是其优势只存在于特定 task/risk structure？
 
-以及：
-
-> 同一种架构效应能否出现在第二个任务域或 materially different 的 reality-facing interface 上？
+不应为了扭转已接受的负结果直接制作 canary v2。只有在提出新的 protocol 或 state-information 假说并预注册之后，新的 canary study 才有研究意义。
