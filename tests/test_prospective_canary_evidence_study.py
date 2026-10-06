@@ -134,7 +134,11 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
                         "candidate_weight_percent": 100,
                         "operation_id": f"{episode_id}:{phase}:to-100",
                     }
-                elif int(runtime["current_weight_percent"]) == 10 and phase.startswith("adaptive-"):
+                elif (
+                    int(runtime["current_weight_percent"]) == 10
+                    and phase.startswith("adaptive-")
+                    and not phase.startswith("adaptive-1")
+                ):
                     action = {
                         "kind": "apply",
                         **ids,
