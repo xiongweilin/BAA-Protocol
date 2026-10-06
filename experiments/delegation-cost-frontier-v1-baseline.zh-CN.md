@@ -10,6 +10,25 @@
 
 它描述已观察 accounting surface，不构成新的前瞻因果实验。
 
+## 可重复分析证据
+
+首个通过 qualification 的派生分析 run：
+
+- AIOS workflow run：`37476354998`
+- workflow head：`b49b8080645f58580e2f1b0244ed68e5acdaae9d`
+- 固定 BAA analyzer：`667d41bb94c34a77aedbbb96a78ab49254ffd612`
+- artifact：`baa-delegation-cost-frontier-v1-37476354998-1`
+- artifact id：`11418149915`
+- artifact digest：`sha256:e59adcb17a0290dc8327a7ad5c17e4bb3901450eea9edb5911b9a147b9e23439`
+- 派生 `result.json` SHA-256：`846c2fc71ed7585e5930fd24e993832f932c029858ebfe668a02501b1c1fd944`
+
+派生结果同时记录两个上游已接受 result hash：
+
+- offboarding v6 `result.json`：`sha256:6029d70a7ba4747c4249a80e10468e0310234edd44aee90bcad1f1d038603a5c`
+- canary v5 `result.json`：`sha256:60dee3b2a8118c121f1ac745a9d09d0417bd33dfc0d2ce63c24b8102586114bb`
+
+该 workflow 只做 evidence reduction：下载历史 artifact、运行固定 analyzer、检查 C2/H8 阈值并上传派生 accounting 结果。
+
 ## 架构面板：严格 risk 与 attention
 
 固定 principal attention=0、unsafe transition=0、terminal unresolved=0、useful delivery minimum=3、audit labor ceiling=5。只改变每个 episode 的 automatic assurance-intervention ceiling。
