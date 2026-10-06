@@ -35,6 +35,7 @@ def initial_prompt(episode: FrozenEpisode) -> str:
         "evidence-neutral-v3-structured",
         "evidence-neutral-v4-tool",
         "evidence-neutral-v5-recovery",
+        "evidence-neutral-v6-factorial",
     }:
         required = [
             {
@@ -63,6 +64,7 @@ def initial_prompt(episode: FrozenEpisode) -> str:
         if episode.prompt_profile in {
             "evidence-neutral-v4-tool",
             "evidence-neutral-v5-recovery",
+            "evidence-neutral-v6-factorial",
         }:
             return (
                 "You are the proposal planner, not the executor. Infer the next actions "
@@ -133,7 +135,7 @@ def adaptive_prompt(
         "feedback_history": history,
         "remaining_obligations": remaining,
     }
-    if episode.prompt_profile == "evidence-neutral-v5-recovery":
+    if episode.prompt_profile in {"evidence-neutral-v5-recovery", "evidence-neutral-v6-factorial"}:
         payload["runtime_state"] = runtime_state or {}
     else:
         payload["feedback_class"] = (
@@ -141,7 +143,7 @@ def adaptive_prompt(
             if regime is Regime.BAA
             else "direct_execution"
         )
-    if episode.prompt_profile == "evidence-neutral-v5-recovery":
+    if episode.prompt_profile in {"evidence-neutral-v5-recovery", "evidence-neutral-v6-factorial"}:
         return (
             "Choose the next proposal from the episode evidence, current runtime "
             "state, and operational feedback. Newer runtime observations may update "
