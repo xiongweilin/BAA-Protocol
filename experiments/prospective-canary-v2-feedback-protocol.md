@@ -106,6 +106,8 @@ Initial model calls are shared across all feedback treatments.
 
 Adaptive calls are not shared once model-visible feedback differs.
 
+After any BAA `deny` or `hold`, every treatment receives the same interaction right: **at most one immediate repair proposal before the environment clock advances**. Minimal, diagnostic, and corrective therefore differ only in feedback content, not in whether a same-state repair opportunity exists. A second denial does not create an unbounded retry loop.
+
 No feedback-treatment name is inserted into the prompt. The model can observe the treatment only through the information actually provided.
 
 ## Primary endpoint
@@ -203,13 +205,14 @@ A run is qualified only if:
 5. horizons are exactly 2, 4, 8;
 6. the forced function interface is `submit_canary_proposal`;
 7. model interface is `function_tool`;
-8. there is at least one physical model call;
-9. transport, schema, and model/interface errors are all zero;
-10. every feedback/horizon cell has denominator 18;
-11. every stale-route cell has denominator 3;
-12. feedback-treatment names are absent from model-visible prompts;
-13. corrective feedback is derived only from model-visible authoritative state plus deterministic kernel/interface rules;
-14. no kernel or workload mutation occurs between cells.
+8. every treatment permits at most one same-state repair proposal after a deny/hold before environment advancement;
+9. there is at least one physical model call;
+10. transport, schema, and model/interface errors are all zero;
+11. every feedback/horizon cell has denominator 18;
+12. every stale-route cell has denominator 3;
+13. feedback-treatment names are absent from model-visible prompts;
+14. corrective feedback is derived only from model-visible authoritative state plus deterministic kernel/interface rules;
+15. no kernel or workload mutation occurs between cells.
 
 The first fully qualified run is accepted regardless of sign.
 
