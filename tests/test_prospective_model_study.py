@@ -498,6 +498,32 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertIn('"current_time": 200', prompt)
         self.assertIn("submit_baa_proposal", prompt)
 
+    def test_v5_adaptive_prompt_hides_regime_label(self):
+        from baa_protocol.prospective_model_study import adaptive_prompt
+
+        _, episodes = load_workload(WORKLOAD_V5)
+        episode = next(item for item in episodes if item.episode_id == "V204")
+        common = dict(
+            episode=episode,
+            capability=AdaptiveResource(level=2, extra_turns=4),
+            history=[
+                {
+                    "phase": "admission",
+                    "disposition": "hold",
+                    "reason": "effective time not reached",
+                }
+            ],
+            remaining=["obl:identity", "obl:sessions", "obl:hris"],
+            runtime_state={"current_time": 180},
+        )
+        direct_prompt = adaptive_prompt(regime=Regime.SELF_CHECK, **common)
+        baa_prompt = adaptive_prompt(regime=Regime.BAA, **common)
+        self.assertNotIn("feedback_class", direct_prompt)
+        self.assertNotIn("feedback_class", baa_prompt)
+        self.assertNotIn("bounded_action_protocol", baa_prompt)
+        self.assertNotIn("direct_execution", direct_prompt)
+        self.assertEqual(direct_prompt, baa_prompt)
+
     def test_v5_harness_can_convert_safe_stop_into_delegation_leverage(self):
         class RecoveryModel:
             model_id = "recovery-model"
