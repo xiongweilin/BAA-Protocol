@@ -108,6 +108,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-canary-v1-result.zh-CN.md](experiments/prospective-canary-v1-result.zh-CN.md) —— 通过资格检查的第二域结果：C2 Delta = -1，BAA unsafe=0，未出现跨域 frontier expansion。
 - [experiments/prospective-canary-v2-feedback-protocol.zh-CN.md](experiments/prospective-canary-v2-feedback-protocol.zh-CN.md) —— 预注册 assurance-feedback 质量 × adaptive horizon 的机制研究。
 - [experiments/prospective-canary-v2-feedback-result.zh-CN.md](experiments/prospective-canary-v2-feedback-result.zh-CN.md) —— 通过资格检查的零 feedback/horizon 结果：H4/H8 stale-route 均保持 1/3，unsafe=0。
+- [experiments/prospective-canary-v3-evidence-protocol.zh-CN.md](experiments/prospective-canary-v3-evidence-protocol.zh-CN.md) —— 预注册 evidence-availability 研究：latest-only 对比 versioned current-stage retention。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
