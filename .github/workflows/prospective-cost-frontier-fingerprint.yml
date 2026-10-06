@@ -1,0 +1,48 @@
+name: Prospective cost-frontier fingerprint
+
+on:
+  push:
+    branches:
+      - experiment/prospective-delegation-cost-frontier-v1
+    paths:
+      - "scripts/generate_prospective_delegation_cost_frontier_v1.py"
+      - ".github/workflows/prospective-cost-frontier-fingerprint.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  fingerprint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Generate and fingerprint workload
+        run: |
+          python scripts/generate_prospective_delegation_cost_frontier_v1.py --output /tmp/workload.json
+          python - <<'PY'
+          import hashlib
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          path = Path("/tmp/workload.json")
+          raw = path.read_bytes()
+          data = json.loads(raw)
+          digest = hashlib.sha256(raw).hexdigest()
+          groups = Counter(ep["study_group"] for ep in data["episodes"])
+          assert data["version"] == "prospective-delegation-cost-frontier-v1"
+          assert len(data["episodes"]) == 24
+          assert groups == {
+              "clean_control": 4,
+              "guardrail_control": 4,
+              "missing_observer_control": 4,
+              "stale_evidence_recovery": 4,
+              "lost_ack_recovery": 4,
+              "rollback_unavailable_control": 4,
+          }
+          print("WORKLOAD_SHA256=" + digest)
+          print("GROUPS=" + json.dumps(groups, sort_keys=True))
+          PY
