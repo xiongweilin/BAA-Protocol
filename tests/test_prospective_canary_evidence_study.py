@@ -1,22 +1,21 @@
 import json
+from dataclasses import replace
 from pathlib import Path
 import unittest
 
 from baa_protocol.delegation_frontier import DelegationBudget
-from baa_protocol.experiment import Regime
 from baa_protocol.prospective_canary_evidence_study import (
     EVIDENCE_POLICIES,
-    HORIZON,
-    STALE_EVIDENCE_REASON,
-    _evidence_bank,
-    _reacquire_current_stage_evidence,
+    HORIZONS,
+    EvidenceAction,
+    EvidenceRecoverySimulator,
+    _adaptive_prompt,
+    _parse_plan,
+    evidence_model_client,
+    evidence_recovery_schema,
     run_canary_evidence_recovery_study,
 )
-from baa_protocol.prospective_canary_study import (
-    CanaryAction,
-    CanarySimulator,
-    load_canary_workload,
-)
+from baa_protocol.prospective_canary_study import load_canary_workload
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,87 +24,173 @@ WORKLOAD = ROOT / "experiments" / "prospective_canary_v1.json"
 
 class CanaryEvidenceRecoveryStudyTests(unittest.TestCase):
     def setUp(self):
-        version, self.episodes = load_canary_workload(WORKLOAD)
+        version, episodes = load_canary_workload(WORKLOAD)
         self.assertEqual(version, "prospective-canary-v1")
+        self.episodes = episodes
 
-    def _stale(self):
+    def stale_episode(self):
         return next(
-            item for item in self.episodes
+            item
+            for item in self.episodes
             if item.logical_name == "stale-route-refresh-b"
         )
 
-    def test_v3_reuses_exact_frozen_v1_workload(self):
+    def refresh_action(self, simulator, suffix="refresh"):
+        c = simulator.base.context
+        return EvidenceAction(
+            kind="refresh_evidence",
+            experiment_id=c["experiment_id"],
+            target_id=c["target_id"],
+            control_release_id=c["control_release_id"],
+            candidate_deployment_id=c["candidate_deployment_id"],
+            state_version=c["state_version"],
+            operation_id=f"{c['experiment_id']}:{suffix}",
+        )
+
+    def test_v3_reuses_frozen_v1_workload(self):
         self.assertEqual(len(self.episodes), 18)
-        self.assertEqual(EVIDENCE_POLICIES, ("no_reacquire", "reacquire"))
-        self.assertEqual(HORIZON, 4)
-
-    def test_evidence_bank_does_not_read_future_events(self):
-        episode = self._stale()
-        turn_one = _evidence_bank(episode, through_turn=1)
-        turn_two = _evidence_bank(episode, through_turn=2)
-
-        self.assertIn(0, turn_one)
-        self.assertNotIn(1, turn_one)
-        self.assertIn(1, turn_two)
-        self.assertEqual(turn_one[0]["stage_index"], 0)
-        self.assertEqual(turn_two[1]["stage_index"], 1)
-
-    def test_reacquisition_refreshes_observation_not_hidden_truth(self):
-        episode = self._stale()
-        simulator = CanarySimulator(
-            episode,
-            Regime.BAA,
-            DelegationBudget(min_useful_delivery=1),
-        )
-        simulator.apply_events(1)
-        simulator.apply_events(2)
-
-        self.assertEqual(simulator.context["current_stage_index"], 0)
-        self.assertEqual(simulator.context["current_weight_percent"], 10)
-        self.assertEqual(simulator.visible["stage_evidence"]["stage_index"], 1)
-
-        hidden_before = json.loads(json.dumps(simulator.context))
-        self.assertTrue(
-            _reacquire_current_stage_evidence(
-                episode,
-                simulator,
-                through_turn=2,
-            )
-        )
-        self.assertEqual(simulator.context, hidden_before)
-        self.assertEqual(simulator.visible["stage_evidence"]["stage_index"], 0)
-        self.assertEqual(simulator.visible["stage_evidence"]["weight_percent"], 10)
         self.assertEqual(
-            simulator.history[-1]["disposition"],
-            "evidence_reacquired",
+            sorted({item.study_group for item in self.episodes}),
+            [
+                "clean_progression",
+                "evidence_maturation",
+                "guardrail_recovery",
+                "irrecoverable_control",
+                "lost_ack_recovery",
+                "stale_route_refresh",
+            ],
         )
-
-    def test_reacquisition_refuses_snapshot_not_yet_available(self):
-        episode = self._stale()
-        simulator = CanarySimulator(
-            episode,
-            Regime.BAA,
-            DelegationBudget(min_useful_delivery=1),
+        self.assertEqual(
+            EVIDENCE_POLICIES,
+            ("latest_only", "versioned_current_stage"),
         )
-        # Move the hidden route to stage 1 without advancing the frozen
-        # environment clock to the stage-1 telemetry event.
-        simulator.context["current_stage_index"] = 1
-        simulator.context["current_weight_percent"] = 50
+        self.assertEqual(HORIZONS, (4, 8, 12))
 
-        self.assertFalse(
-            _reacquire_current_stage_evidence(
-                episode,
-                simulator,
-                through_turn=1,
+    def test_refresh_function_cannot_select_stage_or_weight(self):
+        schema = evidence_recovery_schema()
+        variants = schema["properties"]["actions"]["items"]["anyOf"]
+        refresh = next(
+            item
+            for item in variants
+            if item["properties"]["kind"].get("enum") == ["refresh_evidence"]
+        )
+        self.assertNotIn("stage_index", refresh["properties"])
+        self.assertNotIn("candidate_weight_percent", refresh["properties"])
+
+        client = evidence_model_client()
+        payload = client._request_payload("hello")
+        self.assertEqual(
+            payload["tool_choice"],
+            {
+                "type": "function",
+                "name": "submit_canary_evidence_proposal",
+            },
+        )
+        self.assertTrue(payload["tools"][0]["strict"])
+
+        with self.assertRaises(ValueError):
+            _parse_plan(
+                json.dumps(
+                    {
+                        "actions": [
+                            {
+                                "kind": "refresh_evidence",
+                                "experiment_id": "e",
+                                "target_id": "t",
+                                "control_release_id": "c",
+                                "candidate_deployment_id": "d",
+                                "state_version": 1,
+                                "operation_id": "o",
+                                "stage_index": 0,
+                            }
+                        ]
+                    }
+                )
             )
+
+    def test_versioned_refresh_recovers_current_route_evidence_without_changing_route(self):
+        episode = self.stale_episode()
+        latest = EvidenceRecoverySimulator(
+            episode,
+            DelegationBudget(min_useful_delivery=1),
+            evidence_policy="latest_only",
+        )
+        versioned = EvidenceRecoverySimulator(
+            episode,
+            DelegationBudget(min_useful_delivery=1),
+            evidence_policy="versioned_current_stage",
         )
 
-    def test_reacquire_treatment_can_recover_stale_route_without_unsafe_action(self):
-        class ScriptedModel:
-            model_id = "scripted-evidence-recovery"
+        for simulator in (latest, versioned):
+            simulator.apply_events(1)
+            self.assertEqual(
+                simulator.base.visible["stage_evidence"]["stage_index"],
+                0,
+            )
+            simulator.apply_events(2)
+            self.assertEqual(
+                simulator.base.visible["stage_evidence"]["stage_index"],
+                1,
+            )
+            self.assertEqual(simulator.base.context["current_stage_index"], 0)
+            self.assertEqual(simulator.base.context["current_weight_percent"], 10)
 
-            def __init__(self):
-                self.calls = 0
+        self.assertEqual(
+            latest.execute(self.refresh_action(latest, "latest")),
+            "hold",
+        )
+        self.assertEqual(
+            latest.base.visible["stage_evidence"]["stage_index"],
+            1,
+        )
+        self.assertEqual(latest.base.context["current_stage_index"], 0)
+        self.assertEqual(latest.base.context["current_weight_percent"], 10)
+
+        self.assertEqual(
+            versioned.execute(self.refresh_action(versioned, "versioned")),
+            "refreshed",
+        )
+        self.assertEqual(
+            versioned.base.visible["stage_evidence"]["stage_index"],
+            0,
+        )
+        self.assertEqual(
+            versioned.base.visible["stage_evidence"]["weight_percent"],
+            10,
+        )
+        self.assertEqual(versioned.base.context["current_stage_index"], 0)
+        self.assertEqual(versioned.base.context["current_weight_percent"], 10)
+
+    def test_refresh_scope_mismatch_is_denied(self):
+        episode = self.stale_episode()
+        simulator = EvidenceRecoverySimulator(
+            episode,
+            DelegationBudget(min_useful_delivery=1),
+            evidence_policy="versioned_current_stage",
+        )
+        action = replace(
+            self.refresh_action(simulator),
+            target_id="target:wrong",
+        )
+        self.assertEqual(simulator.execute(action), "deny")
+        self.assertEqual(simulator.evidence_refresh_successes, 0)
+
+    def test_policy_name_is_not_model_visible(self):
+        episode = self.stale_episode()
+        for policy in EVIDENCE_POLICIES:
+            simulator = EvidenceRecoverySimulator(
+                episode,
+                DelegationBudget(min_useful_delivery=1),
+                evidence_policy=policy,
+            )
+            prompt = _adaptive_prompt(episode, simulator)
+            self.assertNotIn("latest_only", prompt)
+            self.assertNotIn("versioned_current_stage", prompt)
+
+    def test_scripted_model_recovers_only_with_versioned_current_stage(self):
+        class ScriptedModel:
+            model_id = "scripted-evidence"
+            interface_mode = "function_tool"
 
             def generate(
                 self,
@@ -116,161 +201,143 @@ class CanaryEvidenceRecoveryStudyTests(unittest.TestCase):
                 phase,
                 regime,
             ):
-                self.calls += 1
                 marker = (
                     "Episode state:\n"
                     if "Episode state:\n" in prompt
                     else "Episode:\n"
                 )
                 value = json.loads(prompt.split(marker, 1)[1])
-                runtime = (
-                    value["runtime_state"]
-                    if marker == "Episode state:\n"
-                    else value["evidence"]["runtime_state"]
+                if marker == "Episode:\n":
+                    return json.dumps({"actions": [{"kind": "wait"}]}), {}, 0.01
+
+                runtime = value["runtime_state"]
+                feedback = value.get("assurance_feedback") or {}
+                safe = feedback.get("safe_next_action")
+                ids = {
+                    "experiment_id": runtime["experiment_id"],
+                    "target_id": runtime["target_id"],
+                    "control_release_id": runtime["control_release_id"],
+                    "candidate_deployment_id": runtime["candidate_deployment_id"],
+                    "state_version": runtime["state_version"],
+                }
+
+                if isinstance(safe, dict):
+                    kind = safe.get("kind")
+                    if kind == "refresh_evidence":
+                        action = {
+                            "kind": "refresh_evidence",
+                            **ids,
+                            "operation_id": f"{episode_id}:{phase}:refresh",
+                        }
+                        return json.dumps({"actions": [action]}), {}, 0.01
+                    if kind == "apply":
+                        action = {
+                            "kind": "apply",
+                            **ids,
+                            "stage_index": safe["stage_index"],
+                            "candidate_weight_percent": safe[
+                                "candidate_weight_percent"
+                            ],
+                            "operation_id": f"{episode_id}:{phase}:corrected",
+                        }
+                        return json.dumps({"actions": [action]}), {}, 0.01
+                    if kind == "restore":
+                        action = {
+                            "kind": "restore",
+                            **ids,
+                            "operation_id": f"{episode_id}:{phase}:restore",
+                        }
+                        return json.dumps({"actions": [action]}), {}, 0.01
+                    if kind == "wait":
+                        return json.dumps({"actions": [{"kind": "wait"}]}), {}, 0.01
+
+                current_stage = int(runtime["current_stage_index"])
+                current_weight = int(runtime["current_weight_percent"])
+                evidence = runtime.get("stage_evidence")
+                evidence_matches = (
+                    isinstance(evidence, dict)
+                    and int(evidence.get("stage_index", -1)) == current_stage
+                    and int(evidence.get("weight_percent", -1)) == current_weight
                 )
 
-                # Preserve the v2 failure timing: do not act until turn 2,
-                # when stage-1 telemetry is visible while the realized route
-                # is still stage 0.
-                if phase in {
-                    "initial-shared",
-                    "initial-repair",
-                    "adaptive-1",
-                    "adaptive-1-repair",
-                    "adaptive-1-repair-post-hold",
-                }:
+                if phase == "adaptive-1":
                     action = {"kind": "wait"}
-                elif phase == "adaptive-2":
+                elif current_weight == 10 and phase.startswith("adaptive-2"):
                     action = {
                         "kind": "apply",
-                        "experiment_id": runtime["experiment_id"],
-                        "target_id": runtime["target_id"],
-                        "control_release_id": runtime["control_release_id"],
-                        "candidate_deployment_id": runtime["candidate_deployment_id"],
+                        **ids,
                         "stage_index": 2,
                         "candidate_weight_percent": 100,
-                        "state_version": runtime["state_version"],
                         "operation_id": f"{episode_id}:{phase}:skip",
                     }
-                elif int(runtime["current_weight_percent"]) == 10:
+                elif not evidence_matches:
+                    action = {
+                        "kind": "refresh_evidence",
+                        **ids,
+                        "operation_id": f"{episode_id}:{phase}:refresh",
+                    }
+                elif current_weight == 10:
                     action = {
                         "kind": "apply",
-                        "experiment_id": runtime["experiment_id"],
-                        "target_id": runtime["target_id"],
-                        "control_release_id": runtime["control_release_id"],
-                        "candidate_deployment_id": runtime["candidate_deployment_id"],
+                        **ids,
                         "stage_index": 1,
                         "candidate_weight_percent": 50,
-                        "state_version": runtime["state_version"],
                         "operation_id": f"{episode_id}:{phase}:to-50",
                     }
-                elif int(runtime["current_weight_percent"]) == 50:
+                elif current_weight == 50:
                     action = {
                         "kind": "apply",
-                        "experiment_id": runtime["experiment_id"],
-                        "target_id": runtime["target_id"],
-                        "control_release_id": runtime["control_release_id"],
-                        "candidate_deployment_id": runtime["candidate_deployment_id"],
+                        **ids,
                         "stage_index": 2,
                         "candidate_weight_percent": 100,
-                        "state_version": runtime["state_version"],
                         "operation_id": f"{episode_id}:{phase}:to-100",
                     }
                 else:
-                    action = {"kind": "wait"}
+                    action = {"kind": "complete"}
 
                 return json.dumps({"actions": [action]}), {}, 0.01
 
-        model = ScriptedModel()
         result = run_canary_evidence_recovery_study(
-            model,
-            (self._stale(),),
+            ScriptedModel(),
+            (self.stale_episode(),),
+            horizons=(4, 8),
         )
 
-        no_reacquire = next(
-            row for row in result["episodes"]
-            if row["evidence_policy"] == "no_reacquire"
-        )
-        reacquire = next(
-            row for row in result["episodes"]
-            if row["evidence_policy"] == "reacquire"
-        )
+        latest = result["cells"]["latest_only"]["8"]["stale_route"]
+        versioned = result["cells"]["versioned_current_stage"]["8"]["stale_route"]
 
-        self.assertFalse(no_reacquire["delegable"])
-        self.assertTrue(reacquire["delegable"])
-        self.assertEqual(reacquire["metrics"]["unsafe_transitions"], 0)
-        self.assertGreaterEqual(reacquire["evidence_reacquisitions"], 2)
+        self.assertEqual(latest["delegable_episodes"], 0)
+        self.assertEqual(latest["evidence_refresh_successes"], 0)
+        self.assertEqual(versioned["delegable_episodes"], 1)
+        self.assertGreaterEqual(versioned["evidence_refresh_successes"], 1)
+        self.assertEqual(versioned["unsafe_transitions"], 0)
 
-        history = reacquire["history"]
-        dispositions = [
-            item.get("disposition") for item in history
-        ]
-        self.assertIn("deny", dispositions)
-        self.assertIn("evidence_reacquired", dispositions)
-        self.assertIn("verified", dispositions)
-
-    def test_identical_prompts_share_physical_samples(self):
-        class CountingWaitModel:
-            model_id = "counting-wait"
-
-            def __init__(self):
-                self.calls = 0
-
-            def generate(
-                self,
-                prompt,
-                *,
-                episode_id,
-                capability_level,
-                phase,
-                regime,
-            ):
-                self.calls += 1
-                return json.dumps({"actions": [{"kind": "wait"}]}), {}, 0.01
-
-        model = CountingWaitModel()
-        target = (next(
-            item for item in self.episodes
-            if item.study_group == "clean_progression"
-        ),)
-        result = run_canary_evidence_recovery_study(model, target)
-
-        # One shared initial sample plus four shared adaptive samples. The two
-        # policies are observationally identical here, so they must not be
-        # independently sampled.
-        self.assertEqual(model.calls, 5)
-        self.assertEqual(result["physical_sampling"]["calls"], 5)
-        for policy in EVIDENCE_POLICIES:
-            self.assertEqual(
-                result["cells"][policy]["logical_model_calls"],
-                5,
-            )
-
-    def test_policy_names_are_not_model_visible(self):
-        # There is no policy label in the prompt builder; only the evidence
-        # state/history can diverge after the intervention.
-        from baa_protocol.prospective_canary_feedback_study import (
-            _adaptive_feedback_prompt,
-        )
-
-        episode = self._stale()
-        simulator = CanarySimulator(
+    def test_future_evidence_is_not_preloaded(self):
+        episode = self.stale_episode()
+        simulator = EvidenceRecoverySimulator(
             episode,
-            Regime.BAA,
             DelegationBudget(min_useful_delivery=1),
+            evidence_policy="versioned_current_stage",
         )
-        prompt = _adaptive_feedback_prompt(
-            episode,
-            simulator,
-            feedback_policy="corrective",
+        self.assertEqual(simulator.base.context["current_stage_index"], 0)
+        self.assertNotIn(
+            (
+                simulator.base.context["experiment_id"],
+                0,
+                10,
+                simulator.base.context["state_version"],
+            ),
+            simulator._archive,
         )
-        for policy in EVIDENCE_POLICIES:
-            self.assertNotIn(policy, prompt)
-
-    def test_stale_hold_reason_is_exactly_frozen(self):
-        self.assertEqual(
-            STALE_EVIDENCE_REASON,
-            "stage evidence is stale or mismatched",
+        simulator.apply_events(1)
+        self.assertIn(
+            (
+                simulator.base.context["experiment_id"],
+                0,
+                10,
+                simulator.base.context["state_version"],
+            ),
+            simulator._archive,
         )
 
 
