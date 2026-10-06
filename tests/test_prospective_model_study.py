@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WORKLOAD = ROOT / "experiments" / "prospective_offboarding_v1.json"
 WORKLOAD_V2 = ROOT / "experiments" / "prospective_offboarding_v2.json"
 WORKLOAD_V3 = ROOT / "experiments" / "prospective_offboarding_v3.json"
+WORKLOAD_V4 = ROOT / "experiments" / "prospective_offboarding_v4.json"
 
 
 def action(obligation, subject="employee:1", epoch=7):
@@ -320,6 +321,78 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         client = ResponsesGatewayClient(structured_output=True)
         self.assertTrue(client.structured_output)
         self.assertEqual(client.interface_mode, "json_schema")
+
+    def test_v4_reuses_hidden_control_workload_with_tool_profile(self):
+        version, episodes = load_workload(WORKLOAD_V4)
+        self.assertEqual(version, "prospective-offboarding-v4")
+        self.assertEqual(len(episodes), 12)
+        self.assertTrue(
+            all(
+                episode.prompt_profile == "evidence-neutral-v4-tool"
+                for episode in episodes
+            )
+        )
+        _, v3_episodes = load_workload(WORKLOAD_V3)
+        self.assertEqual(
+            [episode.public_context for episode in episodes],
+            [episode.public_context for episode in v3_episodes],
+        )
+        self.assertEqual(
+            [episode.control_context for episode in episodes],
+            [episode.control_context for episode in v3_episodes],
+        )
+
+    def test_v4_prompt_requires_proposal_tool_without_policy_values(self):
+        _, episodes = load_workload(WORKLOAD_V4)
+        prompt = initial_prompt(episodes[0])
+        self.assertIn("submit_baa_proposal", prompt)
+        self.assertNotIn("Schema example:", prompt)
+        self.assertNotIn('"subject_ref":"employee:1"', prompt)
+
+    def test_proposal_tool_payload_forces_one_strict_function(self):
+        client = ResponsesGatewayClient(proposal_tool=True)
+        payload = client._request_payload("hello")
+        self.assertEqual(client.interface_mode, "function_tool")
+        self.assertEqual(
+            payload["tool_choice"],
+            {"type": "function", "name": "submit_baa_proposal"},
+        )
+        self.assertFalse(payload["parallel_tool_calls"])
+        self.assertEqual(len(payload["tools"]), 1)
+        tool = payload["tools"][0]
+        self.assertEqual(tool["type"], "function")
+        self.assertEqual(tool["name"], "submit_baa_proposal")
+        self.assertTrue(tool["strict"])
+        self.assertEqual(tool["parameters"], proposal_output_schema())
+
+    def test_proposal_tool_extracts_function_arguments(self):
+        body = {
+            "output": [
+                {
+                    "type": "function_call",
+                    "name": "submit_baa_proposal",
+                    "call_id": "call_test",
+                    "arguments": '{"actions":[{"kind":"wait"}]}',
+                }
+            ]
+        }
+        self.assertEqual(
+            ResponsesGatewayClient._extract_function_arguments(body),
+            '{"actions":[{"kind":"wait"}]}',
+        )
+
+    def test_proposal_tool_rejects_plain_text_instead_of_function_call(self):
+        body = {
+            "output": [
+                {
+                    "type": "message",
+                    "role": "assistant",
+                    "content": [{"type": "output_text", "text": "{}"}],
+                }
+            ]
+        }
+        with self.assertRaisesRegex(Exception, "expected exactly one"):
+            ResponsesGatewayClient._extract_function_arguments(body)
 
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient

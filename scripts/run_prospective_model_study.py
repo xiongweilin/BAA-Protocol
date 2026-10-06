@@ -32,6 +32,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use Responses Structured Outputs with the BAA proposal JSON schema.",
     )
+    parser.add_argument(
+        "--proposal-tool",
+        action="store_true",
+        help="Force a submit_baa_proposal function call for each model proposal.",
+    )
     return parser.parse_args()
 
 
@@ -43,6 +48,7 @@ def main() -> None:
         model_id=args.model,
         timeout_seconds=args.timeout_seconds,
         structured_output=args.structured_output,
+        proposal_tool=args.proposal_tool,
     )
     result = run_prospective_study(
         client,
