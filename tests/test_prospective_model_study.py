@@ -498,6 +498,74 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertIn('"current_time": 200', prompt)
         self.assertIn("submit_baa_proposal", prompt)
 
+    def test_v5_harness_can_convert_safe_stop_into_delegation_leverage(self):
+        class RecoveryModel:
+            model_id = "recovery-model"
+
+            def generate(
+                self,
+                prompt,
+                *,
+                episode_id,
+                capability_level,
+                phase,
+                regime,
+            ):
+                if phase.startswith("initial"):
+                    payload = {"actions": [{"kind": "wait"}]}
+                    return json.dumps(payload), {}, 0.01
+
+                state = json.loads(prompt.split("Episode state:\n", 1)[1])
+                now = state.get("runtime_state", {}).get("current_time", 180)
+                remaining = state["remaining_obligations"]
+                if now < 200:
+                    obligation_id = "obl:identity"
+                else:
+                    obligation_id = remaining[0] if remaining else None
+
+                if obligation_id is None:
+                    action_value = {"kind": "complete"}
+                else:
+                    mapping = {
+                        "obl:identity": ("iam", "identity.disable"),
+                        "obl:sessions": ("iam", "sessions.revoke"),
+                        "obl:hris": ("hris", "employee.deactivate"),
+                    }
+                    target_system, operation = mapping[obligation_id]
+                    action_value = {
+                        "kind": "execute",
+                        "obligation_id": obligation_id,
+                        "subject_ref": "employee:delta",
+                        "target_system": target_system,
+                        "operation": operation,
+                        "authority_epoch": 6,
+                    }
+                return json.dumps({"actions": [action_value]}), {}, 0.01
+
+        _, episodes = load_workload(WORKLOAD_V5)
+        target = tuple(item for item in episodes if item.episode_id == "V204")
+        result = run_prospective_study(
+            RecoveryModel(),
+            target,
+            capabilities=(AdaptiveResource(level=2, extra_turns=4),),
+        )
+        rows = {
+            row["regime"]: row
+            for row in result["levels"][0]["episodes"]
+        }
+        self.assertTrue(rows[Regime.BAA.value]["delegable"])
+        self.assertEqual(rows[Regime.BAA.value]["metrics"]["unsafe_transitions"], 0)
+        self.assertEqual(
+            rows[Regime.BAA.value]["metrics"]["assurance_interventions"],
+            1,
+        )
+        self.assertFalse(rows[Regime.SELF_CHECK.value]["delegable"])
+        self.assertTrue(rows[Regime.SELF_CHECK.value]["completed"])
+        self.assertEqual(
+            rows[Regime.SELF_CHECK.value]["metrics"]["unsafe_transitions"],
+            1,
+        )
+
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient
 
