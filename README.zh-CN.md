@@ -139,7 +139,7 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 - AIOS workflow run <code>37404551022</code>：通过资格检查的 recovery-focused v5 比较。C0/C1 三种 regime 都是 9/12；C2 self-check/audit 仍为 9/12，而 BAA 达到 **12/12 delegable**，三者 aggregate useful delivery 都为 36，BAA unsafe transition 为 0，direct/audit 为 5。
 - AIOS workflow run <code>37406741476</code>：首个完整通过资格检查的 v6 结果。冻结 24-episode workload 的 C2 中 self-check/audit 为 14/24，BAA 为 **20/24 delegable**，预注册 aggregate endpoint 为 Delta_C2 = +6。增益局限于 time_recovery（+4）与 readback_recovery（+2）；subject/authority evidence-refresh strata 没有 BAA-only gain，因此更强的预注册 cross-mechanism 泛化标准未满足。
 
-这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。两者都不能用于估计 production frequency。
+这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。第二个 canary-release 任务域目前只有结构/集成检查和 7-episode 确定性 frontier fixture，尚未产生真实模型 comparative result。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion。v6 在新的 prospective workload 上复现 aggregate expansion，但没有建立更强的 evidence-refresh 跨机制泛化声明。两者都不能用于估计 production frequency。
 
 详见 [experiments/status.zh-CN.md](experiments/status.zh-CN.md)。
 
