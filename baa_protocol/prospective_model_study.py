@@ -157,7 +157,7 @@ def call_plan(
             latency_seconds=time.perf_counter() - started,
             usage={},
             error=f"{type(exc).__name__}: {exc}",
-            error_stage="transport",
+            error_stage=getattr(exc, "error_stage", "transport"),
         )
 
     try:
@@ -342,12 +342,14 @@ def run_prospective_study(
 
     return {
         "model_id": client.model_id,
+        "model_interface": getattr(client, "interface_mode", "unspecified"),
         "budget": asdict(limits),
         "physical_sampling": {
             "calls": len(physical_calls),
             "calls_with_errors": sum(int(call.error is not None) for call in physical_calls),
             "transport_errors": sum(int(call.error_stage == "transport") for call in physical_calls),
             "schema_errors": sum(int(call.error_stage == "schema") for call in physical_calls),
+            "model_errors": sum(int(call.error_stage == "model") for call in physical_calls),
             "input_tokens": physical_input_tokens,
             "output_tokens": physical_output_tokens,
         },
