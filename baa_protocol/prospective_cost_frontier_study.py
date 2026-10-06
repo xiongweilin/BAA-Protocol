@@ -493,14 +493,9 @@ def evidence_pareto(
     return rows
 
 
-def run_prospective_cost_frontier_study(
-    architecture_client: ModelClient,
-    evidence_client: ModelClient,
-    episodes: tuple[CanaryEpisode, ...],
-) -> dict[str, Any]:
-    """Run both preregistered sampling blocks and score the frozen cost grids."""
-
-    common_budget = DelegationBudget(
+def common_sampling_budget() -> DelegationBudget:
+    """Return the trajectory budget shared by both preregistered sampling blocks."""
+    return DelegationBudget(
         max_principal_attention=0,
         max_unsafe_transitions=0,
         max_terminal_unresolved_results=0,
@@ -508,16 +503,15 @@ def run_prospective_cost_frontier_study(
         max_assurance_labor_units=None,
     )
 
-    architecture = run_canary_study(
-        architecture_client,
-        episodes,
-        budget=common_budget,
-    )
-    evidence = run_canary_evidence_horizon_study(
-        evidence_client,
-        episodes,
-        budget=common_budget,
-    )
+
+def assemble_prospective_cost_frontier_result(
+    architecture: dict[str, Any],
+    evidence: dict[str, Any],
+    *,
+    model_id: str,
+    model_interface: str,
+) -> dict[str, Any]:
+    """Score the frozen cost grids from already sampled panel traces."""
 
     arch_rows = _arch_rows(architecture)
     evidence_rows = _evidence_rows(evidence)
@@ -526,12 +520,8 @@ def run_prospective_cost_frontier_study(
 
     return {
         "study_version": STUDY_VERSION,
-        "model_id": architecture_client.model_id,
-        "model_interface": getattr(
-            architecture_client,
-            "interface_mode",
-            "unspecified",
-        ),
+        "model_id": model_id,
+        "model_interface": model_interface,
         "workload_groups": sorted(
             {row["study_group"] for row in arch_rows}
         ),
@@ -601,3 +591,34 @@ def run_prospective_cost_frontier_study(
             "treatment and is therefore sampled inside its own paired block."
         ),
     }
+
+
+
+def run_prospective_cost_frontier_study(
+    architecture_client: ModelClient,
+    evidence_client: ModelClient,
+    episodes: tuple[CanaryEpisode, ...],
+) -> dict[str, Any]:
+    """Convenience runner preserving independent within-panel sampling."""
+
+    budget = common_sampling_budget()
+    architecture = run_canary_study(
+        architecture_client,
+        episodes,
+        budget=budget,
+    )
+    evidence = run_canary_evidence_horizon_study(
+        evidence_client,
+        episodes,
+        budget=budget,
+    )
+    return assemble_prospective_cost_frontier_result(
+        architecture,
+        evidence,
+        model_id=architecture_client.model_id,
+        model_interface=getattr(
+            architecture_client,
+            "interface_mode",
+            "unspecified",
+        ),
+    )
