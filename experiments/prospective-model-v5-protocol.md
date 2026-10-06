@@ -71,6 +71,8 @@ The operator message does not itself authorize early execution. The later clock 
 
 All other episodes receive no runtime event.
 
+The `after_turn: 1` timing is literal: adaptive turn 1 is processed first, then the runtime event occurs. C1 therefore reaches the event but has no later adaptive action to exploit it. C2 has three further adaptive turns after the event and is the first horizon that can demonstrate event-driven recovery completion.
+
 ## Fairness of the recovery events
 
 Runtime events are frozen before model generation.
