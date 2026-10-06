@@ -285,6 +285,20 @@ AIOS workflow run `37410377327` 是第二 BAA 任务域 `canary-release-promotio
 
 详见 [prospective-canary-v1-result.zh-CN.md](prospective-canary-v1-result.zh-CN.md)。
 
+### Canary v2 通过资格检查的 feedback × horizon 结果
+
+AIOS workflow run `37412693511` 是修正 adaptive shared-sampling 后首个完整通过资格检查的 canary v2 结果。更早的 run `37411958870` 因实现层没有对 byte-identical adaptive prompt 强制共享 physical sample 而被判定 implementation-invalid，并在修正提交后由 concurrency 取消；其 outcome 不进入证据。
+
+冻结主 endpoint：
+
+`Delta_feedback_H4 = D_stale(corrective,H4) - D_stale(diagnostic,H4) = 1 - 1 = 0`。
+
+H2/H4/H8 的 aggregate delegability 在三种 feedback treatment 中分别完全相同：9/18、10/18、11/18；`stale_route_refresh` 在所有 cell 中都保持 1/3。预注册 horizon contrast 与 info-vs-time contrast 也都为 0。所有 cell unsafe transition=0、principal attention=0、terminal unresolved=0。
+
+corrective feedback 的确能在 stale-route failure 中把被 deny 的 skip-stage proposal 改成正确 sequential next stage，但修复 proposal 随后被 `stage evidence is stale or mismatched` hold。因此 v2 把局部瓶颈从“模型是否理解 denial”进一步收敛到“与 current realized route 对齐的授权 evidence 是否仍然可取得”。
+
+详见 [prospective-canary-v2-feedback-result.zh-CN.md](prospective-canary-v2-feedback-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -351,6 +365,7 @@ reference/network/product-composition 阶段已经收敛，因为：
 28. v6 冻结新的 24-episode workload 与六个预注册 strata，并按 no-resampling 规则接受首个完整通过资格检查的 run。
 29. v6 复现正的 aggregate C2 frontier expansion（direct 14/24，BAA 20/24），但没有满足更强的 evidence-refresh 跨机制泛化标准。
 30. canary v1 进入第二任务域并按 no-resampling 规则接受首个合格 run；C2 endpoint 为负（direct 11/18，BAA 10/18），同时 BAA 将 unsafe transition 从 2 降到 0。
+31. canary v2 修正 adaptive shared-sampling 后接受首个完整合格 run；feedback 主 endpoint、horizon contrast 与 info-vs-time contrast 全部为 0，同时定位到 current-route evidence stale/mismatched 的 evidence-recovery 瓶颈。
 
 ## 下一阶段边界
 
@@ -369,12 +384,10 @@ offboarding 的 prospective-generalization 阶段已经足够完成，不应继�
 
 但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-第二任务域 canary 结果已经否定了一个简单预期：safety advantage 不会在同一 horizon 下自动转化为 delegation leverage。下一组核心可证伪问题因此变成：
+第二任务域 canary v1 已经否定“safety advantage 会自动转化为 delegation leverage”的简单预期；canary v2 又进一步否定“只增加 denial 信息或把 horizon 从 H4 延长到 H8 就能恢复 stale-route liveness”的预期。
 
-> 随 assurance feedback quality、adaptive horizon 与 assurance labor ceiling 变化，attention-risk-delivery-assurance-cost 可行前沿如何移动？
+v2 显示 corrective feedback 可以修正 action shape，却仍会在下一步被 current-stage evidence stale/mismatched 阻止。因此下一组核心可证伪问题收窄为：
 
-以及：
+> 在 hard gate、workload 与 action policy 不变时，如果 assurance layer 按 stage/version 保留或重新取得与 current independently observed route 对齐的权威 evidence，能否让已经被正确 reformulate 的 sequential transition 安全完成？
 
-> bounded protocol 能否在不削弱 hard invariant 的前提下，向模型暴露足够结构化的 corrective information，使 denied action 被重新表述为安全的 sequential continuation？
-
-任何 canary feedback protocol、horizon 或 kernel 的改变都必须进入新的预注册 study version；canary v1 保持冻结。
+下一实验不应继续增加 feedback 文本，也不应单纯继续拉长 horizon。应隔离 evidence availability / temporal alignment，例如比较 `latest_only` 与 `versioned_current_stage`。任何 evidence-retention/reacquisition 机制必须进入新的预注册 study version；canary v1/v2 保持冻结。
