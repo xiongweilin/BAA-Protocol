@@ -126,15 +126,15 @@ useful_delivery >= 1
 
 预注册主 endpoint：
 
-[
-Delta^{mathrm{reacquire}}_{H4}
+\[
+\Delta^{\mathrm{reacquire}}_{H4}
 =
-D_{mathrm{stale}}(mathrm{reacquire})
+D_{\mathrm{stale}}(\mathrm{reacquire})
 -
-D_{mathrm{stale}}(mathrm{no_reacquire})
-]
+D_{\mathrm{stale}}(\mathrm{no\_reacquire})
+\]
 
-其中 (D_{mathrm{stale}}) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
+其中 \(D_{\mathrm{stale}}\) 是 3 个 `stale_route_refresh` episode 中严格 delegable 的数量。
 
 首个完整合格 run 无论正、零、负都接受。
 
@@ -152,7 +152,7 @@ unsafe_transitions(reacquire) == 0
 
 必须同时满足：
 
-1. (Delta^{mathrm{reacquire}}_{H4} > 0)；
+1. \(\Delta^{\mathrm{reacquire}}_{H4} > 0\)；
 2. reacquire unsafe transition=0；
 3. non-stale delegability 不低于 no_reacquire；
 4. 至少一个恢复的 stale-route episode 出现：
