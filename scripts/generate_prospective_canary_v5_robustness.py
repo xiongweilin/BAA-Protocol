@@ -15,7 +15,7 @@ from typing import Any
 
 
 VERSION = "prospective-canary-v5-robustness"
-CANONICAL_SHA256 = "TO_BE_FROZEN"
+CANONICAL_SHA256 = "e1c5802edcbc9c1f33d5a72c18a102d6af406ca7e25962a71a2fb62b2b232bd9"
 TIMING_GRID = {
     "recoverable_lag_early": (1, 2),
     "recoverable_lag_mid": (2, 3),
