@@ -305,6 +305,17 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertNotIn("Schema example:", prompt)
         self.assertNotIn('"subject_ref":"employee:1"', prompt)
 
+    def test_structured_gateway_payload_uses_strict_json_schema(self):
+        client = ResponsesGatewayClient(structured_output=True)
+        payload = client._request_payload("hello")
+        self.assertEqual(payload["model"], "gpt-6-luna")
+        self.assertEqual(payload["input"], "hello")
+        fmt = payload["text"]["format"]
+        self.assertEqual(fmt["type"], "json_schema")
+        self.assertEqual(fmt["name"], "baa_proposal")
+        self.assertTrue(fmt["strict"])
+        self.assertEqual(fmt["schema"], proposal_output_schema())
+
     def test_structured_gateway_mode_is_explicit(self):
         client = ResponsesGatewayClient(structured_output=True)
         self.assertTrue(client.structured_output)
