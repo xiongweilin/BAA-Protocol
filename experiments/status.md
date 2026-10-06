@@ -301,20 +301,6 @@ The accepted interpretation is therefore that second-domain bounded admission pr
 
 See [prospective-canary-v1-result.md](prospective-canary-v1-result.md).
 
-### Canary v2 qualified feedback × horizon result
-
-AIOS workflow run `37412693511` is the first fully qualified canary v2 result after correcting adaptive physical-sample sharing. Earlier run `37411958870` is implementation-invalid because byte-identical adaptive prompts were not yet forced to share one physical sample; it was cancelled by concurrency after the correction and contributes no outcome evidence.
-
-The frozen primary endpoint is:
-
-`Delta_feedback_H4 = D_stale(corrective,H4) - D_stale(diagnostic,H4) = 1 - 1 = 0`.
-
-Aggregate delegability is identical across all three feedback treatments at every frozen horizon: 9/18 at H2, 10/18 at H4, and 11/18 at H8. `stale_route_refresh` remains 1/3 in every cell. The preregistered horizon and info-vs-time contrasts are also 0. Every cell has zero unsafe transitions, zero principal attention, and zero terminal unresolved results.
-
-Corrective feedback does change the action selected after a stale/skip-stage denial: the model proposes the correct sequential next stage. That repaired proposal is then held as `stage evidence is stale or mismatched`. v2 therefore localizes the bottleneck beyond denial comprehension to whether authorization evidence aligned with the current realized route remains available.
-
-See [prospective-canary-v2-feedback-result.md](prospective-canary-v2-feedback-result.md).
-
 ### Canary v2 qualified feedback/horizon result
 
 AIOS workflow run `37412693511` is the first fully qualified corrected canary v2 result under the preregistered no-resampling rule.
@@ -365,13 +351,13 @@ The repository does not establish:
 
 Positive acceptance results remain falsification evidence, not open-world probability estimates. The prospective real-model comparison also retains its null result rather than treating absence of advantage as a failed run.
 
-The evidence supports four statements that must remain separate:
+The evidence supports five statements that must remain separate:
 
 - structural/reference: modeled forbidden transitions are mechanically excluded under stated assumptions;
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
 - composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
-- prospective comparison: v1 and v4 retained frontier null results; v4 showed finite safety-trajectory separation; v5 then showed a qualified C2 frontier expansion when preregistered recovery events made later safe completion possible.
+- prospective comparison: v1 and v4 retained frontier null results; v5 showed a qualified C2 frontier expansion under preregistered recovery events; v6 prospectively reproduced an aggregate offboarding expansion without evidence-refresh cross-mechanism generalization; canary v1 produced a negative second-domain frontier result; canary v2 found no stale-route gain from richer mechanical feedback or H8 horizon.
 
 None implies that a production tenant is safe.
 
