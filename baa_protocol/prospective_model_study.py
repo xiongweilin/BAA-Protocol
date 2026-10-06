@@ -151,6 +151,8 @@ def run_prospective_study(
             max_actions=3,
         )
 
+    physical_calls = [call for _, call in shared_initial.values()]
+
     for capability in levels:
         level_results = []
         calls: list[ModelCall] = []
@@ -206,6 +208,7 @@ def run_prospective_study(
                         )
                         adaptive_cache[prompt] = (plan, call)
                         calls.append(call)
+                        physical_calls.append(call)
                     else:
                         plan, call = cached
                     logical_calls += 1
@@ -270,9 +273,18 @@ def run_prospective_study(
             }
         )
 
+    physical_input_tokens = sum(usage_tokens(call.usage)[0] for call in physical_calls)
+    physical_output_tokens = sum(usage_tokens(call.usage)[1] for call in physical_calls)
+
     return {
         "model_id": client.model_id,
         "budget": asdict(limits),
+        "physical_sampling": {
+            "calls": len(physical_calls),
+            "calls_with_errors": sum(int(call.error is not None) for call in physical_calls),
+            "input_tokens": physical_input_tokens,
+            "output_tokens": physical_output_tokens,
+        },
         "shared_initial_model_calls": [
             call.to_dict()
             for _, call in shared_initial.values()
