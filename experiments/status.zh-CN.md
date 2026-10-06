@@ -349,13 +349,13 @@ H4：
 
 正向 acceptance 结果仍是 falsification evidence，而不是 open-world probability estimate。prospective real-model comparison 同时保留其零结果，不把“没有优势”重新解释为失败运行。
 
-当前证据支持四种必须分离的陈述：
+当前证据支持五种必须分离的陈述：
 
 - structural/reference：在明确假设下，模型中的 forbidden transitions 被机械排除；
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
 - composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；
-- prospective comparison：v1 与 v4 保留 frontier 零结果；v4 显示有限 safety-trajectory separation；v5 随后在预注册 recovery event 允许稍后安全 completion 时显示通过资格检查的 C2 frontier expansion。
+- prospective comparison：v1 与 v4 保留 frontier 零结果；v5 在预注册 recovery event 下显示通过资格检查的 C2 frontier expansion；v6 在新的 offboarding workload 上复现 aggregate expansion 但没有建立 evidence-refresh 跨机制泛化；canary v1 给出第二域负 frontier 结果；canary v2 则没有发现 richer mechanical feedback 或 H8 horizon 对 stale-route 的增益。
 
 任何一项都不意味着生产租户安全。
 
