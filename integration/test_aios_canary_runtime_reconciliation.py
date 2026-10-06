@@ -77,7 +77,7 @@ class CanaryRuntimeReconciliationTests(unittest.TestCase):
                 )
 
             effect = runtime.effect_boundary.get(key)
-            self.assertEqual(effect["status"], "unknown")
+            self.assertEqual(effect["status"], "ambiguous")
             self.assertFalse(effect["dispatch_allowed"])
             self.assertEqual(calls["count"], 1)
 
