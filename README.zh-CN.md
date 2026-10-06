@@ -88,7 +88,8 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 
 ## 仓库结构
 
-- [domains/employee-offboarding.zh-CN.md](domains/employee-offboarding.zh-CN.md) —— 任务域边界、假设、不变量与实验。
+- [domains/employee-offboarding.zh-CN.md](domains/employee-offboarding.zh-CN.md) —— 第一任务域边界、假设、不变量与实验。
+- [domains/canary-release-promotion.zh-CN.md](domains/canary-release-promotion.zh-CN.md) —— 第二任务域：带 evidence gate 与 rollback 的渐进式流量敞口。
 - [spec/protocol.zh-CN.md](spec/protocol.zh-CN.md) —— 准入与执行协议。
 - [spec/guarantees.zh-CN.md](spec/guarantees.zh-CN.md) —— 证明义务与声明语言。
 - [spec/state-machine.zh-CN.md](spec/state-machine.zh-CN.md) —— 协议状态语义。
