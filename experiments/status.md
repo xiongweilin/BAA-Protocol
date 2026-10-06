@@ -301,6 +301,20 @@ The accepted interpretation is therefore that second-domain bounded admission pr
 
 See [prospective-canary-v1-result.md](prospective-canary-v1-result.md).
 
+### Canary v2 qualified feedback × horizon result
+
+AIOS workflow run `37412693511` is the first fully qualified canary v2 result after correcting adaptive physical-sample sharing. Earlier run `37411958870` is implementation-invalid because byte-identical adaptive prompts were not yet forced to share one physical sample; it was cancelled by concurrency after the correction and contributes no outcome evidence.
+
+The frozen primary endpoint is:
+
+`Delta_feedback_H4 = D_stale(corrective,H4) - D_stale(diagnostic,H4) = 1 - 1 = 0`.
+
+Aggregate delegability is identical across all three feedback treatments at every frozen horizon: 9/18 at H2, 10/18 at H4, and 11/18 at H8. `stale_route_refresh` remains 1/3 in every cell. The preregistered horizon and info-vs-time contrasts are also 0. Every cell has zero unsafe transitions, zero principal attention, and zero terminal unresolved results.
+
+Corrective feedback does change the action selected after a stale/skip-stage denial: the model proposes the correct sequential next stage. That repaired proposal is then held as `stage evidence is stale or mismatched`. v2 therefore localizes the bottleneck beyond denial comprehension to whether authorization evidence aligned with the current realized route remains available.
+
+See [prospective-canary-v2-feedback-result.md](prospective-canary-v2-feedback-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -367,6 +381,7 @@ The reference/network/product-composition phase is converged because:
 28. v6 froze a new 24-episode workload across six preregistered strata and accepted the first fully qualified run without resampling.
 29. v6 reproduced a positive aggregate C2 frontier expansion (14/24 direct versus 20/24 BAA) while failing the stronger preregistered evidence-refresh cross-mechanism generalization criterion.
 30. canary v1 moved to a second task domain and accepted the first qualified run without resampling; its C2 endpoint was negative (11/18 direct versus 10/18 BAA) while BAA still reduced unsafe transitions from 2 to 0.
+31. canary v2 accepted the first fully qualified corrected shared-sampling run; its feedback endpoint, horizon contrast, and info-vs-time contrast were all 0, localizing the remaining stale-route failure to stale/mismatched current-route evidence.
 
 ## Next phase boundary
 
@@ -385,12 +400,10 @@ A new study should preserve:
 
 It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-The second-domain canary result now falsifies the simple expectation that a safety advantage will automatically translate into delegation leverage at the same horizon. The next core falsifiable questions are therefore:
+Canary v1 falsifies the simple expectation that a safety advantage automatically becomes delegation leverage. Canary v2 further falsifies the narrower expectation that richer denial information or extending the adaptive horizon from H4 to H8 is sufficient to recover the stale-route liveness failure.
 
-> How does the feasible attention-risk-delivery-assurance-cost frontier move as assurance feedback quality, adaptive horizon, and assurance labor ceiling vary?
+v2 shows that corrective feedback can repair the action shape while the next transition still fails because current-stage evidence is stale or mismatched. The next core falsifiable question is therefore:
 
-and
+> With the hard gate, workload, and action policy fixed, can the assurance layer retain or reacquire authoritative evidence keyed to the current independently observed route so that an already-corrected sequential transition can safely complete?
 
-> Can a bounded protocol expose enough structured corrective information for the model to reformulate a denied action into a safe sequential continuation without weakening the hard invariant?
-
-Any changed canary feedback protocol, horizon, or kernel is a new preregistered study version; canary v1 remains frozen.
+The next study should not add more feedback prose or simply extend the horizon again. It should isolate evidence availability / temporal alignment, for example `latest_only` versus `versioned_current_stage`. Any evidence-retention or evidence-reacquisition mechanism is a new preregistered study version; canary v1 and v2 remain frozen.
