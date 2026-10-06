@@ -26,7 +26,7 @@ from baa_protocol.prospective_cost_frontier_study import (
 from baa_protocol.prospective_transport import ReplaySafeTransportClient
 
 
-EXPECTED_WORKLOAD_SHA256 = "TO_BE_FROZEN"
+EXPECTED_WORKLOAD_SHA256 = "2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29"
 
 
 def parse_args() -> argparse.Namespace:
