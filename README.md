@@ -100,6 +100,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-model-v3-result.md](experiments/prospective-model-v3-result.md) — v3 structured-output qualification failure and forced-function capability probe.
 - [experiments/prospective-model-v4-result.md](experiments/prospective-model-v4-result.md) — qualified forced-function v4 comparison.
 - [experiments/prospective-model-v5-protocol.md](experiments/prospective-model-v5-protocol.md) — preregistered recovery/liveness follow-up.
+- [experiments/prospective-model-v5-result.md](experiments/prospective-model-v5-result.md) — qualified finite delegation-frontier expansion under preregistered recovery events.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
@@ -131,9 +132,10 @@ The evidence chain now includes:
 - AIOS workflow run `37315551794`: one composed BAA -> AIOS -> World Runtime -> real ephemeral Keycloak/Odoo episode, with normal completion, lost-ack recovery, read-back-outage recovery, and unauthorized Runtime bypass. The composed run records independent product read-back, persisted recovery transitions, stable logical request identity, and verified external completion;
 - AIOS workflow run `37393917221`: accepted preregistered v1 comparison; all three regimes were 6/7 delegable at C0/C1/C2, a retained frontier null result;
 - v2 failed model-evidence qualification; v3 failed structured-output interface qualification;
-- AIOS workflow run `37402587158`: qualified forced-function v4 comparison; all three regimes were 9/12 delegable at C0/C1/C2. Direct/audit produced 3 unsafe transitions at C1 and 4 at C2, while BAA remained at 0 through 2 and 3 automatic interventions respectively. This is a frontier null result with a positive finite safety-trajectory result.
+- AIOS workflow run `37402587158`: qualified forced-function v4 comparison; all three regimes were 9/12 delegable at C0/C1/C2. Direct/audit produced adaptive unsafe transitions while BAA remained at 0; this is a frontier null result with a positive finite safety-trajectory result;
+- AIOS workflow run `37404551022`: qualified recovery-focused v5 comparison. C0/C1 remained 9/12 for all regimes; at C2 self-check/audit remained 9/12 while BAA reached **12/12 delegable**, with equal aggregate useful delivery (36), zero BAA unsafe transitions, and five direct/audit unsafe transitions.
 
-These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or production delegation leverage. The accepted v1 and v4 finite comparisons did not show delegation-frontier expansion. v2 and v3 are retained qualification failures. v4 did show that BAA prevented adaptive unsafe reality-facing transitions in already non-delegable episodes.
+These results do **not** establish production-tenant safety, production credential/infrastructure isolation, general unattended-autonomy safety, real-world failure probabilities, or population-level production delegation leverage. v1 and v4 retained frontier null results; v2 and v3 are qualification failures. v5 provides the first qualified finite delegation-frontier expansion, but its three recovery mechanisms were intentionally constructed from v4 failure modes and therefore constitute mechanistic evidence rather than an estimate of production frequency.
 
 See [experiments/status.md](experiments/status.md).
 

@@ -100,6 +100,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-model-v3-result.zh-CN.md](experiments/prospective-model-v3-result.zh-CN.md) —— v3 structured-output qualification failure 与 forced-function capability probe。
 - [experiments/prospective-model-v4-result.zh-CN.md](experiments/prospective-model-v4-result.zh-CN.md) —— 通过资格检查的 forced-function v4 比较。
 - [experiments/prospective-model-v5-protocol.zh-CN.md](experiments/prospective-model-v5-protocol.zh-CN.md) —— 预注册的 recovery/liveness follow-up。
+- [experiments/prospective-model-v5-result.zh-CN.md](experiments/prospective-model-v5-result.zh-CN.md) —— 在预注册 recovery event 下通过资格检查的有限 delegation-frontier expansion。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
@@ -131,9 +132,10 @@ BAA 不把充分性声明当作执行权限，也不重新定义 AIOS 语义。
 - AIOS workflow run <code>37315551794</code>：完成一个 BAA -> AIOS -> World Runtime -> 真实临时 Keycloak/Odoo 的组合 episode，覆盖正常完成、lost-ack 恢复、read-back-outage 恢复与未授权 Runtime 绕过，并记录独立产品 read-back、持久化恢复状态转移、稳定逻辑 request identity 与经验证的外部完成；
 - AIOS workflow run <code>37393917221</code>：接受的 v1 比较；三种 regime 在 C0/C1/C2 都是 6/7 delegable，保留为 frontier 零结果；
 - v2 未通过 model-evidence qualification；v3 未通过 structured-output interface qualification；
-- AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 在 C1 出现 3 次 unsafe transition、C2 出现 4 次；BAA 通过 2/3 次自动干预始终保持 0 unsafe。这是 frontier 零结果，同时包含有限的 safety-trajectory 正结果。
+- AIOS workflow run <code>37402587158</code>：通过资格检查的 forced-function v4 比较；三种 regime 在 C0/C1/C2 都是 9/12 delegable。direct/audit 出现 adaptive unsafe transition，而 BAA 保持 0 unsafe；这是 frontier 零结果，同时包含有限 safety-trajectory 正结果；
+- AIOS workflow run <code>37404551022</code>：通过资格检查的 recovery-focused v5 比较。C0/C1 三种 regime 都是 9/12；C2 self-check/audit 仍为 9/12，而 BAA 达到 **12/12 delegable**，三者 aggregate useful delivery 都为 36，BAA unsafe transition 为 0，direct/audit 为 5。
 
-这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或 production delegation leverage。已接受的 v1 与 v4 有限比较都没有显示 delegation-frontier expansion。v2 与 v3 保留为 qualification failure。v4 同时显示：BAA 能阻止已经不可委托 episode 中随 adaptive feedback 出现的 unsafe reality-facing transition。
+这些结果**不**建立生产租户安全、生产凭证/基础设施隔离、一般无人值守自治安全、真实世界失败概率或总体层面的 production delegation leverage。v1 与 v4 保留 frontier 零结果；v2 与 v3 是 qualification failure。v5 首次给出通过资格检查的有限 delegation-frontier expansion，但三个 recovery mechanism 有意来自 v4 已观察 failure mode，因此属于机制性证据，而不是 production frequency 估计。
 
 详见 [experiments/status.zh-CN.md](experiments/status.zh-CN.md)。
 

@@ -4,14 +4,15 @@
 
 ## 当前声明层级
 
-仓库在一个具体任务域——员工离职——上已达到六层证据：
+仓库在一个具体任务域——员工离职——上已达到七层证据：
 
 1. 可执行 BAA 参考语义与确定性故障 fixture。
 2. 固定 AIOS contract compatibility 与 execution-engine gating。
 3. 跨 HTTP/process/Docker 边界的隔离、类生产网络 acceptance。
 4. 对真实临时 Keycloak 与 Odoo 实例的高保真 connector acceptance。
 5. 单 episode 的组合 BAA -> AIOS -> World Runtime -> 真实 Keycloak/Odoo acceptance matrix，含独立产品 read-back 与故障恢复。
-6. 预注册的真实模型三制度前瞻研究，包含版本固定的 model/gateway 证据与显式零结果保留。
+6. 预注册的真实模型三制度前瞻研究，包含版本固定的 model/gateway 证据，以及显式保留 null/qualification failure。
+7. 通过资格检查的 recovery-focused 真实模型研究，在预注册公共环境恢复事件下显示有限 delegation-frontier expansion。
 
 当前最强 integration 声明仍为：
 
@@ -203,6 +204,39 @@ adaptive feedback 同时暴露出有限 safety 差异：self-check/audit 在 C1 
 
 详见 [prospective-model-v4-result.zh-CN.md](prospective-model-v4-result.zh-CN.md)。
 
+### v5 通过资格检查的 delegation-leverage 结果
+
+AIOS workflow run <code>37404551022</code> 使用预注册 recovery/liveness workload、forced-function proposal interface，以及移除 adaptive prompt regime label 的 causal-control head。
+
+资格证据：
+
+~~~text
+workload: prospective-offboarding-v5
+model: gpt-6-luna
+model_interface: function_tool
+BAA-Protocol: 59180c03daa3c5709cf974feb43b8dbe992c4427
+AIOS workflow head: 81f1592a281cb88a3df8562ac81756382fe9bbe6
+gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+physical calls: 32
+calls with errors: 0
+~~~
+
+冻结严格预算下：
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 9/12 | 9/12 | 9/12 |
+| C1 | 9/12 | 9/12 | 9/12 |
+| C2 | 9/12 | 9/12 | **12/12** |
+
+C2 三种 regime 都完成 12/12 episode，并产生 36 个 useful-delivery unit。但 self-check/audit 在三个预注册 recovery episode 上累计 5 个 unsafe transition，因此仍不满足 risk bound。BAA 完成 12/12，同时 unsafe=0、principal attention=0、terminal unresolved=0。
+
+新增的三个 delegable episode 精确为 V204、V210、V212：BAA 先保留安全 continuation，公共 environment recovery event 发生后，C2 后续 turn 完成工作；direct regime 虽也最终完成，但此前已经违反 risk bound。
+
+这是 prospective 系列第一个通过资格检查的有限 delegation-frontier expansion。由于 recovery mechanism 有意来自 v4 已观察 failure mode，它属于机制性证据，而不是 production frequency 的估计。
+
+详见 [prospective-model-v5-result.zh-CN.md](prospective-model-v5-result.zh-CN.md)。
+
 ## 尚未证明
 
 仓库不建立：
@@ -231,7 +265,7 @@ adaptive feedback 同时暴露出有限 safety 差异：self-check/audit 在 C1 
 - integration：固定 AIOS runtime 与 bounded gate 保持预期 action-state distinction 与 recovery behavior；
 - product compatibility：覆盖的 connector operation 在明确临时测试配置下可作用于真实临时 Keycloak/Odoo；
 - composed acceptance：一个 bounded offboarding episode 可贯穿 BAA/AIOS/World Runtime/product/read-back chain，并从已测试 transport/observation ambiguity 中恢复；
-- prospective comparison：v1 与 v4 都保留 frontier 零结果；v4 进一步显示 BAA 能阻止 adaptive unsafe reality-facing transition，但这些 safe stop 没有转化成额外 completion。
+- prospective comparison：v1 与 v4 保留 frontier 零结果；v4 显示有限 safety-trajectory separation；v5 随后在预注册 recovery event 允许稍后安全 completion 时显示通过资格检查的 C2 frontier expansion。
 
 任何一项都不意味着生产租户安全。
 
@@ -263,18 +297,27 @@ reference/network/product-composition 阶段已经收敛，因为：
 22. implementation-invalid run 被显式排除，接受的 v1 run 保留零 delegation-frontier result；
 23. v2 与 v3 qualification failure 被保留，没有通过事后放宽 parser 或反复重采样消除；
 24. forced-function proposal channel 先通过独立 capability probe，再用于完整通过资格检查的 v4 比较；
-25. v4 将有限 safety-trajectory 正结果与 delegation-frontier 零结果明确分离。
+25. v4 将有限 safety-trajectory 正结果与 delegation-frontier 零结果明确分离；
+26. v5 在接受 run 之前冻结公共 recovery-event 时序，并移除 adaptive prompt 中的 regime-name cue；
+27. v5 产生首个通过资格检查的有限真实模型 delegation-frontier expansion：C2 self-check/audit 9/12，BAA 12/12。
 
 ## 下一阶段边界
 
-继续扩展 connector、parser 或 proposal interface 已不再是主要研究需要。forced-function proposal boundary 已经支持一轮完整通过资格检查的真实模型比较。
+单一任务域的机制问题已经从“能否挡住 unsafe action”推进到“safe stop 是否能在后续恢复并完成”；v4 与 v5 分别提供了有限证据。
 
-下一阶段是**存在合法 recovery path 条件下的 liveness/delegation-leverage 检验**。
+下一阶段是**delegation leverage 的前瞻泛化检验**，而不是继续调整这十二个 episode。
 
-新的 prospective workload 应保持 hidden-control 设计、同样三种 regime、forced proposal capability 与 accounting contract，但加入这样的 episode：unsafe shortcut 与一个更昂贵但安全的 recovery path 同时存在。BAA 必须能够拒绝 shortcut，同时保留足够的 controllable state 与 evidence，使模型能在相同 principal-attention budget 下发现并完成 recovery path。
+新研究应继续保持：
 
-主要 outcome 继续包括 useful delivery、unsafe/out-of-scope reality-facing transition、unresolved-result duration、replay/duplicate logical-request behavior、principal attention、third-party assurance labor、automatic assurance intervention、recovery quality，以及对 adaptive feedback 和 strategic proposal behavior 的敏感性。
+- hidden control truth 与 model-visible evidence 分离；
+- forced-function proposal capability；
+- regime-label causal control；
+- 三种 regime 使用共同外生 event schedule；
+- 严格 attention/risk/delivery accounting；
+- 完整 proposal 与 unknown-result 分母。
 
-核心可证伪问题保持不变：
+但 task instance 与 recovery mechanism 应前瞻扩展，而不是全部从 v4 failure mode 定向构造。核心问题变成：v5 模式能否在更广 workload 上保持，同时不牺牲 useful delivery，也不把成本转移成 principal attention 或 assurance labor。
 
-> 在共同注意力预算 A 与风险上限 R 下，BAA 是否提高有用交付或扩大可委托任务集合？当 proposal policy 真正受到 unsafe 或 ambiguous action 压力时，该增益是否仍存在？
+核心可证伪问题：
+
+> 在共同注意力预算 A 与风险上限 R 下，BAA 是否能在更广 prospective task distribution 上扩大 delegable set？该增益在 adaptive feedback 下是否持续存在，而不依赖手工挑选 recovery case？

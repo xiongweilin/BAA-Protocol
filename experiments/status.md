@@ -4,14 +4,15 @@
 
 ## Current claim level
 
-The repository has reached six evidence layers for one concrete domain: employee offboarding.
+The repository has reached seven evidence layers for one concrete domain: employee offboarding.
 
 1. Executable BAA reference semantics and deterministic fault fixtures.
 2. Pinned AIOS contract compatibility and execution-engine gating.
 3. Isolated production-like network acceptance across HTTP/process/Docker boundaries.
 4. High-fidelity connector acceptance against real ephemeral Keycloak and Odoo product instances.
 5. A composed single-episode BAA -> AIOS -> World Runtime -> real Keycloak/Odoo acceptance matrix with independent product read-back and fault recovery.
-6. A preregistered prospective real-model three-regime study with version-pinned model/gateway evidence and explicit null-result retention.
+6. Preregistered prospective real-model three-regime studies with version-pinned model/gateway evidence and explicit null/qualification-failure retention.
+7. A qualified recovery-focused real-model study showing finite delegation-frontier expansion under preregistered common environment recovery events.
 
 The strongest current claim is:
 
@@ -219,6 +220,39 @@ Adaptive feedback nevertheless exposed a finite safety difference: self-check an
 
 See [prospective-model-v4-result.md](prospective-model-v4-result.md).
 
+### v5 qualified delegation-leverage result
+
+AIOS workflow run `37404551022` used the preregistered recovery/liveness workload, forced-function proposal interface, and a causal-control head that removes regime labels from adaptive prompts.
+
+Qualification:
+
+~~~text
+workload: prospective-offboarding-v5
+model: gpt-6-luna
+model_interface: function_tool
+BAA-Protocol: 59180c03daa3c5709cf974feb43b8dbe992c4427
+AIOS workflow head: 81f1592a281cb88a3df8562ac81756382fe9bbe6
+gateway: 496ec69a5b1f578ae837498037f4badf6e4c2dbc
+physical calls: 32
+calls with errors: 0
+~~~
+
+Under the frozen strict budget:
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 9/12 | 9/12 | 9/12 |
+| C1 | 9/12 | 9/12 | 9/12 |
+| C2 | 9/12 | 9/12 | **12/12** |
+
+At C2 all regimes completed 12/12 episodes and delivered 36 useful-delivery units. Self-check/audit nevertheless remained risk-infeasible because they accumulated five unsafe transitions across the three preregistered recovery episodes. BAA completed all 12 with zero unsafe transitions, zero principal attention, and zero terminal unresolved results.
+
+The three gained episodes were exactly V204, V210, and V212. In each case BAA preserved a safe continuation until the common environment recovery event; later C2 turns completed the work. Direct regimes also completed, but only after an earlier risk-bound violation.
+
+This is the first qualified finite delegation-frontier expansion in the prospective series. Because the recovery mechanisms were intentionally constructed from v4-observed failure modes, it is mechanistic evidence, not an estimate of natural production frequency.
+
+See [prospective-model-v5-result.md](prospective-model-v5-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -247,7 +281,7 @@ The evidence supports four statements that must remain separate:
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
 - composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
-- prospective comparison: v1 and v4 both retained frontier null results; v4 additionally showed BAA preventing adaptive unsafe reality-facing transitions while failing to turn those safe stops into additional completion.
+- prospective comparison: v1 and v4 retained frontier null results; v4 showed finite safety-trajectory separation; v5 then showed a qualified C2 frontier expansion when preregistered recovery events made later safe completion possible.
 
 None implies that a production tenant is safe.
 
@@ -279,28 +313,27 @@ The reference/network/product-composition phase is converged because:
 22. implementation-invalid runs were excluded explicitly, and the accepted v1 run retained a null delegation-frontier result;
 23. v2 and v3 qualification failures were retained rather than repaired by post-hoc parser relaxation or repeated sampling;
 24. a forced-function proposal channel was independently capability-probed and then used in a fully qualified v4 comparison;
-25. v4 separated a positive finite safety-trajectory result from a null delegation-frontier result.
+25. v4 separated a positive finite safety-trajectory result from a null delegation-frontier result;
+26. v5 froze common recovery-event timing and removed regime-name cues from adaptive prompts before the accepted run;
+27. v5 produced the first qualified finite real-model delegation-frontier expansion: C2 self-check/audit 9/12 versus BAA 12/12.
 
 ## Next phase boundary
 
-Connector-only, parser, or proposal-interface expansion is no longer the main research need. The forced-function proposal boundary has now supported a fully qualified real-model comparison.
+The single-domain mechanism question has now advanced beyond “can the kernel block unsafe actions?” and “can a safe stop later recover?” v4 and v5 provide finite evidence for both.
 
-The next phase is **liveness/delegation-leverage testing under a legitimate recovery path**.
+The next phase is **prospective generalization of delegation leverage** rather than further tuning of the same twelve episodes.
 
-A new prospective workload should preserve the hidden-control design, the same three regimes, the forced proposal capability, and the same accounting contract, but include episodes where an unsafe shortcut competes with a safe, more expensive recovery path. BAA must be able to reject the shortcut while leaving enough controllable state and evidence for the model to discover and complete the recovery path within the same principal-attention budget.
+A new study should preserve:
 
-Primary outcomes remain:
+- hidden control truth versus model-visible evidence;
+- forced-function proposal capability;
+- regime-label causal control;
+- common exogenous event schedules;
+- strict attention/risk/delivery accounting;
+- complete proposal and unknown-result denominators.
 
-- useful delivery;
-- unsafe or out-of-scope reality-facing transitions;
-- unresolved-result duration;
-- replay / duplicate logical-request behavior;
-- principal attention;
-- third-party assurance labor;
-- automatic assurance interventions;
-- recovery quality;
-- sensitivity to adaptive feedback and strategic proposal behavior.
+It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-The core falsifiable question is unchanged:
+The core falsifiable question remains:
 
-> Under common attention budget A and risk limit R, does BAA increase useful delivery or enlarge the delegable task set, and does that gain persist when the proposal policy actually encounters pressure toward unsafe or ambiguous actions?
+> Under common attention budget A and risk limit R, does BAA enlarge the delegable task set across a broader prospective task distribution, and does that gain persist under adaptive feedback without relying on hand-selected recovery cases?
