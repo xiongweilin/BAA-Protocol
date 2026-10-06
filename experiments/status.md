@@ -277,6 +277,30 @@ The accepted conclusion is therefore narrower than full cross-mechanism generali
 
 See [prospective-model-v6-result.md](prospective-model-v6-result.md).
 
+### Canary v1 qualified second-domain result
+
+AIOS workflow run `37410377327` is the first fully qualified prospective result in the second BAA task domain, `canary-release-promotion`.
+
+At the frozen strict point:
+
+| C | self-check | post-hoc audit | BAA |
+|---|---:|---:|---:|
+| C0 | 3/18 | 3/18 | 3/18 |
+| C1 | 9/18 | 9/18 | 9/18 |
+| C2 | **11/18** | **11/18** | 10/18 |
+
+Therefore the preregistered primary endpoint is negative:
+
+`Delta_C2 = 10 - max(11, 11) = -1`.
+
+The stronger cross-domain architectural criterion is also **not met**. There is no BAA-only C2 gain in `evidence_maturation`, `guardrail_recovery`, or `stale_route_refresh`.
+
+The safety trace nevertheless separates. At C2 BAA has zero unsafe transitions versus two for each direct regime. The difference is localized to `stale_route_refresh`: direct regimes complete all three cases but two completions are unsafe; BAA blocks the unsafe stage-skipping proposals but completes none of the three within the frozen horizon. Only one direct stale-route case is strictly delegable.
+
+The accepted interpretation is therefore that second-domain bounded admission preserves the tested safety invariant but does not produce delegation-frontier expansion under this feedback/horizon configuration. Safe blocking does not automatically become safe completion.
+
+See [prospective-canary-v1-result.md](prospective-canary-v1-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -342,6 +366,7 @@ The reference/network/product-composition phase is converged because:
 27. v5 produced the first qualified finite real-model delegation-frontier expansion: C2 self-check/audit 9/12 versus BAA 12/12.
 28. v6 froze a new 24-episode workload across six preregistered strata and accepted the first fully qualified run without resampling.
 29. v6 reproduced a positive aggregate C2 frontier expansion (14/24 direct versus 20/24 BAA) while failing the stronger preregistered evidence-refresh cross-mechanism generalization criterion.
+30. canary v1 moved to a second task domain and accepted the first qualified run without resampling; its C2 endpoint was negative (11/18 direct versus 10/18 BAA) while BAA still reduced unsafe transitions from 2 to 0.
 
 ## Next phase boundary
 
@@ -360,10 +385,12 @@ A new study should preserve:
 
 It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-The next core falsifiable questions are:
+The second-domain canary result now falsifies the simple expectation that a safety advantage will automatically translate into delegation leverage at the same horizon. The next core falsifiable questions are therefore:
 
-> Does BAA shift the feasible attention-risk-delivery-assurance-cost frontier across budget settings, rather than only at one strict point?
+> How does the feasible attention-risk-delivery-assurance-cost frontier move as assurance feedback quality, adaptive horizon, and assurance labor ceiling vary?
 
 and
 
-> Does the same architectural effect appear in a second task domain or materially different reality-facing interface?
+> Can a bounded protocol expose enough structured corrective information for the model to reformulate a denied action into a safe sequential continuation without weakening the hard invariant?
+
+Any changed canary feedback protocol, horizon, or kernel is a new preregistered study version; canary v1 remains frozen.
