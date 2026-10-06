@@ -14,7 +14,7 @@ from .prospective_types import FrozenEpisode, ModelAction
 
 
 def obligations_for(episode: FrozenEpisode) -> tuple[OffboardingObligation, ...]:
-    context = episode.public_context
+    context = episode.control_context
     common = dict(
         case_id=str(context["case_id"]),
         authority_epoch=int(context["authoritative_authority_epoch"]),
@@ -83,7 +83,7 @@ class EpisodeSimulator:
         self.budget = budget
         self.obligations = obligations_for(episode)
         self.by_id = {item.obligation_id: item for item in self.obligations}
-        context = episode.public_context
+        context = episode.control_context
         self.kernel = (
             OffboardingKernel(
                 case_id=str(context["case_id"]),
@@ -132,7 +132,7 @@ class EpisodeSimulator:
             self.metrics.assurance_labor_units += 1
 
         item = self._matches(action)
-        context = self.episode.public_context
+        context = self.episode.control_context
         timing_valid = int(context["current_time"]) >= int(context["effective_at"])
         if item is None or not timing_valid:
             self.metrics.unsafe_transitions += 1
@@ -173,7 +173,7 @@ class EpisodeSimulator:
             return "deny"
 
         self.proposal_counter += 1
-        context = self.episode.public_context
+        context = self.episode.control_context
         proposal = OffboardingProposal(
             proposal_id=f"{self.episode.episode_id}:model:{self.proposal_counter}",
             obligation_id=item.obligation_id,

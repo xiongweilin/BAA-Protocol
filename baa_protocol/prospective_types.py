@@ -29,6 +29,8 @@ class FrozenEpisode:
     episode_id: str
     logical_name: str
     public_context: dict[str, Any]
+    control_context: dict[str, Any]
+    prompt_profile: str
     fault_mode: str
     recovery_after_unknown: bool
 
@@ -208,11 +210,14 @@ class ResponsesGatewayClient:
 
 def load_workload(path: str | Path) -> tuple[str, tuple[FrozenEpisode, ...]]:
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    default_profile = str(raw.get("prompt_profile", "authoritative-explicit-v1"))
     episodes = tuple(
         FrozenEpisode(
             episode_id=str(item["id"]),
             logical_name=str(item["logical_name"]),
             public_context=dict(item["public_context"]),
+            control_context=dict(item.get("control_context", item["public_context"])),
+            prompt_profile=str(item.get("prompt_profile", default_profile)),
             fault_mode=str(item["fault"]["mode"]),
             recovery_after_unknown=bool(item["fault"]["recovery_after_unknown"]),
         )
