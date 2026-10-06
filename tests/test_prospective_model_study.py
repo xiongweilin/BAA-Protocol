@@ -7,14 +7,17 @@ from baa_protocol.experiment import Regime
 from baa_protocol.prospective_model_study import initial_prompt, run_prospective_study
 from baa_protocol.prospective_types import (
     AdaptiveResource,
+    ResponsesGatewayClient,
     load_workload,
     parse_plan,
+    proposal_output_schema,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKLOAD = ROOT / "experiments" / "prospective_offboarding_v1.json"
 WORKLOAD_V2 = ROOT / "experiments" / "prospective_offboarding_v2.json"
+WORKLOAD_V3 = ROOT / "experiments" / "prospective_offboarding_v3.json"
 
 
 def action(obligation, subject="employee:1", epoch=7):
@@ -258,6 +261,54 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         self.assertEqual(call.error_stage, "transport")
         self.assertEqual(call.raw_text, "")
         self.assertIn("gateway unavailable", call.error)
+
+    def test_v3_reuses_hidden_control_workload_with_structured_profile(self):
+        version, episodes = load_workload(WORKLOAD_V3)
+        self.assertEqual(version, "prospective-offboarding-v3")
+        self.assertEqual(len(episodes), 12)
+        self.assertTrue(
+            all(
+                episode.prompt_profile == "evidence-neutral-v3-structured"
+                for episode in episodes
+            )
+        )
+        v2_version, v2_episodes = load_workload(WORKLOAD_V2)
+        self.assertEqual(v2_version, "prospective-offboarding-v2")
+        self.assertEqual(
+            [episode.public_context for episode in episodes],
+            [episode.public_context for episode in v2_episodes],
+        )
+        self.assertEqual(
+            [episode.control_context for episode in episodes],
+            [episode.control_context for episode in v2_episodes],
+        )
+
+    def test_structured_schema_constrains_shape_not_policy_values(self):
+        schema = proposal_output_schema()
+        action_union = schema["properties"]["actions"]["items"]["anyOf"]
+        execute = next(
+            item
+            for item in action_union
+            if item["properties"]["kind"].get("enum") == ["execute"]
+        )
+        self.assertEqual(execute["properties"]["subject_ref"], {"type": "string"})
+        self.assertEqual(execute["properties"]["target_system"], {"type": "string"})
+        self.assertEqual(execute["properties"]["operation"], {"type": "string"})
+        self.assertEqual(execute["properties"]["authority_epoch"], {"type": "integer"})
+        self.assertNotIn("enum", execute["properties"]["obligation_id"])
+        self.assertFalse(execute["additionalProperties"])
+
+    def test_v3_prompt_does_not_include_example_ground_truth_values(self):
+        _, episodes = load_workload(WORKLOAD_V3)
+        prompt = initial_prompt(episodes[0])
+        self.assertIn("structured proposal interface", prompt)
+        self.assertNotIn("Schema example:", prompt)
+        self.assertNotIn('"subject_ref":"employee:1"', prompt)
+
+    def test_structured_gateway_mode_is_explicit(self):
+        client = ResponsesGatewayClient(structured_output=True)
+        self.assertTrue(client.structured_output)
+        self.assertEqual(client.interface_mode, "json_schema")
 
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient
