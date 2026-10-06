@@ -205,6 +205,60 @@ class ProspectiveModelStudyTests(unittest.TestCase):
             1,
         )
 
+    def test_schema_failure_preserves_raw_model_output(self):
+        from baa_protocol.prospective_model_study import call_plan
+
+        class InvalidModel:
+            model_id = "invalid-model"
+
+            def generate(self, prompt, **kwargs):
+                raw = json.dumps({
+                    "actions": [{
+                        "kind": "execute",
+                        "subject_ref": "employee:alpha",
+                        "authority_epoch": 4,
+                    }]
+                })
+                return raw, {"input_tokens": 7, "output_tokens": 3}, 0.02
+
+        _, episodes = load_workload(WORKLOAD_V2)
+        plan, call = call_plan(
+            InvalidModel(),
+            "test",
+            episode=episodes[0],
+            capability=AdaptiveResource(level=0, extra_turns=0),
+            phase="diagnostic",
+            regime=None,
+            max_actions=1,
+        )
+        self.assertEqual(plan.actions, ())
+        self.assertEqual(call.error_stage, "schema")
+        self.assertIn('"subject_ref": "employee:alpha"', call.raw_text)
+        self.assertEqual(call.usage["input_tokens"], 7)
+
+    def test_transport_failure_is_classified_separately(self):
+        from baa_protocol.prospective_model_study import call_plan
+
+        class FailingModel:
+            model_id = "failing-model"
+
+            def generate(self, prompt, **kwargs):
+                raise RuntimeError("gateway unavailable")
+
+        _, episodes = load_workload(WORKLOAD_V2)
+        _, call = call_plan(
+            FailingModel(),
+            "test",
+            episode=episodes[0],
+            capability=AdaptiveResource(level=0, extra_turns=0),
+            phase="diagnostic",
+            regime=None,
+            max_actions=1,
+        )
+        self.assertEqual(call.error_stage, "transport")
+        self.assertEqual(call.raw_text, "")
+        self.assertIn("gateway unavailable", call.error)
+
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient
 
