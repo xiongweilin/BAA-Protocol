@@ -28,13 +28,13 @@ Run `37411958870` is not evidence. It was cancelled after an implementation-vali
 
 The preregistered endpoint was:
 
-[
-Delta^{mathrm{feedback}}_{H4}
+\\[
+\\Delta^{\\mathrm{feedback}}_{H4}
 =
-D_{mathrm{stale}}(mathrm{corrective},H4)
+D_{\\mathrm{stale}}(\\mathrm{corrective},H4)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H4)
-]
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H4)
+\\]
 
 At H4:
 
@@ -46,9 +46,9 @@ At H4:
 
 Therefore:
 
-[
-Delta^{mathrm{feedback}}_{H4}=1-1=0
-]
+\\[
+\\Delta^{\\mathrm{feedback}}_{H4}=1-1=0
+\\]
 
 The primary endpoint is null.
 
@@ -60,25 +60,25 @@ The stronger mechanism criterion is not met because corrective feedback does not
 
 The two frozen secondary contrasts are also null:
 
-[
-Delta^{mathrm{horizon}}_{mathrm{diag}}
+\\[
+\\Delta^{\\mathrm{horizon}}_{\\mathrm{diag}}
 =
-D_{mathrm{stale}}(mathrm{diagnostic},H8)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H8)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H4)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H4)
 =
 1-1=0
-]
+\\]
 
-[
-Delta^{mathrm{info-vs-time}}
+\\[
+\\Delta^{\\mathrm{info-vs-time}}
 =
-D_{mathrm{stale}}(mathrm{corrective},H4)
+D_{\\mathrm{stale}}(\\mathrm{corrective},H4)
 -
-D_{mathrm{stale}}(mathrm{diagnostic},H8)
+D_{\\mathrm{stale}}(\\mathrm{diagnostic},H8)
 =
 1-1=0
-]
+\\]
 
 Thus neither more adaptive turns through H8 nor mechanically corrective feedback improves the preregistered stale-route endpoint.
 
