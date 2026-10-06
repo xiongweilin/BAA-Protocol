@@ -8,6 +8,7 @@ from baa_protocol.prospective_model_study import initial_prompt, run_prospective
 from baa_protocol.prospective_types import (
     AdaptiveResource,
     ResponsesGatewayClient,
+    ModelAction,
     load_workload,
     parse_plan,
     proposal_output_schema,
@@ -19,6 +20,7 @@ WORKLOAD = ROOT / "experiments" / "prospective_offboarding_v1.json"
 WORKLOAD_V2 = ROOT / "experiments" / "prospective_offboarding_v2.json"
 WORKLOAD_V3 = ROOT / "experiments" / "prospective_offboarding_v3.json"
 WORKLOAD_V4 = ROOT / "experiments" / "prospective_offboarding_v4.json"
+WORKLOAD_V5 = ROOT / "experiments" / "prospective_offboarding_v5.json"
 
 
 def action(obligation, subject="employee:1", epoch=7):
@@ -393,6 +395,108 @@ class ProspectiveModelStudyTests(unittest.TestCase):
         }
         with self.assertRaisesRegex(Exception, "expected exactly one"):
             ResponsesGatewayClient._extract_function_arguments(body)
+
+    def test_v5_reuses_v4_hidden_truth_and_adds_only_recovery_events(self):
+        version, episodes = load_workload(WORKLOAD_V5)
+        self.assertEqual(version, "prospective-offboarding-v5")
+        self.assertEqual(len(episodes), 12)
+        self.assertTrue(
+            all(
+                episode.prompt_profile == "evidence-neutral-v5-recovery"
+                for episode in episodes
+            )
+        )
+        _, v4_episodes = load_workload(WORKLOAD_V4)
+        self.assertEqual(
+            [episode.public_context for episode in episodes],
+            [episode.public_context for episode in v4_episodes],
+        )
+        self.assertEqual(
+            [episode.control_context for episode in episodes],
+            [episode.control_context for episode in v4_episodes],
+        )
+        events = {episode.episode_id: episode.runtime_events for episode in episodes}
+        self.assertEqual(
+            events["V204"],
+            ({"after_turn": 1, "type": "advance_time", "current_time": 200, "source": "system-clock"},),
+        )
+        self.assertEqual(
+            events["V210"],
+            ({"after_turn": 1, "type": "independent_readback", "source": "external-verifier"},),
+        )
+        self.assertEqual(
+            events["V212"],
+            ({"after_turn": 1, "type": "advance_time", "current_time": 210, "source": "system-clock"},),
+        )
+        self.assertTrue(
+            all(
+                not events[episode_id]
+                for episode_id in events
+                if episode_id not in {"V204", "V210", "V212"}
+            )
+        )
+
+    def test_v5_time_event_opens_previously_held_action(self):
+        from baa_protocol.prospective_simulator import EpisodeSimulator
+
+        _, episodes = load_workload(WORKLOAD_V5)
+        episode = next(item for item in episodes if item.episode_id == "V204")
+        simulator = EpisodeSimulator(episode, Regime.BAA, DelegationBudget())
+        proposal = ModelAction(
+            kind="execute",
+            obligation_id="obl:identity",
+            subject_ref="employee:delta",
+            target_system="iam",
+            operation="identity.disable",
+            authority_epoch=6,
+        )
+        first = simulator.execute(proposal)
+        self.assertIn(first, {"deny", "hold"})
+        self.assertEqual(simulator.metrics.useful_delivery, 0)
+        simulator.apply_runtime_events(1)
+        self.assertEqual(simulator.visible_runtime_state()["current_time"], 200)
+        second = simulator.execute(proposal)
+        self.assertEqual(second, "verified")
+        self.assertEqual(simulator.metrics.useful_delivery, 1)
+
+    def test_v5_readback_event_resolves_pending_without_replay(self):
+        from baa_protocol.prospective_simulator import EpisodeSimulator
+
+        _, episodes = load_workload(WORKLOAD_V5)
+        episode = next(item for item in episodes if item.episode_id == "V210")
+        simulator = EpisodeSimulator(episode, Regime.BAA, DelegationBudget())
+        proposal = ModelAction(
+            kind="execute",
+            obligation_id="obl:identity",
+            subject_ref="employee:juliet",
+            target_system="iam",
+            operation="identity.disable",
+            authority_epoch=15,
+        )
+        self.assertEqual(simulator.execute(proposal), "unknown")
+        self.assertEqual(simulator.pending, "obl:identity")
+        simulator.apply_runtime_events(1)
+        self.assertIsNone(simulator.pending)
+        self.assertIn("obl:identity", simulator.verified)
+        self.assertEqual(simulator.metrics.unsafe_transitions, 0)
+        self.assertEqual(simulator.metrics.useful_delivery, 1)
+
+    def test_v5_adaptive_prompt_exposes_current_runtime_state(self):
+        from baa_protocol.prospective_model_study import adaptive_prompt
+
+        _, episodes = load_workload(WORKLOAD_V5)
+        episode = next(item for item in episodes if item.episode_id == "V204")
+        prompt = adaptive_prompt(
+            episode,
+            AdaptiveResource(level=2, extra_turns=4),
+            Regime.BAA,
+            [{"phase": "environment", "disposition": "time_advanced", "current_time": 200}],
+            ["obl:identity"],
+            runtime_state={"current_time": 200},
+        )
+        self.assertIn('"runtime_state"', prompt)
+        self.assertIn('"current_time": 200', prompt)
+        self.assertIn("submit_baa_proposal", prompt)
 
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient
