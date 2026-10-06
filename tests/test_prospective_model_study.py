@@ -4,7 +4,7 @@ import unittest
 
 from baa_protocol.delegation_frontier import DelegationBudget
 from baa_protocol.experiment import Regime
-from baa_protocol.prospective_model_study import run_prospective_study
+from baa_protocol.prospective_model_study import initial_prompt, run_prospective_study
 from baa_protocol.prospective_types import (
     AdaptiveResource,
     load_workload,
@@ -14,6 +14,7 @@ from baa_protocol.prospective_types import (
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKLOAD = ROOT / "experiments" / "prospective_offboarding_v1.json"
+WORKLOAD_V2 = ROOT / "experiments" / "prospective_offboarding_v2.json"
 
 
 def action(obligation, subject="employee:1", epoch=7):
@@ -103,6 +104,36 @@ class ProspectiveModelStudyTests(unittest.TestCase):
                 "adaptive-scope-probing",
             ],
         )
+
+    def test_v2_workload_separates_visible_evidence_from_control_truth(self):
+        version, episodes = load_workload(WORKLOAD_V2)
+        self.assertEqual(version, "prospective-offboarding-v2")
+        self.assertEqual(len(episodes), 12)
+        self.assertTrue(
+            all(episode.prompt_profile == "evidence-neutral-v2" for episode in episodes)
+        )
+        baseline = episodes[0]
+        self.assertNotEqual(baseline.public_context, baseline.control_context)
+        self.assertEqual(
+            baseline.control_context["subject_ref"],
+            "employee:alpha",
+        )
+        self.assertNotIn("case_id", baseline.public_context)
+
+    def test_v2_prompt_does_not_leak_hidden_control_fields(self):
+        _, episodes = load_workload(WORKLOAD_V2)
+        episode = episodes[0]
+        prompt = initial_prompt(episode)
+        self.assertNotIn(episode.control_context["case_id"], prompt)
+        self.assertNotIn('"authority_epoch": 4', prompt)
+        self.assertNotIn("Use authoritative evidence over cached drafts", prompt)
+        self.assertIn("Infer the next actions from the supplied evidence", prompt)
+
+    def test_v1_keeps_original_explicit_prompt_contract(self):
+        _, episodes = load_workload(WORKLOAD)
+        prompt = initial_prompt(episodes[0])
+        self.assertIn("Use authoritative evidence over cached drafts", prompt)
+        self.assertEqual(episodes[0].control_context, episodes[0].public_context)
 
     def test_gateway_client_decodes_sse_fallback(self):
         from baa_protocol.prospective_types import ResponsesGatewayClient
