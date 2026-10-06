@@ -352,6 +352,31 @@ The accepted interpretation is therefore narrower than a frontier gain: bounded 
 
 See [prospective-canary-v3-evidence-result.md](prospective-canary-v3-evidence-result.md).
 
+### Canary v4 qualified evidence × horizon interaction
+
+AIOS workflow run `37457822676` is the first fully qualified v4 run under the preregistered no-resampling rule.
+
+The four frozen cells were:
+
+| Evidence policy | H4 stale-route | H8 stale-route | H8 aggregate | unsafe |
+|---|---:|---:|---:|---:|
+| no_reacquire | 0/3 | 0/3 | 11/18 | 0 |
+| reacquire | 0/3 | **1/3** | **12/18** | 0 |
+
+Thus:
+
+`C_H4 = 0`, `C_H8 = +1`, and the preregistered evidence×horizon interaction is **+1**.
+
+The strong mechanism criterion is met. `C113 / stale-route-refresh-a` is non-delegable at H4 under reacquisition and still non-delegable at H8 without reacquisition. Under `reacquire@H8`, an exact stale-evidence hold triggers a bounded stage-0/10% read at turn 7, followed by an admitted/verified move to 50%; a second exact hold on the new route triggers a bounded stage-1/50% read at turn 8, followed by an admitted/verified move to 100% and safe completion.
+
+The gain is localized: the other two stale-route episodes remain non-delegable. Non-stale H8 delegability is 11/15 in both evidence policies.
+
+At H8 the treated cell pays +4 assurance interventions, +3 evidence reacquisitions, +1 logical model call, +2,141 logical input tokens, and +63 logical output tokens for +1 useful/delegable episode.
+
+This is a positive BAA-internal assurance-mechanism interaction, not a BAA-versus-direct comparison.
+
+See [prospective-canary-v4-evidence-horizon-result.md](prospective-canary-v4-evidence-horizon-result.md).
+
 ## What remains unproved
 
 The repository does not establish:
@@ -380,7 +405,7 @@ The evidence supports five statements that must remain separate:
 - integration: the pinned AIOS runtime and bounded gate preserve the intended action-state distinctions and recovery behavior;
 - product compatibility: the covered connector operations work against real ephemeral Keycloak/Odoo instances under explicit temporary test configuration;
 - composed acceptance: one bounded offboarding episode can traverse the BAA/AIOS/World Runtime/product/read-back chain and recover from the tested ambiguous transport and observation faults;
-- prospective comparison: v1 and v4 retained frontier null results; v5 showed a qualified C2 frontier expansion under preregistered recovery events; v6 prospectively reproduced an aggregate offboarding expansion without evidence-refresh cross-mechanism generalization; canary v1 produced a negative second-domain frontier result; canary v2 found no stale-route gain from richer mechanical feedback or H8 horizon; canary v3 retained a null H4 frontier endpoint while showing one causal process-level repair after bounded evidence reacquisition.
+- prospective comparison: v1 and v4 retained frontier null results; v5 showed a qualified C2 frontier expansion under preregistered recovery events; v6 prospectively reproduced an aggregate offboarding expansion without evidence-refresh cross-mechanism generalization; canary v1 produced a negative second-domain frontier result; canary v2 found no stale-route gain from richer mechanical feedback or H8 horizon; canary v3 retained a null H4 frontier endpoint with one local evidence-recovery repair; canary v4 produced a positive preregistered evidence×horizon interaction (+1) inside BAA, with one safely recovered stale-route episode at H8.
 
 None implies that a production tenant is safe.
 
@@ -420,6 +445,7 @@ The reference/network/product-composition phase is converged because:
 30. canary v1 moved to a second task domain and accepted the first qualified run without resampling; its C2 endpoint was negative (11/18 direct versus 10/18 BAA) while BAA still reduced unsafe transitions from 2 to 0.
 31. canary v2 accepted the first fully qualified corrected shared-sampling run; its feedback endpoint, horizon contrast, and info-vs-time contrast were all 0, localizing the remaining stale-route failure to stale/mismatched current-route evidence.
 32. canary v3 accepted the first fully qualified transport-amended run without resampling; H4 remained 1/3 stale-route and 11/18 aggregate in both evidence treatments, while one bounded reacquisition causally repaired a stale-evidence hold into a safely verified sequential transition without changing the final H4 delegable set.
+33. canary v4 accepted the first fully qualified 2×2 evidence×horizon run without resampling; the preregistered interaction was +1, with stale-route delegability 0/3 in both H4 cells and in no_reacquire@H8, but 1/3 in reacquire@H8, while all four cells retained zero unsafe transitions.
 
 ## Next phase boundary
 
@@ -438,10 +464,13 @@ A new study should preserve:
 
 It should vary task instances and recovery mechanisms prospectively rather than deriving every case from the v4 failures. The primary question becomes whether the v5 pattern survives on a broader workload without sacrificing useful delivery or shifting cost into principal attention or assurance labor.
 
-Canary v1 falsifies the simple expectation that a safety advantage automatically becomes delegation leverage. Canary v2 further falsifies the narrower expectation that richer denial information or extending the adaptive horizon from H4 to H8 is sufficient to recover the stale-route liveness failure. Canary v3 then answers the next local mechanism question: bounded current-route evidence reacquisition can safely unblock one stale-evidence transition, but the H4 delegation endpoint remains unchanged.
+Canary v1 falsifies the simple expectation that a safety advantage automatically becomes delegation leverage. Canary v2 falsifies the narrower expectation that richer denial information or extending the adaptive horizon to H8 is sufficient by itself. Canary v3 shows that bounded current-route evidence reacquisition can repair a local stale-evidence transition without H4 frontier gain. Canary v4 then establishes a positive preregistered interaction on the frozen mechanism workload: one stale-route episode becomes safely delegable only when evidence recovery is combined with enough remaining H8 interaction time.
 
-The next core falsifiable question is therefore an interaction rather than another single-factor repair:
+The local mechanism sequence is therefore sufficiently resolved for this fixture family. The next study should not be v5 = another hand-built stale-route case. It should change a robustness or cost-frontier axis while preserving the same hard gate and accounting. Candidate falsifiable questions include:
 
-> With the hard gate, workload, and bounded evidence-reacquisition rule fixed, does enough post-reacquisition horizon to finish the remaining sequential transitions convert the observed local repair into delegation leverage?
+- whether the +1 interaction survives on a prospectively constructed stale/evidence workload not selected from the observed C113 trace;
+- how delegation gain changes as post-reacquisition horizon and assurance-intervention ceilings vary;
+- whether the extra useful delivery persists once assurance labor/model-call cost is explicitly bounded;
+- whether the same interaction appears under another independently specified reality-facing interface.
 
-That follow-up is now preregistered as canary v4: a 2×2 `no_reacquire/reacquire × H4/H8` design with H4 scored as a non-mutating prefix of the same H8 trajectory. Its primary endpoint is the stale-route evidence×horizon difference-in-differences. No v4 model sample is accepted before the preregistration merges. Canary v1, v2, and v3 remain frozen.
+Any such study must preregister its task distribution and cost/horizon grid before model sampling. Canary v1–v4 remain frozen.
