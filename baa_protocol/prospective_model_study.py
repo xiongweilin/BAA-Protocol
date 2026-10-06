@@ -181,7 +181,7 @@ def run_prospective_study(
                             break
 
                 for turn in range(capability.extra_turns):
-                    if simulator.metrics.completed:
+                    if not simulator.remaining():
                         break
                     prompt = adaptive_prompt(
                         episode,
