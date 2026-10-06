@@ -15,7 +15,7 @@ from typing import Any
 
 
 VERSION = "prospective-delegation-cost-frontier-v1"
-CANONICAL_SHA256 = "TO_BE_FROZEN"
+CANONICAL_SHA256 = "2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29"
 PROFILE_COUNT = 4
 GROUPS = (
     "clean_control",
