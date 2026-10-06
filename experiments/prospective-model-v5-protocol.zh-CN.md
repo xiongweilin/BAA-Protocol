@@ -83,6 +83,19 @@ event 发生后，adaptive planner 能看到当前 runtime state 与 event histo
 
 因此 BAA 不制造有利证据；它只决定公共环境变化前后哪些 reality-facing action 可以执行。
 
+## Regime-label 因果控制
+
+v5 不再把 `feedback_class=bounded_action_protocol/direct_execution` 作为显式字段暴露给 adaptive planner。
+
+模型只看到：
+
+- 实际发生的 admission / execution / verification history；
+- remaining obligations；
+- 当前 runtime state；
+- 公共环境事件。
+
+因此 adaptive proposal 的分化只能来自真实反馈轨迹，而不是“知道自己处于哪种 regime”这一额外标签。该约束只作用于 v5；历史研究保持冻结不变。
+
 ## 预期因果结构
 
 study 允许出现：
@@ -149,6 +162,7 @@ study 不要求正结果。如果模型持续 wait、忽略 recovery evidence �
 - 三个 runtime recovery event 与冻结 workload 完全一致；
 - 每个 physical model call 均有效；
 - transport、schema、model/interface error 均为 0；
+- adaptive prompt 不包含显式 regime label；
 - 未发现改变 event timing、action、outcome 或 accounting 的 implementation defect。
 
 ## 解释边界
