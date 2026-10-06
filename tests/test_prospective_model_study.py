@@ -314,8 +314,10 @@ class ProspectiveModelStudyTests(unittest.TestCase):
             "role": "assistant",
             "content": [{"type": "output_text", "text": "{\\\"actions\\\":[]}"}],
         }
+        newline = bytes([10])
         wire = (
-            b"event: response.output_item.done\n"
+            b"event: response.output_item.done"
+            + newline
             + b"data: "
             + json.dumps(
                 {
@@ -324,7 +326,8 @@ class ProspectiveModelStudyTests(unittest.TestCase):
                     "item": item,
                 }
             ).encode()
-            + b"\\n\\n"
+            + newline
+            + newline
         )
         body = ResponsesGatewayClient._decode_response(
             wire,
