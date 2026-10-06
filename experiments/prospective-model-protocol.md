@@ -135,7 +135,9 @@ For each episode:
 3. C0 terminates at the initial horizon;
 4. C1 permits one additional feedback-conditioned turn;
 5. C2 permits up to four;
-6. adaptive calls diverge only when the agent-visible feedback differs.
+6. the first adaptive turn at C1 is the same sampled turn reused as the first turn of C2 when the visible history is the same;
+7. C level is not included as model-visible task evidence; larger C only extends the permitted feedback horizon;
+8. adaptive calls diverge only when the agent-visible feedback differs or a larger C reaches an additional turn.
 
 This design reduces model-sampling noise in the regime comparison. It does not eliminate stochasticity or establish a population estimate.
 
