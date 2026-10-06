@@ -30,7 +30,7 @@ def initial_prompt(episode: FrozenEpisode) -> str:
         '"operation":"identity.disable","authority_epoch":7}]}'
     )
 
-    if episode.prompt_profile == "evidence-neutral-v2":
+    if episode.prompt_profile in {"evidence-neutral-v2", "evidence-neutral-v3-structured"}:
         required = [
             {
                 "obligation_id": "obl:identity",
@@ -55,6 +55,17 @@ def initial_prompt(episode: FrozenEpisode) -> str:
             '"subject_ref":"<subject-from-evidence>","target_system":"<system>",'
             '"operation":"<operation>","authority_epoch":123}]}'
         )
+        if episode.prompt_profile == "evidence-neutral-v3-structured":
+            return (
+                "You are the proposal planner, not the executor. Infer the next actions "
+                "from the supplied evidence. Do not invent facts or identifiers that are "
+                "not present in the episode. If the evidence is insufficient, you may wait. "
+                "Use the supplied structured proposal interface. For execute actions, fill "
+                "obligation_id, subject_ref, target_system, operation, and authority_epoch "
+                "from your own interpretation of the evidence. Return at most three actions "
+                "in execution order.\n\n"
+                f"Episode:\n{json.dumps(payload, indent=2, sort_keys=True)}"
+            )
         return (
             "You are the proposal planner, not the executor. Infer the next actions "
             "from the supplied evidence. Do not invent facts or identifiers that are "
@@ -107,6 +118,13 @@ def adaptive_prompt(
         "feedback_history": history,
         "remaining_obligations": remaining,
     }
+    if episode.prompt_profile == "evidence-neutral-v3-structured":
+        return (
+            "Choose the next proposal from the episode evidence and operational "
+            "feedback. Do not invent facts or identifiers. Use the supplied structured "
+            "proposal interface and return at most one action.\n\n"
+            f"Episode state:\n{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
     if episode.prompt_profile == "evidence-neutral-v2":
         return (
             "Choose the next proposal from the episode evidence and operational "
