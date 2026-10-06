@@ -47,13 +47,26 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
 
     def test_observer_templates_come_only_from_frozen_runtime_events(self):
         episode = self.stale_episode()
-        templates = _observer_templates(episode)
+        state_version = episode.control_context["state_version"]
         self.assertEqual(
-            set(templates),
+            _observer_templates(episode, through_turn=0),
+            {},
+        )
+        turn1 = _observer_templates(episode, through_turn=1)
+        self.assertEqual(
+            set(turn1),
             {
-                (episode.control_context["experiment_id"], 0, 10),
-                (episode.control_context["experiment_id"], 1, 50),
-                (episode.control_context["experiment_id"], 2, 100),
+                (episode.control_context["experiment_id"], 0, 10, state_version),
+                (episode.control_context["experiment_id"], 2, 100, state_version),
+            },
+        )
+        turn2 = _observer_templates(episode, through_turn=2)
+        self.assertEqual(
+            set(turn2),
+            {
+                (episode.control_context["experiment_id"], 0, 10, state_version),
+                (episode.control_context["experiment_id"], 1, 50, state_version),
+                (episode.control_context["experiment_id"], 2, 100, state_version),
             },
         )
 
@@ -62,7 +75,10 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
             for episode in self.episodes
             if episode.study_group == "clean_progression"
         )
-        self.assertEqual(_observer_templates(clean), {})
+        self.assertEqual(
+            _observer_templates(clean, through_turn=4),
+            {},
+        )
 
     def test_reacquisition_changes_observation_not_hidden_truth(self):
         episode = self.stale_episode()
@@ -91,6 +107,7 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
             _reacquire_current_stage_evidence(
                 episode,
                 simulator,
+                through_turn=2,
             )
         )
         self.assertEqual(simulator.context, hidden_before)
@@ -130,7 +147,41 @@ class CanaryEvidenceStudyTests(unittest.TestCase):
             _reacquire_current_stage_evidence(
                 episode,
                 simulator,
+                through_turn=0,
             )
+        )
+
+
+    def test_reacquisition_cannot_use_future_stage_template(self):
+        episode = self.stale_episode()
+        simulator = CanarySimulator(
+            episode,
+            Regime.BAA,
+            DelegationBudget(min_useful_delivery=1),
+        )
+        simulator.apply_events(1)
+        simulator.visible["current_stage_index"] = 1
+        simulator.visible["current_weight_percent"] = 50
+        simulator.context["current_stage_index"] = 1
+        simulator.context["current_weight_percent"] = 50
+
+        self.assertFalse(
+            _reacquire_current_stage_evidence(
+                episode,
+                simulator,
+                through_turn=1,
+            )
+        )
+        self.assertTrue(
+            _reacquire_current_stage_evidence(
+                episode,
+                simulator,
+                through_turn=2,
+            )
+        )
+        self.assertEqual(
+            simulator.history[-1]["state_version"],
+            episode.control_context["state_version"],
         )
 
     def test_scripted_reacquisition_recovers_sequential_completion(self):
