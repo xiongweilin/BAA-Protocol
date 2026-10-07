@@ -673,3 +673,12 @@ AIOS has merged the composed real-product E2E instrumentation (AIOS main `b2cc12
 The accepted observation scope is the frozen projection over enumerated managed subjects in ephemeral tenants: 3 Odoo employees and 2 Keycloak managed subjects. Scope-complete does not mean all possible real-world side effects are observed. This neither calibrates a joint-risk penalty nor bounds production harms.
 
 See [formal/real-product-exposure-binding-v1.md](../formal/real-product-exposure-binding-v1.md).
+
+
+### Joint-risk binding contract v1
+
+The joint-risk binding contract is merged. It reproduces the frozen `pairwise-shared-factor-min-v1` formula only after a concrete proposal and exposure metric are bound to an explicit risk-factor declaration. Mixed exposure units, duplicate proposal identities, unrecognized functionals and identity rebound fail closed.
+
+**The offboarding risk-factor registry remains intentionally empty.** The observed managed-subject exposure counts from real ephemeral E2E acceptance do not determine which HRIS/IAM actions share a harm mechanism, nor do they calibrate the pairwise interaction penalty. Those semantic assumptions therefore remain unresolved. The positive real-product measurement result and this negative calibration result are compatible: measuring a narrow observable exposure is not proof of a real-world joint-risk bound.
+
+See [formal/joint-risk-binding-contract-v1.md](../formal/joint-risk-binding-contract-v1.md).
