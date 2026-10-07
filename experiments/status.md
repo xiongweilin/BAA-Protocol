@@ -682,3 +682,12 @@ The joint-risk binding contract is merged. It reproduces the frozen `pairwise-sh
 **The offboarding risk-factor registry remains intentionally empty.** The observed managed-subject exposure counts from real ephemeral E2E acceptance do not determine which HRIS/IAM actions share a harm mechanism, nor do they calibrate the pairwise interaction penalty. Those semantic assumptions therefore remain unresolved. The positive real-product measurement result and this negative calibration result are compatible: measuring a narrow observable exposure is not proof of a real-world joint-risk bound.
 
 See [formal/joint-risk-binding-contract-v1.md](../formal/joint-risk-binding-contract-v1.md).
+
+
+### Joint-risk identifiability v1: negative result
+
+A finite executable counterexample now shows that the accepted three unit-exposure observations do not identify the offboarding risk-factor partition or interaction penalty. Holding per-effect measurements at `(1,1,1)`, the frozen pairwise function with penalty 1 yields 3, 4 or 6 under different unobserved factor partitions; fixing a partition while varying penalties 0/1/2 yields 3/4/5. These are synthetic alternative model outputs, not measured harm. The tests also distinguish three effect–subject transitions, two product-qualified subjects and a potentially single underlying principal, and show that terminal net change cannot represent all intermediate transitions.
+
+The required next experiment needs an **independently observed and principal-approved joint-loss outcome**, matched single/composed and same/disjoint-subject episodes, explicit timing and interference controls, and frozen factor/penalty hypotheses with failure and null acceptance rules. Without that outcome, the risk-factor registry stays empty and `Omega` calibration remains open. This does not alter accepted real-product exposure measurements, structural invariants or delegation experiments.
+
+See [formal/joint-risk-identifiability-v1.md](../formal/joint-risk-identifiability-v1.md).

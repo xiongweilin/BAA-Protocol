@@ -139,6 +139,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [formal/exposure-metric-binding-v1.zh-CN.md](formal/exposure-metric-binding-v1.zh-CN.md) —— 在任何 realized exposure 进入 settlement 前，对 observable `managed-subject-state-change-count-v1` metric 执行精确 proposal/metric/subject binding。
 - [formal/real-product-exposure-binding-v1.zh-CN.md](formal/real-product-exposure-binding-v1.zh-CN.md) —— 临时 Keycloak/Odoo 上有限 E2E 证据：正常、恢复、未授权绕过场景下，admitted proposal 与 managed-subject measurement 的精确关联。
 - [formal/joint-risk-binding-contract-v1.zh-CN.md](formal/joint-risk-binding-contract-v1.zh-CN.md) —— 精确 joint-risk term 绑定、统一计量单位和唯一 proposal 约束；offboarding risk factor 仍明确为未校准。
+- [formal/joint-risk-identifiability-v1.zh-CN.md](formal/joint-risk-identifiability-v1.zh-CN.md) —— 可执行的负识别结果：三次单位产品敞口无法识别共享 risk factor 与交互 penalty；列出未来可区分校准实验的准入条件。
 - [formal/offboarding-exposure-declarations-v1.zh-CN.md](formal/offboarding-exposure-declarations-v1.zh-CN.md) —— 将三类 BAA offboarding proposal 全部冻结到该 observable metric，unit exposure bound=1；measurement acceptance 与 risk calibration 仍保持为独立义务。
 - [tests](tests) —— 回归测试与有限穷举检查。
 
