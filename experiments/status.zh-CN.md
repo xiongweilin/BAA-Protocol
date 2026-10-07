@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。固定 AIOS offboarding gate、World Runtime boundary、public Runtime/adaptor mediation surface，以及三个 offboarding product connector 现在都已有有限可执行 refinement 覆盖。exposure-bound bridge 与 exact metric-binding contract 已经显式化。`managed-subject-state-change-count-v1` 被定义为窄的 observable surrogate，但它还不是已接受的 reality-side source，也尚未被论证为 structural v1 实际消费的 risk quantity。下一项结构义务是接受一个 scope-complete measurement source，把 concrete proposal class 绑定到该 metric，并论证 declared joint-risk functional。
+该结果只适用于有限 protocol model。固定 AIOS offboarding gate、World Runtime boundary、public Runtime/adaptor mediation surface，以及三个 offboarding product connector 现在都已有有限可执行 refinement 覆盖。exposure-bound bridge 与 exact metric-binding contract 已经显式化，三个 reference offboarding proposal class 也都声明 `managed-subject-state-change-count-v1` 且 bound=1。该 metric 仍不是已接受的 reality-side source，也尚未被论证为 structural v1 实际消费的 risk quantity。下一项结构义务是接受 scope-complete measurement source，并论证 declared joint-risk functional。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -635,3 +635,16 @@ structural v1 携带整数 `exposure_bound`，但现实侧 measurement 即使也
 AIOS PR #35 包含该 metric 的候选 real-product instrumentation。真实临时 Keycloak run `37631639559` 与 Odoo run `37631639463` 均通过：覆盖 connector operation 的 managed-subject changed set 都只包含 declared target，realized exposure 均为 1。但这些运行尚未进入已接受的 BAA evidence chain，因为 AIOS PR #35 仍未合并：一个与本变更无关的通用 Autodev acceptance workflow 在 Grype high-severity vulnerability gate 上保持红灯，而与本变更相关的 real-product、CI、network-preflight 与 Sonar check 均已通过。
 
 详见 [formal/exposure-metric-binding-v1.zh-CN.md](../formal/exposure-metric-binding-v1.zh-CN.md)。
+
+
+### Offboarding exposure declarations v1
+
+三个 BAA-covered offboarding proposal class 现在都有冻结的 concrete exposure declaration。
+
+`employee.deactivate`、`identity.disable` 与 `sessions.revoke` 全部声明 `managed-subject-state-change-count-v1`，exposure bound=1。declaration 绑定 exact proposal id 与 subject。registry 通过测试要求与 `OffboardingKernel.ALLOWED_EXTERNAL_OPERATIONS` 完全一致，因此未来新增允许 operation 时不能静默缺失 exposure semantics，也不能意外继承默认 metric。
+
+unit bound 继续保持可证伪：对三类 operation 任意一类，如果 scope-complete measurement 同时报告 declared subject 与 control subject 发生变化，则 realized exposure=2，bound 失败。
+
+这只是 proposal-side semantics。它不会把 AIOS PR #35 的候选 measurement 自动变成已接受 evidence，也不论证 structural joint-risk composition rule。下一项 semantic question 因此已经从“这些 proposal class 声明什么 exposure metric”推进到：该 metric 是否有被正式接受的 reality-side measurement source，以及为什么这些 unit exposure 与它们之间的 interaction 应由冻结 joint-risk functional 组合。
+
+详见 [formal/offboarding-exposure-declarations-v1.zh-CN.md](../formal/offboarding-exposure-declarations-v1.zh-CN.md)。
