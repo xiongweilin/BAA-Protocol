@@ -1,5 +1,7 @@
 # World Runtime Refinement v1
 
+> English | [简体中文](world-runtime-refinement-v1.zh-CN.md)
+
 ## Status
 
 This record defines the second finite concrete refinement layer for BAA structural v1.
