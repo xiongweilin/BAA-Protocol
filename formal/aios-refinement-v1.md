@@ -61,9 +61,9 @@ Three offboarding external effects execute through the real AIOS engine fixture.
 
 For each effect the projected path is:
 
-[
-PROPOSED 	o RESERVED 	o PENDING 	o SETTLED
-]
+~~~text
+PROPOSED -> RESERVED -> PENDING -> SETTLED
+~~~
 
 All three effects settle and the AIOS case reaches completion.
 
@@ -87,11 +87,9 @@ The underlying provider invocation count remains one. No second reality-facing d
 
 For the three checked fixtures:
 
-[
-pi(	au_{mathrm{AIOS+gate}})
-in
-operatorname{Trace}(K_{mathrm{formal-v1}})
-]
+~~~text
+pi(trace(AIOS + gate)) is in Trace(K_formal-v1)
+~~~
 
 with respect to the represented phase relation and scope identity.
 
