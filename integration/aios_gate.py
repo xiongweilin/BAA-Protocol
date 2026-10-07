@@ -31,6 +31,8 @@ from baa_protocol.offboarding import (
     OffboardingProposal,
 )
 
+from aios_refinement import AbstractPhase, RefinementEvent
+
 
 class BAAGatedAIOSProvider:
     """Non-bypassable provider wrapper for the covered offboarding effects.
@@ -54,6 +56,7 @@ class BAAGatedAIOSProvider:
         self.unresolved_limit = unresolved_limit
         self._kernels: dict[tuple[str, int], OffboardingKernel] = {}
         self._proposal_for_effect: dict[str, str] = {}
+        self.refinement_trace: list[RefinementEvent] = []
 
     def _kernel(self, effect) -> OffboardingKernel:
         key = (str(effect.case_id), int(effect.authority_epoch))
@@ -101,6 +104,53 @@ class BAAGatedAIOSProvider:
     def _verification_state(observation: RealityObservation) -> dict[str, object]:
         return dict(observation.state)
 
+    def _record_refinement(
+        self,
+        effect,
+        proposal: OffboardingProposal,
+        *,
+        prior: AbstractPhase,
+        next: AbstractPhase,
+        event: str,
+    ) -> None:
+        self.refinement_trace.append(
+            RefinementEvent(
+                effect_id=str(effect.effect_id),
+                proposal_id=proposal.proposal_id,
+                prior=prior,
+                next=next,
+                event=event,
+                obligation_id=str(effect.obligation_id),
+                target_system=effect.target_system,
+                operation=effect.operation,
+                request_identity=proposal.request_identity,
+            )
+        )
+
+    def _proposal_for_refinement(self, effect) -> OffboardingProposal:
+        case = self.store.get_case(effect.case_id)
+        if case is None:
+            raise ValueError("administrative case is unavailable")
+        effective_at = authoritative_effective_time(case)
+        if effective_at is None:
+            raise ValueError("BAA authoritative effective time unavailable")
+        return OffboardingProposal(
+            proposal_id=f"effect:{effect.effect_id}",
+            obligation_id=str(effect.obligation_id),
+            case_id=str(effect.case_id),
+            authority_epoch=effect.authority_epoch,
+            governance_basis_id=str(effect.governance_basis_id),
+            subject_ref=effect.subject_ref,
+            target_system=effect.target_system,
+            operation=effect.operation,
+            state_version=case.version,
+            effective_at=int(effective_at.timestamp()),
+            expires_at=int((effective_at + timedelta(days=1)).timestamp()),
+            request_identity=f"aios-effect:{effect.effect_id}",
+            verification_available=True,
+            bridge_valid=True,
+        )
+
     def execute(self, effect, payload: dict[str, Any]) -> ProviderExecutionResult:
         case = self.store.get_case(effect.case_id)
         if case is None:
@@ -127,23 +177,8 @@ class BAAGatedAIOSProvider:
                 retryable=False,
             )
 
-        proposal_id = f"effect:{effect.effect_id}"
-        proposal = OffboardingProposal(
-            proposal_id=proposal_id,
-            obligation_id=str(effect.obligation_id),
-            case_id=str(effect.case_id),
-            authority_epoch=effect.authority_epoch,
-            governance_basis_id=str(effect.governance_basis_id),
-            subject_ref=effect.subject_ref,
-            target_system=effect.target_system,
-            operation=effect.operation,
-            state_version=case.version,
-            effective_at=int(effective_at.timestamp()),
-            expires_at=int((effective_at + timedelta(days=1)).timestamp()),
-            request_identity=f"aios-effect:{effect.effect_id}",
-            verification_available=True,
-            bridge_valid=True,
-        )
+        proposal = self._proposal_for_refinement(effect)
+        proposal_id = proposal.proposal_id
         now = int(self.now().timestamp())
         admission = kernel.admit(proposal, now=now)
         if admission.decision is not Decision.ADMIT:
@@ -163,6 +198,13 @@ class BAAGatedAIOSProvider:
 
         capability = admission.capability
         assert capability is not None
+        self._record_refinement(
+            effect,
+            proposal,
+            prior=AbstractPhase.PROPOSED,
+            next=AbstractPhase.RESERVED,
+            event="admit",
+        )
         kernel.execute(
             capability,
             now=now,
@@ -175,6 +217,13 @@ class BAAGatedAIOSProvider:
             request_identity=proposal.request_identity,
         )
         self._proposal_for_effect[str(effect.effect_id)] = proposal_id
+        self._record_refinement(
+            effect,
+            proposal,
+            prior=AbstractPhase.RESERVED,
+            next=AbstractPhase.PENDING,
+            event="dispatch",
+        )
 
         result = self.provider.execute(effect, payload)
         if result.status is not ProviderExecutionStatus.SUCCEEDED:
@@ -200,6 +249,13 @@ class BAAGatedAIOSProvider:
             str(effect.obligation_id),
             observed_postcondition=self._verification_state(observation),
         )
+        self._record_refinement(
+            effect,
+            proposal,
+            prior=AbstractPhase.PENDING,
+            next=AbstractPhase.SETTLED,
+            event="post-dispatch-readback",
+        )
         if not verified:
             return ProviderExecutionResult(
                 status=ProviderExecutionStatus.OUTCOME_UNKNOWN,
@@ -216,15 +272,30 @@ class BAAGatedAIOSProvider:
         if kernel is None or effect.obligation_id is None:
             return observation
         state = kernel.effects.get(str(effect.obligation_id))
-        if (
-            state is not None
-            and state.knowledge is EffectKnowledge.POSSIBLY_EFFECTED
-            and observation.availability.value == "available"
-            and observation.freshness.value == "current"
-            and observation.presence.value == "present"
-        ):
-            kernel.verify(
-                str(effect.obligation_id),
-                observed_postcondition=self._verification_state(observation),
-            )
+        if state is not None and state.knowledge is EffectKnowledge.POSSIBLY_EFFECTED:
+            proposal = self._proposal_for_refinement(effect)
+            if (
+                observation.availability.value == "available"
+                and observation.freshness.value == "current"
+                and observation.presence.value == "present"
+            ):
+                kernel.verify(
+                    str(effect.obligation_id),
+                    observed_postcondition=self._verification_state(observation),
+                )
+                self._record_refinement(
+                    effect,
+                    proposal,
+                    prior=AbstractPhase.PENDING,
+                    next=AbstractPhase.SETTLED,
+                    event="independent-readback",
+                )
+            else:
+                self._record_refinement(
+                    effect,
+                    proposal,
+                    prior=AbstractPhase.PENDING,
+                    next=AbstractPhase.PENDING,
+                    event="observation-unavailable",
+                )
         return observation
