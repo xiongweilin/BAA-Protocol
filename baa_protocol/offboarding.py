@@ -16,6 +16,7 @@ from .exposure_bridge import (
     ExposureMetricDeclaration,
 )
 from .model import Decision
+from .risk_bridge import RiskFactorDeclaration
 
 
 class EffectKnowledge(str, Enum):
@@ -97,6 +98,33 @@ def exposure_declaration_for_proposal(
         metric_id=metric_id,
         declared_subject_ref=subject_ref,
         exposure_bound=exposure_bound,
+    )
+
+
+OFFBOARDING_RISK_FACTOR_IDS_V1: dict[tuple[str, str], str] = {}
+
+
+def risk_factor_declaration_for_proposal(
+    proposal: OffboardingProposal,
+) -> RiskFactorDeclaration:
+    """Return a calibrated risk-factor declaration when one exists.
+
+    v1 intentionally has no offboarding risk-factor calibration. Exposure
+    metric declarations therefore cannot yet be projected into the structural
+    joint-risk functional.
+    """
+
+    key = (proposal.target_system, proposal.operation)
+    risk_factor_id = OFFBOARDING_RISK_FACTOR_IDS_V1.get(key)
+    if risk_factor_id is None:
+        raise ValueError(
+            "offboarding proposal has no calibrated risk-factor declaration"
+        )
+    exposure = exposure_declaration_for_proposal(proposal)
+    return RiskFactorDeclaration(
+        proposal_id=proposal.proposal_id,
+        exposure_metric_id=exposure.metric_id,
+        risk_factor_id=risk_factor_id,
     )
 
 
