@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate and the pinned World Runtime invocation/reconciliation boundary now both have finite executable refinement checks. The next structural obligation is complete-mediation coverage for the pinned reality-changing Runtime surfaces, followed by product-connector refinement.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, the pinned World Runtime invocation/reconciliation boundary, and the pinned public Runtime/adaptor provider-boundary surface now have finite executable coverage. The next structural obligation is product-connector refinement from Runtime request/dispatch identity into the pinned Keycloak/Odoo writer/verifier paths.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -595,3 +595,16 @@ The same CI also checks writer/verifier credential-domain separation and the dom
 This remains a finite revision-pinned boundary refinement. It does not prove deployed-network complete mediation, all concurrency/crash interleavings, product-connector semantics, subject-version completeness, semantic independence of read-back, or the exposure/risk bridge.
 
 See [formal/world-runtime-refinement-v1.md](../formal/world-runtime-refinement-v1.md).
+
+
+### Runtime mediation surface v1
+
+The pinned public Runtime/adaptor provider-boundary surface is now frozen and checked in CI against AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c`.
+
+The discovered reality-facing/recovery route inventory is exactly five POST endpoints: `/v1/invoke`, `/v1/domain-effects/prepare`, `/v1/domain-effects/{idempotency_key}/start`, `/v1/domain-effects/{idempotency_key}/result`, and `/v1/reconcile/{idempotency_key}`. The test derives this set from actual FastAPI endpoint source that calls Runtime provider-boundary/recovery methods, so adding another such route changes the discovered set and fails the frozen inventory.
+
+Every discovered route is checked for authenticated request context and transition-authority enforcement; `/v1/invoke` and domain-effect prepare are additionally checked for effect authority. The Administrative bridge enters provider execution through `/v1/invoke`; the Development bridge cannot call its concrete provider until Runtime has prepared/started the effect and returned `dispatch_allowed=true`.
+
+This is pinned public Runtime/adaptor provider-boundary surface coverage, not universal complete mediation. Arbitrary in-process Python bypasses, OS/network/credential enforcement, future revisions, connector semantics, concurrency/crash refinement, independent read-back, and the exposure/risk bridge remain outside the claim.
+
+See [formal/runtime-mediation-surface-v1.md](../formal/runtime-mediation-surface-v1.md).
