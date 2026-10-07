@@ -4,11 +4,21 @@ import tempfile
 import unittest
 
 from administrative_orchestrator.config import Settings
-from world_runtime.execution import CapabilityRequest
+from world_runtime.execution import (
+    CapabilityRequest,
+    EffectIdentityReboundError,
+    effect_identity_fingerprint,
+)
 
 import scripts.domains.administrative.production_world_runtime_stack as stack
 
 from baa_protocol.aios_adapter import AIOS_RUNTIME_CAPABILITY_BY_EFFECT
+from world_runtime_refinement import (
+    RuntimeScopeBinding,
+    assert_scope_binding,
+    assert_strict_effect_rule,
+    assert_writer_verifier_separated,
+)
 
 
 def settings() -> Settings:
@@ -63,31 +73,14 @@ class AIOSWorldRuntimeSurfaceTests(unittest.TestCase):
             with self.subTest(capability=capability):
                 self.assertIn(capability, rules)
                 rule = rules[capability]
-                self.assertTrue(rule.authorization_required)
-                self.assertTrue(rule.resource_required)
-                self.assertTrue(rule.version_required)
+                assert_strict_effect_rule(rule)
 
     def test_covered_effects_have_distinct_writer_and_verifier_domains(self):
         providers = self.runtime.registry.list()
 
         for capability in AIOS_RUNTIME_CAPABILITY_BY_EFFECT.values():
             with self.subTest(capability=capability):
-                writers = [
-                    item
-                    for item in providers
-                    if capability in item.capabilities
-                ]
-                verifiers = [
-                    item
-                    for item in providers
-                    if f"{capability}.verify" in item.capabilities
-                ]
-                self.assertEqual(len(writers), 1)
-                self.assertEqual(len(verifiers), 1)
-                self.assertNotEqual(
-                    writers[0].credential_domain,
-                    verifiers[0].credential_domain,
-                )
+                assert_writer_verifier_separated(capability, providers)
 
     def test_runtime_rejects_covered_effect_without_authorization_before_provider(self):
         capability = AIOS_RUNTIME_CAPABILITY_BY_EFFECT[
@@ -119,14 +112,164 @@ class AIOSWorldRuntimeSurfaceTests(unittest.TestCase):
                     principal="principal:test",
                     resource_ref="administrative:iam:employee:1",
                     resource="administrative:iam:employee:1",
+                    subject_version_refs=[
+                        "administrative-case:case:test:v1",
+                        "authority-epoch:1",
+                    ],
                     idempotency_key="baa:missing-auth",
                     parameters={"subject_ref": "employee:1"},
                     effect_class="external-effect",
                 )
             )
 
-        with self.assertRaises(PermissionError):
+        with self.assertRaisesRegex(
+            PermissionError,
+            "effectful capability requires authorization",
+        ):
             asyncio.run(invoke_without_authorization())
+        self.assertIsNone(
+            self.runtime.ledger.project_get(
+                "execution.provider-attempt",
+                "baa:missing-auth",
+            )
+        )
+
+    def test_runtime_rejects_missing_resource_and_version_before_attempt(self):
+        capability = AIOS_RUNTIME_CAPABILITY_BY_EFFECT[
+            ("iam", "identity.disable")
+        ]
+        responsibility = self.runtime.responsibility.create(
+            __import__(
+                "world_runtime.responsibility",
+                fromlist=["Responsibility"],
+            ).Responsibility(
+                id="responsibility:baa-scope-test",
+                principal="principal:test",
+                subject="employee:1",
+                domain="administrative",
+            )
+        )
+        work = self.runtime.execution.admit_work(
+            responsibility_id=responsibility.id,
+            kind="administrative-effect",
+            payload={},
+        )
+
+        missing_resource = CapabilityRequest(
+            capability=capability,
+            work_id=work.id,
+            actor_ref="principal:test",
+            principal="principal:test",
+            subject_version_refs=["administrative-case:case:test:v1"],
+            idempotency_key="baa:missing-resource",
+            parameters={"subject_ref": "employee:1"},
+            effect_class="external-effect",
+        )
+        with self.assertRaisesRegex(
+            PermissionError,
+            "requires an explicit resource boundary",
+        ):
+            asyncio.run(self.runtime.invoke(missing_resource))
+        self.assertIsNone(
+            self.runtime.ledger.project_get(
+                "execution.provider-attempt",
+                "baa:missing-resource",
+            )
+        )
+
+        missing_version = CapabilityRequest(
+            capability=capability,
+            work_id=work.id,
+            actor_ref="principal:test",
+            principal="principal:test",
+            resource_ref="administrative:iam:employee:1",
+            resource="administrative:iam:employee:1",
+            idempotency_key="baa:missing-version",
+            parameters={"subject_ref": "employee:1"},
+            effect_class="external-effect",
+        )
+        with self.assertRaisesRegex(
+            PermissionError,
+            "requires explicit subject version refs",
+        ):
+            asyncio.run(self.runtime.invoke(missing_version))
+        self.assertIsNone(
+            self.runtime.ledger.project_get(
+                "execution.provider-attempt",
+                "baa:missing-version",
+            )
+        )
+
+    def test_durable_effect_identity_rejects_scope_rebound(self):
+        capability = AIOS_RUNTIME_CAPABILITY_BY_EFFECT[
+            ("iam", "identity.disable")
+        ]
+        request = CapabilityRequest(
+            capability=capability,
+            actor_ref="principal:test",
+            principal="principal:test",
+            resource_ref="administrative:iam:employee:1",
+            resource="administrative:iam:employee:1",
+            subject_version_refs=[
+                "administrative-case:case:test:v4",
+                "authority-epoch:2",
+            ],
+            authorization_id="authorization:test",
+            idempotency_key="baa:stable-effect",
+            parameters={"subject_ref": "employee:1"},
+            effect_class="external-effect",
+        )
+        binding = RuntimeScopeBinding.from_request(request)
+        assert_scope_binding(
+            binding,
+            capability=capability,
+            resource="administrative:iam:employee:1",
+            subject_version_refs=(
+                "administrative-case:case:test:v4",
+                "authority-epoch:2",
+            ),
+            idempotency_key="baa:stable-effect",
+        )
+
+        fingerprint = effect_identity_fingerprint(request)
+        self.runtime.execution.bind_effect_identity(
+            request,
+            fingerprint=fingerprint,
+        )
+
+        for changed in (
+            request.model_copy(
+                update={
+                    "capability": AIOS_RUNTIME_CAPABILITY_BY_EFFECT[
+                        ("iam", "sessions.revoke")
+                    ]
+                }
+            ),
+            request.model_copy(
+                update={
+                    "resource_ref": "administrative:iam:employee:2",
+                    "resource": "administrative:iam:employee:2",
+                }
+            ),
+            request.model_copy(
+                update={
+                    "subject_version_refs": [
+                        "administrative-case:case:test:v5",
+                        "authority-epoch:2",
+                    ]
+                }
+            ),
+        ):
+            with self.subTest(change=changed.model_dump(mode="json")):
+                self.assertNotEqual(
+                    effect_identity_fingerprint(changed),
+                    fingerprint,
+                )
+                with self.assertRaises(EffectIdentityReboundError):
+                    self.runtime.execution.validate_effect_identity(
+                        changed,
+                        result_projection="execution.provider-idempotency",
+                    )
 
 
 if __name__ == "__main__":
