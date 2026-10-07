@@ -1,4 +1,5 @@
 import unittest
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
@@ -338,6 +339,11 @@ class BAARuntimeGateTests(unittest.TestCase):
             set(phase_by_effect(gate.refinement_trace).values()),
             {AbstractPhase.SETTLED},
         )
+
+        altered = list(gate.refinement_trace)
+        altered[1] = replace(altered[1], target_system="scope:changed")
+        with self.assertRaises(AssertionError):
+            assert_refines_protocol(altered)
 
     def test_lost_ack_recovers_then_releases_remaining_effects(self):
         store, case = authorized_case()
