@@ -538,3 +538,14 @@ The study has two independent sampling blocks:
 Budget ceilings are post-trace classifiers in the current simulator and therefore do not trigger resampling per cost cell. Evidence reacquisition remains a trajectory-changing treatment and is sampled in its own paired block.
 
 The accepted result may be positive, null, or negative. Qualification is based only on the frozen fingerprint, denominators, interface, transport/error accounting, and recorded revisions.
+
+
+### Structural guarantee v1
+
+The reference protocol now also has a finite-state structural model check, separate from the empirical delegation studies.
+
+The frozen v1 abstract universe exhaustively explores **584 reachable states and 35,040 transitions** under explicit `Omega_formal-v1` assumptions. The checked invariants cover exact capability scope, exclusive reserved/pending/settled accounting, joint-risk budget preservation, no silent pending release, no blind replay of unknown effects, protected guarantee-source isolation, and conservative timeout settlement.
+
+The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
+
+The result applies to the finite protocol model only. The next structural obligation is a refinement mapping from a concrete runtime boundary, such as the pinned AIOS World Runtime capability path, into the checked transition system.
