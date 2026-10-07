@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. A first finite concrete-trace refinement now exists for the pinned AIOS offboarding gate; the next structural obligation is to extend that mapping across the pinned World Runtime invocation/reconciliation boundary.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate and the pinned World Runtime invocation/reconciliation boundary now both have finite executable refinement checks. The next structural obligation is complete-mediation coverage for the pinned reality-changing Runtime surfaces, followed by product-connector refinement.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -582,3 +582,16 @@ The first concrete refinement layer is now merged. Three pinned AIOS offboarding
 The checker also rejects scope drift across proposal, obligation, target, operation, and stable request identity. This is a finite tested trace relation, not a whole-program proof. Complete mediation at the deployed World Runtime HTTP boundary, concurrency/crash refinement, product-connector refinement, and the exposure/risk semantic bridge remain open obligations.
 
 See [formal/aios-refinement-v1.md](../formal/aios-refinement-v1.md).
+
+
+### World Runtime boundary refinement v1
+
+The second concrete refinement layer is now merged against pinned AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c`.
+
+For every BAA-covered offboarding capability, the pinned Runtime requires authorization, an explicit resource boundary, and subject-version refs. Missing authorization/resource/version cases fail before a durable provider-attempt reservation. Capability, resource, and subject-version scope participate in durable effect identity, and reusing one idempotency key after changing any of those coordinates is rejected as an identity rebound.
+
+The same CI also checks writer/verifier credential-domain separation and the domain-effect ambiguous state: after an unknown outcome, the durable effect has a dispatch generation but neither fresh-start nor dispatch permission, so a provider is not blindly redispatched.
+
+This remains a finite revision-pinned boundary refinement. It does not prove deployed-network complete mediation, all concurrency/crash interleavings, product-connector semantics, subject-version completeness, semantic independence of read-back, or the exposure/risk bridge.
+
+See [formal/world-runtime-refinement-v1.md](../formal/world-runtime-refinement-v1.md).

@@ -132,6 +132,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [formal/structural-guarantees-v1.zh-CN.md](formal/structural-guarantees-v1.zh-CN.md) —— 有限状态结构保证记录、显式假设与 refinement 边界。
 - [formal/structural-model-v1-result.json](formal/structural-model-v1-result.json) —— 机器可读的穷举模型检查结果。
 - [formal/aios-refinement-v1.zh-CN.md](formal/aios-refinement-v1.zh-CN.md) —— 从固定 AIOS offboarding gate 到 formal-v1 phase relation 的有限具体 trace refinement 检查。
+- [formal/world-runtime-refinement-v1.zh-CN.md](formal/world-runtime-refinement-v1.zh-CN.md) —— 对固定 World Runtime 的 authorization/resource/version scope、durable effect identity、ambiguous-effect fencing 与 writer/verifier separation 的有限 refinement 检查。
 - [tests](tests) —— 回归测试与有限穷举检查。
 
 ## 与 guide、AIOS 的关系
