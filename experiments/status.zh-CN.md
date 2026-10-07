@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。现在已经为固定 AIOS offboarding gate 建立第一层有限具体 trace refinement；下一项结构义务是把该 mapping 延伸到固定 World Runtime invocation/reconciliation boundary。
+该结果只适用于有限 protocol model。固定 AIOS offboarding gate 与固定 World Runtime invocation/reconciliation boundary 现在都已有有限可执行 refinement 检查。下一项结构义务是对固定 reality-changing Runtime surface 建立 complete-mediation coverage，再推进 product-connector refinement。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -566,3 +566,16 @@ evidence-recovery panel 在更窄的预注册意义上为正。H4/H8 都有 5 �
 checker 还会拒绝同一 effect 在 proposal、obligation、target、operation 与 stable request identity 上发生的 scope drift。这仍是有限具体 trace 的已测试 refinement relation，不是 whole-program proof。deployed World Runtime HTTP boundary 的 complete mediation、concurrency/crash refinement、product connector refinement 与 exposure/risk semantic bridge 仍是开放义务。
 
 详见 [formal/aios-refinement-v1.zh-CN.md](../formal/aios-refinement-v1.zh-CN.md)。
+
+
+### World Runtime boundary refinement v1
+
+第二层具体 refinement 已经基于固定 AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c` 合并。
+
+对每个 BAA-covered offboarding capability，固定 Runtime 都要求 authorization、显式 resource boundary 与 subject-version refs。缺失 authorization/resource/version 的反例都会在 durable provider-attempt reservation 前失败。capability、resource 与 subject-version scope 都进入 durable effect identity；同一 idempotency key 若改变其中任一坐标，会被作为 identity rebound 拒绝。
+
+同一 CI 还检查 writer/verifier credential-domain separation，以及 domain-effect 的 ambiguous state：unknown outcome 后，durable effect 已记录 dispatch generation，但不允许 fresh start，也不允许再次 dispatch，因此 provider 不会被 blind redispatch。
+
+该结果仍是有限、revision-pinned 的 boundary refinement。它不证明 deployed-network complete mediation、全部 concurrency/crash interleaving、product connector 语义、subject-version 完整性、read-back 的语义独立性或 exposure/risk bridge。
+
+详见 [formal/world-runtime-refinement-v1.zh-CN.md](../formal/world-runtime-refinement-v1.zh-CN.md)。
