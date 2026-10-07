@@ -8,17 +8,10 @@ is mediated by this gate; that remains an Omega assumption.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum
 from typing import Iterable
 
 
-class AbstractPhase(str, Enum):
-    PROPOSED = "proposed"
-    DENIED = "denied"
-    HELD = "held"
-    RESERVED = "reserved"
-    PENDING = "pending"
-    SETTLED = "settled"
+from baa_protocol.formal_model import Phase as AbstractPhase
 
 
 @dataclass(frozen=True)
