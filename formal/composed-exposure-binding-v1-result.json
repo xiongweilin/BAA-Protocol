@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "metric_id": "managed-subject-state-change-count-v1",
+  "provenance": {
+    "baa_revision": "b3215d940cf7c9bd6b208ed5915eaa3c92ab10e3",
+    "aios_tested_commit": "e10c5f6c52e12ea08f603e9c8d01ca099e070df4",
+    "aios_accepted_commit": "b2cc1254a1908d00ded7c705f6e230c43f08f6f8",
+    "tested_tree": "0b24ed3f205ad8bbeffd6b238738baa1a34564a0",
+    "accepted_tree": "0b24ed3f205ad8bbeffd6b238738baa1a34564a0",
+    "workflow_name": "Real Product Offboarding E2E",
+    "workflow_run_id": 37638217335
+  },
+  "scenarios": {
+    "normal": {
+      "artifact_id": 11491082646,
+      "artifact_digest": "sha256:f9f307627a55b01c38c78dc3603019ed6526e71b11f6af0ba02067c3a173e5b5",
+      "status_trace": [
+        "completed"
+      ],
+      "bindings": [
+        {
+          "operation": "identity.disable",
+          "target_system": "iam",
+          "effect_id": "22ed22f8-3994-5396-a400-f6624305add5",
+          "obligation_id": "1fa8206d-7e50-5718-bc20-e9285ce126c2",
+          "proposal_id": "effect:22ed22f8-3994-5396-a400-f6624305add5",
+          "declared_subject_ref": "odoo:hr.employee:2",
+          "exposure_bound": 1,
+          "realized_exposure": 1,
+          "managed_subject_count_before": 2,
+          "managed_subject_count_after": 2,
+          "changed_subject_refs": [
+            "odoo:hr.employee:2"
+          ],
+          "scope_complete": true,
+          "assessment_established": true
+        },
+        {
+          "operation": "sessions.revoke",
+          "target_system": "iam",
+          "effect_id": "0f05344e-5740-5089-91eb-020f31d826f2",
+          "obligation_id": "0a5ac9bc-f864-5aed-ac85-8e29ed3da39c",
+          "proposal_id": "effect:0f05344e-5740-5089-91eb-020f31d826f2",
+          "declared_subject_ref": "odoo:hr.employee:2",
+          "exposure_bound": 1,
+          "realized_exposure": 1,
+          "managed_subject_count_before": 2,
+          "managed_subject_count_after": 2,
+          "changed_subject_refs": [
+            "odoo:hr.employee:2"
+          ],
+          "scope_complete": true,
+          "assessment_established": true
+        },
+        {
+          "operation": "employee.deactivate",
+          "target_system": "hris",
+          "effect_id": "e0302109-8921-5c8f-be0b-87c353472775",
+          "obligation_id": "a05b7931-de3c-5370-9d3e-39de4a5f6f37",
+          "proposal_id": "effect:e0302109-8921-5c8f-be0b-87c353472775",
+          "declared_subject_ref": "odoo:hr.employee:2",
+          "exposure_bound": 1,
+          "realized_exposure": 1,
+          "managed_subject_count_before": 3,
+          "managed_subject_count_after": 3,
+          "changed_subject_refs": [
+            "odoo:hr.employee:2"
+          ],
+          "scope_complete": true,
+          "assessment_established": true
+        }
+      ]
+    },
+    "lost_ack": {
+      "artifact_id": 11489419994,
+      "artifact_digest": "sha256:7252a32f9ab63f63a3c481be247a83574be84c0c67a505add493b290d1925325",
+      "status_trace": [
+        "executing",
+        "completed"
+      ],
+      "bindings_match_normal": true
+    },
+    "readback_outage": {
+      "artifact_id": 11489454782,
+      "artifact_digest": "sha256:e44102ff8443f0f7c8ee76b1c2e1e631d55ba09461284ab7ce9c3a65b26c343a",
+      "status_trace": [
+        "executing",
+        "completed"
+      ],
+      "bindings_match_normal": true
+    },
+    "runtime_bypass": {
+      "artifact_id": 11489744687,
+      "artifact_digest": "sha256:a83371e4d8138a2f7eb1abf70861a9a79dafbcc8c88826caa6f0f4b4197e84cb",
+      "http_status": 403,
+      "authorization_boundary_reached": true,
+      "provider_effect_observed": false,
+      "product_state_unchanged": true
+    }
+  },
+  "interpretation": {
+    "established": [
+      "Each covered real-product effect is tied to an actually admitted BAA proposal.",
+      "The frozen metric identity, declared subject, and unit bound match the reality-side measurement.",
+      "Normal, lost-ack, and readback-outage episodes each establish realized exposure 1 for all three covered operations.",
+      "Runtime bypass remains rejected before provider effect and leaves the observed target product state unchanged."
+    ],
+    "not_established": [
+      "Absence of hidden product side effects outside the frozen state projection.",
+      "Completeness for unrelated object types, unmanaged subjects, downstream systems, or production tenants.",
+      "Calibration of subject-count exposure to harm severity or probability.",
+      "Correctness of the structural joint-risk composition rule for real-world loss."
+    ]
+  }
+}
