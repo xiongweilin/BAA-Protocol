@@ -51,7 +51,7 @@ refinement checker 直接复用 `baa_protocol.formal_model.Phase`。
 - operation；
 - stable request identity。
 
-checker 会拒绝不连续 phase sequence，以及缺少 scope identity 的 reality-facing event。
+checker 会拒绝不连续 phase sequence、缺少 scope identity 的 reality-facing event，以及同一 effect 在 proposal/obligation/target/operation/request identity 上发生的 scope drift。
 
 ## 已检查具体 trace
 
