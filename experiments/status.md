@@ -549,3 +549,23 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
 The result applies to the finite protocol model only. The next structural obligation is a refinement mapping from a concrete runtime boundary, such as the pinned AIOS World Runtime capability path, into the checked transition system.
+
+
+### Prospective delegation cost-frontier v1 accepted result
+
+AIOS workflow run `37620654622` is the first fully qualified run of the frozen prospective cost-frontier study. It used BAA `4e072c8421c9ce250419b736e8282cdc97c05766`, AIOS workflow head `4b747987346ed11484bc47b9651eab7370e876f7`, llm-gateway `6fe86653da104bd0c00637a856e352303774fc01`, and the frozen workload SHA-256 `2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29`.
+
+The two sampling blocks completed 375 physical model calls / 375 HTTP attempts with zero retries and zero unresolved transport, schema, or model errors.
+
+The architecture panel is a preregistered null result. In the strict-safe subspace, C0, C1, and C2 each have **0 BAA-positive cells, 30 ties, and 0 BAA-negative cells**. The persistence criterion is false. At the reference trajectory level, all three regimes have 0/24, 1/24, and 5/24 delegable episodes at C0/C1/C2. BAA reduces unsafe transitions from 5 to 0 at C1 and from 9 to 0 at C2, but does not enlarge the useful/delegable set.
+
+The evidence-recovery panel is positive in its narrower preregistered sense. H4 and H8 each have 5 positive cost cells, 19 ties, and 0 negative cells; all 5 positive cells are in the stale-evidence target and every non-target control cell is invariant. The minimum positive cost point is (I_{max}=6, Q_{max}=2), where aggregate delegability moves from 7/24 to 8/24 and the target from 0/4 to 1/4. H8 adds no gain beyond H4 in this workload, so the earlier evidence × remaining-horizon interaction is not replicated here.
+
+The accepted interpretation is therefore deliberately mixed:
+
+- the architecture-level hypothesis that BAA will prospectively push out the delegation cost frontier is **not supported** on this second-domain cross-mechanism workload;
+- the bounded evidence-reacquisition mechanism survives with an explicit assurance-cost threshold and no control degradation.
+
+This prevents the retrospective offboarding cost surface from being generalized into a broad architecture claim.
+
+The empirical next step should now change the reality-facing action interface or task domain rather than create another canary variant aimed at obtaining a positive frontier. The structural line proceeds independently toward an AIOS/runtime refinement mapping.
