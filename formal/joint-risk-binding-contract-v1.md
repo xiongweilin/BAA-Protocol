@@ -37,6 +37,8 @@ Proposal identity rebound, metric identity rebound, empty risk factor, and funct
 
 The resulting bound risk term retains proposal id, exposure metric id, exposure bound, risk-factor id, and functional id.
 
+At composition time, the evaluator also rejects **duplicate proposal ids** and **mixed exposure metric ids**. Exact binding of each term does not authorize adding heterogeneous units (such as subject counts and monetary losses). Cross-metric composition requires an independently justified common unit or explicit conversion and is outside v1.
+
 ## Current offboarding result: uncalibrated
 
 The three reference offboarding proposal classes now have concrete exposure declarations, but they do **not** have calibrated risk-factor declarations.
