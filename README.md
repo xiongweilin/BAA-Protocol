@@ -135,6 +135,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [formal/world-runtime-refinement-v1.md](formal/world-runtime-refinement-v1.md) — finite revision-pinned refinement checks for World Runtime authorization/resource/version scope, durable effect identity, ambiguous-effect fencing, and writer/verifier separation.
 - [formal/runtime-mediation-surface-v1.md](formal/runtime-mediation-surface-v1.md) — pinned public Runtime/adaptor provider-boundary surface inventory and authority-guard coverage for the five dispatch/reconciliation routes.
 - [formal/product-connector-refinement-v1.md](formal/product-connector-refinement-v1.md) — finite refinement from Runtime request identity into Odoo/Keycloak durable request markers, reconciliation, and product read-back for the three offboarding effects.
+- [formal/exposure-bridge-contract-v1.md](formal/exposure-bridge-contract-v1.md) — falsifiable subject-scope exposure contract; current target-only product read-back is explicitly insufficient to establish the structural exposure-bound assumption.
 - [tests](tests) — regression and finite exhaustive checks.
 
 ## Relationship to guide and AIOS
