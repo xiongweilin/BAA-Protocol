@@ -11,6 +11,10 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, Optional
 
+from .exposure_bridge import (
+    MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+    ExposureMetricDeclaration,
+)
 from .model import Decision
 
 
@@ -50,6 +54,50 @@ class OffboardingProposal:
     verification_available: bool = True
     bridge_valid: bool = True
     protected_source_target: bool = False
+
+
+OFFBOARDING_EXPOSURE_BOUNDS_V1 = {
+    ("hris", "employee.deactivate"): (
+        MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+        1,
+    ),
+    ("iam", "identity.disable"): (
+        MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+        1,
+    ),
+    ("iam", "sessions.revoke"): (
+        MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+        1,
+    ),
+}
+
+
+def exposure_declaration_for_proposal(
+    proposal: OffboardingProposal,
+) -> ExposureMetricDeclaration:
+    """Return the frozen v1 exposure declaration for one offboarding proposal.
+
+    This is a declaration of the metric consumed by the reference structural
+    accounting layer. It is not evidence that a reality-side measurement
+    source has established the metric for this proposal.
+    """
+
+    key = (proposal.target_system, proposal.operation)
+    try:
+        metric_id, exposure_bound = OFFBOARDING_EXPOSURE_BOUNDS_V1[key]
+    except KeyError as exc:
+        raise ValueError(
+            "offboarding proposal has no frozen exposure declaration"
+        ) from exc
+    subject_ref = proposal.subject_ref.strip()
+    if not subject_ref:
+        raise ValueError("offboarding exposure declaration requires a subject")
+    return ExposureMetricDeclaration(
+        proposal_id=proposal.proposal_id,
+        metric_id=metric_id,
+        declared_subject_ref=subject_ref,
+        exposure_bound=exposure_bound,
+    )
 
 
 @dataclass(frozen=True)
