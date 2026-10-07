@@ -533,3 +533,23 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
 该结果只适用于有限 protocol model。下一项结构义务是为具体 runtime boundary（例如固定 AIOS World Runtime capability path）建立到已检查状态迁移系统的 refinement mapping。
+
+
+### 前瞻 Delegation cost-frontier v1 接受结果
+
+AIOS workflow run `37620654622` 是冻结 prospective cost-frontier study 的首个完整 qualified run。采样固定 BAA `4e072c8421c9ce250419b736e8282cdc97c05766`、AIOS workflow head `4b747987346ed11484bc47b9651eab7370e876f7`、llm-gateway `6fe86653da104bd0c00637a856e352303774fc01`，以及 workload SHA-256 `2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29`。
+
+两个 sampling block 共完成 375 次 physical model call / 375 次 HTTP attempt，retry=0，未解决 transport/schema/model error 全部为 0。
+
+architecture panel 是预注册零结果。strict-safe 子空间中，C0、C1、C2 都是 **BAA-positive cell=0、tie=30、BAA-negative cell=0**，因此 persistence criterion=false。参考 trajectory 上三种 regime 的 C0/C1/C2 delegable episode 都分别为 0/24、1/24、5/24。BAA 将 C1 unsafe transition 从 5 降到 0、C2 从 9 降到 0，但没有扩大 useful/delegable set。
+
+evidence-recovery panel 在更窄的预注册意义上为正。H4/H8 都有 5 个 positive cost cell、19 个 tie、0 个 negative cell；5 个正 cell 全部来自 stale-evidence target，所有非目标 control cell 完全 invariant。最小正成本点是 (I_{max}=6, Q_{max}=2)：aggregate delegability 从 7/24 变为 8/24，target 从 0/4 变为 1/4。该 workload 中 H8 相比 H4 没有额外收益，因此此前 evidence × remaining-horizon interaction 没有在这里复现。
+
+所以接受结论必须保持混合：
+
+- “BAA 会在第二域前瞻推开 delegation cost frontier”这一架构级假说**没有获得支持**；
+- bounded evidence-reacquisition 机制保留了明确的 assurance-cost threshold，且没有 control 退化。
+
+因此，offboarding 的回顾性成本面不能被推广成普遍架构结论。
+
+经验路线下一步应改变 reality-facing action interface 或任务域，而不是继续制造 canary 变体追求正 frontier。结构路线独立继续推进 AIOS/runtime refinement mapping。
