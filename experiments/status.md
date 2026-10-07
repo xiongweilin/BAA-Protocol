@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate, the pinned World Runtime invocation/reconciliation boundary, and the pinned public Runtime/adaptor provider-boundary surface now have finite executable coverage. The next structural obligation is product-connector refinement from Runtime request/dispatch identity into the pinned Keycloak/Odoo writer/verifier paths.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The next structural obligation is the exposure/risk semantic bridge between declared admission bounds and measured reality-side exposure.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -608,3 +608,16 @@ Every discovered route is checked for authenticated request context and transiti
 This is pinned public Runtime/adaptor provider-boundary surface coverage, not universal complete mediation. Arbitrary in-process Python bypasses, OS/network/credential enforcement, future revisions, connector semantics, concurrency/crash refinement, independent read-back, and the exposure/risk bridge remain outside the claim.
 
 See [formal/runtime-mediation-surface-v1.md](../formal/runtime-mediation-surface-v1.md).
+
+
+### Product connector refinement v1
+
+The product-boundary refinement is now merged against pinned AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c` for Odoo employee deactivation, Keycloak identity disable, and Keycloak session revocation.
+
+The production Runtime provider passes `CapabilityRequest.id` as connector `request_ref` and uses the same request id for reconciliation. Each covered connector persists or checks an operation-specific product request marker and rejects a conflicting marker as an external request-identity conflict.
+
+Lost-ack fixtures now run in BAA CI for all three operations. Odoo reconciliation resolves an inactive employee carrying the same deactivate marker without a second product write. Keycloak disable reconciliation resolves a disabled user carrying the same marker without another PUT. Session-revoke reconciliation resolves an empty session set after an ambiguous logout using a GET only, without another logout POST. Separate verifier objects report observed product state.
+
+This is a finite pinned connector identity/reconciliation/read-back refinement. Existing real ephemeral Keycloak/Odoo acceptance and composed E2E runs provide higher-fidelity evidence but do not expand this claim into production safety or a formal product-server proof.
+
+See [formal/product-connector-refinement-v1.md](../formal/product-connector-refinement-v1.md).
