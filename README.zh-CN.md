@@ -136,6 +136,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [formal/runtime-mediation-surface-v1.zh-CN.md](formal/runtime-mediation-surface-v1.zh-CN.md) —— 固定 public Runtime/adaptor provider-boundary 的五个 dispatch/reconciliation route inventory 与 authority guard 覆盖。
 - [formal/product-connector-refinement-v1.zh-CN.md](formal/product-connector-refinement-v1.zh-CN.md) —— 三种 offboarding effect 从 Runtime request identity 到 Odoo/Keycloak durable request marker、reconciliation 与 product read-back 的有限 refinement。
 - [formal/exposure-bridge-contract-v1.zh-CN.md](formal/exposure-bridge-contract-v1.zh-CN.md) —— 可证伪的 subject-scope exposure contract；当前 target-only product read-back 被明确判定为不足以建立 structural exposure-bound assumption。
+- [formal/exposure-metric-binding-v1.zh-CN.md](formal/exposure-metric-binding-v1.zh-CN.md) —— 在任何 realized exposure 进入 settlement 前，对 observable `managed-subject-state-change-count-v1` metric 执行精确 proposal/metric/subject binding。
 - [tests](tests) —— 回归测试与有限穷举检查。
 
 ## 与 guide、AIOS 的关系

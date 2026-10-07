@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge is now explicit and falsifiable, but current target-only product read-back does not establish it. The next structural obligation is a scope-complete exposure evidence source (or another observable exposure metric), followed by justification of the declared joint-risk functional.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge and exact metric-binding contract are explicit. `managed-subject-state-change-count-v1` is defined as a narrow observable surrogate, but it is not yet an accepted reality-side source or justified as the risk quantity consumed by structural v1. The next structural obligation is to accept a scope-complete measurement source, bind concrete proposal classes to that metric, and justify the declared joint-risk functional.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -636,3 +636,18 @@ The regression suite preserves explicit falsifications. With declared subject `e
 This is a negative structural result, not a defect hidden by clamping. The remaining path is either to add scope-complete reality-side evidence for this metric or to define a different exposure metric whose completeness is observable. Only after that should the joint-risk functional itself be treated as the next semantic obligation.
 
 See [formal/exposure-bridge-contract-v1.md](../formal/exposure-bridge-contract-v1.md).
+
+
+### Exposure metric binding v1
+
+The structural exposure bridge now has an exact metric-binding layer.
+
+Structural v1 carries an integer `exposure_bound`, but an integer reality-side measurement is not eligible for settlement unless the proposal explicitly declares the same concrete metric. The frozen v1 observable metric is `managed-subject-state-change-count-v1`: the number of managed subjects whose explicitly observed product-state projection changes across one logical operation.
+
+The executable binding requires exact proposal identity, metric identity, declared subject, scope-complete measurement, and a realized value within the declared bound. Proposal/metric/subject rebound, incomplete scope, out-of-target changed subjects, and above-bound measurements all fail closed. The existing collateral-subject counterexample remains explicit.
+
+This does not establish that the observable metric is the right production risk quantity. It prevents silent metric substitution between concrete measurement and formal settlement.
+
+AIOS PR #35 contains candidate real-product instrumentation for this metric. Its real ephemeral Keycloak run `37631639559` and Odoo run `37631639463` both passed: the managed-subject changed set contained only the declared target and realized exposure was 1 for each covered connector operation. Those runs are not yet imported into the accepted BAA evidence chain because AIOS PR #35 remains unmerged: an unrelated generic Autodev acceptance workflow is red at its Grype high-severity vulnerability gate, while the real-product, CI, network-preflight, and Sonar checks relevant to this change passed.
+
+See [formal/exposure-metric-binding-v1.md](../formal/exposure-metric-binding-v1.md).
