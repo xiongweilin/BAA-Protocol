@@ -132,6 +132,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [formal/structural-guarantees-v1.md](formal/structural-guarantees-v1.md) — finite-state structural guarantee record, explicit assumptions, and refinement boundary.
 - [formal/structural-model-v1-result.json](formal/structural-model-v1-result.json) — machine-readable exhaustive model-check result.
 - [formal/aios-refinement-v1.md](formal/aios-refinement-v1.md) — finite tested trace refinement from the pinned AIOS offboarding gate into the checked formal-v1 phase relation.
+- [formal/world-runtime-refinement-v1.md](formal/world-runtime-refinement-v1.md) — finite revision-pinned refinement checks for World Runtime authorization/resource/version scope, durable effect identity, ambiguous-effect fencing, and writer/verifier separation.
 - [tests](tests) — regression and finite exhaustive checks.
 
 ## Relationship to guide and AIOS
