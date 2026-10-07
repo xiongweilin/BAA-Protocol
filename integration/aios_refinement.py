@@ -44,6 +44,7 @@ def assert_refines_protocol(events: Iterable[RefinementEvent]) -> None:
 
     last: dict[str, AbstractPhase] = {}
     terminal: set[str] = set()
+    scope_by_effect: dict[str, tuple[str, str, str, str, str]] = {}
 
     for event in events:
         if (event.prior, event.next) not in ALLOWED_TRANSITIONS:
@@ -70,6 +71,7 @@ def assert_refines_protocol(events: Iterable[RefinementEvent]) -> None:
         if event.next in {AbstractPhase.RESERVED, AbstractPhase.PENDING, AbstractPhase.SETTLED}:
             if not all(
                 (
+                    event.proposal_id,
                     event.obligation_id,
                     event.target_system,
                     event.operation,
@@ -78,6 +80,18 @@ def assert_refines_protocol(events: Iterable[RefinementEvent]) -> None:
             ):
                 raise AssertionError(
                     "reality-facing refinement event is missing scope identity"
+                )
+            scope = (
+                event.proposal_id,
+                event.obligation_id,
+                event.target_system,
+                event.operation,
+                event.request_identity,
+            )
+            prior_scope = scope_by_effect.setdefault(event.effect_id, scope)
+            if scope != prior_scope:
+                raise AssertionError(
+                    f"scope identity changed for {event.effect_id}"
                 )
 
 
