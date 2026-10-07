@@ -666,3 +666,12 @@ joint-risk binding contract 已合并。只有 concrete proposal、exposure metr
 **offboarding risk-factor registry 有意保持为空。** 真实临时产品 E2E 得到的 managed-subject exposure count 不能决定 HRIS/IAM 行动是否共享真实 harm mechanism，也不能校准 pairwise interaction penalty。这些语义假设仍未关闭。正的现实产品测量结果与负的风险校准结果并不矛盾：能够测量窄的 observable exposure，不代表已证明真实世界 joint-risk 上界。
 
 详见 [formal/joint-risk-binding-contract-v1.zh-CN.md](../formal/joint-risk-binding-contract-v1.zh-CN.md)。
+
+
+### Joint-risk identifiability v1：负结果
+
+新增有限可执行反例：已接受的三次单位 exposure 观察，不能识别 offboarding 的 risk-factor 分组或 interaction penalty。保持 per-effect measurement 为 `(1,1,1)`，冻结 pairwise 公式在 penalty=1 时，根据未观察到的 factor 分组可输出 3、4 或 6；固定一组 factor 后，penalty=0/1/2 分别输出 3/4/5。这些是合成的不同模型计算结果，不是实测 harm。测试还区分三次 effect–subject transition、两个 product-qualified subject 与可能只有一个的底层 principal，并展示期末净变化不能代表全部中间 transition。
+
+下一项可接受研究需要**独立观察且由委托人预先认可的 joint-loss outcome**、匹配的单动作/组合动作与同/不同 subject episode、明确 timing 与 interference control，以及冻结的 factor/penalty 假说和零/负结果规则。没有这种 outcome，就继续让 risk-factor registry 为空，并保留 `Omega` calibration 为开放义务。本项不改变已接受的真实产品 exposure、结构不变量或 delegation 实验。
+
+详见 [formal/joint-risk-identifiability-v1.zh-CN.md](../formal/joint-risk-identifiability-v1.zh-CN.md)。
