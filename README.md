@@ -139,6 +139,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [formal/exposure-metric-binding-v1.md](formal/exposure-metric-binding-v1.md) — exact proposal/metric/subject binding for the observable `managed-subject-state-change-count-v1` exposure metric before any realized exposure can feed settlement.
 - [formal/real-product-exposure-binding-v1.md](formal/real-product-exposure-binding-v1.md) — finite ephemeral Keycloak/Odoo E2E evidence connecting admitted proposals to managed-subject measurements across normal, recovery and unauthorized-bypass scenarios.
 - [formal/joint-risk-binding-contract-v1.md](formal/joint-risk-binding-contract-v1.md) — exact joint-risk term binding, same-metric and unique-proposal composition checks; offboarding risk factors remain explicitly uncalibrated.
+- [formal/joint-risk-identifiability-v1.md](formal/joint-risk-identifiability-v1.md) — executable negative identification result: three unit product exposures cannot identify shared risk factors or the interaction penalty; specifies requirements for a discriminating future calibration study.
 - [formal/offboarding-exposure-declarations-v1.md](formal/offboarding-exposure-declarations-v1.md) — freezes all three BAA offboarding proposal classes to that observable metric with unit exposure bound 1, while leaving measurement acceptance and risk calibration separate.
 - [tests](tests) — regression and finite exhaustive checks.
 
