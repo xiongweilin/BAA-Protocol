@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。固定 AIOS offboarding gate 与固定 World Runtime invocation/reconciliation boundary 现在都已有有限可执行 refinement 检查。下一项结构义务是对固定 reality-changing Runtime surface 建立 complete-mediation coverage，再推进 product-connector refinement。
+该结果只适用于有限 protocol model。固定 AIOS offboarding gate、固定 World Runtime invocation/reconciliation boundary，以及固定 public Runtime/adaptor provider-boundary surface 现在都已有有限可执行覆盖。下一项结构义务是把 Runtime request/dispatch identity refinement 到固定 Keycloak/Odoo writer/verifier path。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -579,3 +579,16 @@ checker 还会拒绝同一 effect 在 proposal、obligation、target、operation
 该结果仍是有限、revision-pinned 的 boundary refinement。它不证明 deployed-network complete mediation、全部 concurrency/crash interleaving、product connector 语义、subject-version 完整性、read-back 的语义独立性或 exposure/risk bridge。
 
 详见 [formal/world-runtime-refinement-v1.zh-CN.md](../formal/world-runtime-refinement-v1.zh-CN.md)。
+
+
+### Runtime mediation surface v1
+
+固定 public Runtime/adaptor provider-boundary surface 现在已经基于 AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c` 冻结并进入 CI。
+
+当前自动发现的 reality-facing/recovery route inventory 恰好包含五个 POST endpoint：`/v1/invoke`、`/v1/domain-effects/prepare`、`/v1/domain-effects/{idempotency_key}/start`、`/v1/domain-effects/{idempotency_key}/result`、`/v1/reconcile/{idempotency_key}`。测试从实际 FastAPI endpoint 中调用 Runtime provider-boundary/recovery 方法的源码推导该集合，因此新增同类 route 会改变发现结果并使冻结 inventory 失败。
+
+每个被发现的 route 都检查 authenticated request context 与 transition-authority enforcement；`/v1/invoke` 和 domain-effect prepare 还必须执行 effect authority。Administrative bridge 通过 `/v1/invoke` 进入 provider execution；Development bridge 只有在 Runtime prepare/start effect 且返回 `dispatch_allowed=true` 后才能调用具体 provider。
+
+该结果是固定 public Runtime/adaptor provider-boundary surface coverage，不是 universal complete mediation。任意 in-process Python 绕过、OS/network/credential enforcement、未来 revision、connector 语义、concurrency/crash refinement、independent read-back 与 exposure/risk bridge 仍在 claim 之外。
+
+详见 [formal/runtime-mediation-surface-v1.zh-CN.md](../formal/runtime-mediation-surface-v1.zh-CN.md)。
