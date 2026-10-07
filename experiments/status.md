@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge and exact metric-binding contract are explicit. `managed-subject-state-change-count-v1` is defined as a narrow observable surrogate, but it is not yet an accepted reality-side source or justified as the risk quantity consumed by structural v1. The next structural obligation is to accept a scope-complete measurement source, bind concrete proposal classes to that metric, and justify the declared joint-risk functional.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge and exact metric-binding contract are explicit, and all three reference offboarding proposal classes now declare `managed-subject-state-change-count-v1` with bound 1. The metric is still not an accepted reality-side source or justified as the risk quantity consumed by structural v1. The next structural obligations are an accepted scope-complete measurement source and justification of the declared joint-risk functional.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -651,3 +651,16 @@ This does not establish that the observable metric is the right production risk 
 AIOS PR #35 contains candidate real-product instrumentation for this metric. Its real ephemeral Keycloak run `37631639559` and Odoo run `37631639463` both passed: the managed-subject changed set contained only the declared target and realized exposure was 1 for each covered connector operation. Those runs are not yet imported into the accepted BAA evidence chain because AIOS PR #35 remains unmerged: an unrelated generic Autodev acceptance workflow is red at its Grype high-severity vulnerability gate, while the real-product, CI, network-preflight, and Sonar checks relevant to this change passed.
 
 See [formal/exposure-metric-binding-v1.md](../formal/exposure-metric-binding-v1.md).
+
+
+### Offboarding exposure declarations v1
+
+The three BAA-covered offboarding proposal classes now have frozen concrete exposure declarations.
+
+`employee.deactivate`, `identity.disable`, and `sessions.revoke` all declare `managed-subject-state-change-count-v1` with exposure bound 1. The declaration binds the exact proposal id and subject. The registry is tested to match `OffboardingKernel.ALLOWED_EXTERNAL_OPERATIONS` exactly, so a newly allowed operation cannot silently inherit no exposure semantics or an accidental default.
+
+The unit bound remains falsifiable: for every operation class, a scope-complete measurement that reports the declared subject plus a control subject as changed yields realized exposure 2 and fails the bound.
+
+This is proposal-side semantics only. It does not make AIOS PR #35's candidate measurements accepted evidence and does not justify the structural joint-risk composition rule. The next semantic question is therefore no longer "what exposure metric do these proposal classes declare?" but whether a reality-side measurement source for that metric is accepted and why those unit exposures and their interactions should be composed by the frozen joint-risk functional.
+
+See [formal/offboarding-exposure-declarations-v1.md](../formal/offboarding-exposure-declarations-v1.md).
