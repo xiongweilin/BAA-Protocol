@@ -1,0 +1,21 @@
+{
+  "explored_transitions": 35040,
+  "invariants": [
+    "capability_scope_non_expansion",
+    "ledger_category_exclusivity",
+    "joint_risk_budget",
+    "pending_exposure_not_silently_released",
+    "unknown_effect_not_blindly_replayed",
+    "protected_guarantee_source_unreachable",
+    "conservative_timeout_settlement"
+  ],
+  "omega": [
+    "the executor is the complete mediation path for represented actions",
+    "proposal scope and exposure bounds are immutable after admission",
+    "realized exposure used for settlement is non-negative and no greater than the declared bound",
+    "protected guarantee sources are exactly the objects marked protected_source",
+    "the declared joint-risk functional is the risk quantity being guaranteed",
+    "no unmodelled external transition mutates the represented ledger"
+  ],
+  "reachable_states": 584
+}
