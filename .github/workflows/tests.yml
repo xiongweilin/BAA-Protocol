@@ -80,6 +80,10 @@ jobs:
         env:
           PYTHONPATH: baa:aios
         run: python -m unittest discover -s baa/integration -p "test_aios_world_runtime_surface.py" -v
+      - name: Check pinned Runtime mediation surface
+        env:
+          PYTHONPATH: baa:aios
+        run: python -m unittest discover -s baa/integration -p "test_aios_runtime_mediation_surface.py" -v
       - name: Check AIOS canary release contract
         env:
           PYTHONPATH: baa:aios
