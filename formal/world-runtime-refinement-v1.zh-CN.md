@@ -1,5 +1,7 @@
 # World Runtime Refinement v1
 
+> [English](world-runtime-refinement-v1.md) | 简体中文
+
 ## 状态
 
 本文记录 BAA structural v1 的第二层有限具体 refinement。
