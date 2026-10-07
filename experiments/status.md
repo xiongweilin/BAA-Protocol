@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The next structural obligation is the exposure/risk semantic bridge between declared admission bounds and measured reality-side exposure.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge is now explicit and falsifiable, but current target-only product read-back does not establish it. The next structural obligation is a scope-complete exposure evidence source (or another observable exposure metric), followed by justification of the declared joint-risk functional.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -621,3 +621,18 @@ Lost-ack fixtures now run in BAA CI for all three operations. Odoo reconciliatio
 This is a finite pinned connector identity/reconciliation/read-back refinement. Existing real ephemeral Keycloak/Odoo acceptance and composed E2E runs provide higher-fidelity evidence but do not expand this claim into production safety or a formal product-server proof.
 
 See [formal/product-connector-refinement-v1.md](../formal/product-connector-refinement-v1.md).
+
+
+### Exposure bridge contract v1
+
+The remaining structural exposure assumption is now explicit and executable: settlement may use a realized exposure only when a reality-side evidence source establishes the declared exposure metric completely enough to falsify its bound.
+
+v1 freezes one narrow metric: subject-scope exposure is the number of distinct product subjects affected by one logical effect. Settlement-capable evidence must identify the declared subject, include the observed target postcondition, enumerate the affected-subject set, and attest that the set is complete for this metric.
+
+The current pinned Odoo/Keycloak read-back is deliberately classified as **scope-incomplete**. It verifies the declared target's postcondition but does not enumerate collateral subjects. Therefore the current product path does not establish the structural-v1 assumption that realized exposure is no greater than the declared bound.
+
+The regression suite preserves explicit falsifications. With declared subject `employee:1` and bound 1, complete evidence containing `employee:1` and `employee:2` yields realized exposure 2; the structural-v1 verification transition then rejects settlement as outside the Omega exposure bound. Target-subject rebound and affected scope outside the declared target also fail closed.
+
+This is a negative structural result, not a defect hidden by clamping. The remaining path is either to add scope-complete reality-side evidence for this metric or to define a different exposure metric whose completeness is observable. Only after that should the joint-risk functional itself be treated as the next semantic obligation.
+
+See [formal/exposure-bridge-contract-v1.md](../formal/exposure-bridge-contract-v1.md).

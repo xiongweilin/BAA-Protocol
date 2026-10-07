@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。固定 AIOS offboarding gate、World Runtime boundary、public Runtime/adaptor mediation surface，以及三个 offboarding product connector 现在都已有有限可执行 refinement 覆盖。下一项结构义务是建立 admission 声明 bound 与 reality-side measured exposure 之间的 exposure/risk semantic bridge。
+该结果只适用于有限 protocol model。固定 AIOS offboarding gate、World Runtime boundary、public Runtime/adaptor mediation surface，以及三个 offboarding product connector 现在都已有有限可执行 refinement 覆盖。exposure-bound bridge 现在已经显式且可证伪，但当前 target-only product read-back 不能建立它。下一项结构义务是增加 scope-complete exposure evidence source（或定义另一种可完整观察的 exposure metric），之后再论证 declared joint-risk functional。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -605,3 +605,18 @@ BAA CI 现在对三个 operation 都运行 lost-ack fixture。Odoo reconciliatio
 该结果是有限、固定 revision 的 connector identity/reconciliation/read-back refinement。此前真实临时 Keycloak/Odoo acceptance 与组合 E2E run 提供更高 fidelity，但不会把本 claim 扩张成 production safety 或 product-server 形式化证明。
 
 详见 [formal/product-connector-refinement-v1.zh-CN.md](../formal/product-connector-refinement-v1.zh-CN.md)。
+
+
+### Exposure bridge contract v1
+
+剩余 structural exposure assumption 现在已经显式化并可执行：只有 reality-side evidence source 对声明的 exposure metric 提供足够完整、能够证伪 bound 的证据时，settlement 才能使用 realized exposure。
+
+v1 冻结一个窄 metric：subject-scope exposure 等于一个 logical effect 实际影响的不同 product subject 数量。可用于 settlement 的 evidence 必须标识 declared subject、包含 observed target postcondition、枚举 affected-subject set，并 attestation 该集合在本 metric 下完整。
+
+当前固定 Odoo/Keycloak read-back 被明确分类为 **scope-incomplete**。它能够验证 declared target 的 postcondition，但不会枚举 collateral subject。因此，当前 product path 不能建立 structural-v1 的“realized exposure 不超过 declared bound”假设。
+
+regression suite 保留显式反例：declared subject=`employee:1`、bound=1 时，完整 evidence 若同时包含 `employee:1` 与 `employee:2`，则 realized exposure=2；structural-v1 verification transition 随即以超出 Omega exposure bound 拒绝 settlement。target-subject rebound 与超出 declared target 的 affected scope 也会 fail closed。
+
+这是负的结构结果，不是通过 clamp 隐藏的缺陷。剩余路径只有两类：为该 metric 增加 scope-complete reality-side evidence，或定义另一种在 product boundary 上可完整观察的 exposure metric。只有完成 exposure measurement 后，才应把 joint-risk functional 本身作为下一项 semantic obligation。
+
+详见 [formal/exposure-bridge-contract-v1.zh-CN.md](../formal/exposure-bridge-contract-v1.zh-CN.md)。

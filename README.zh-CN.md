@@ -135,6 +135,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [formal/world-runtime-refinement-v1.zh-CN.md](formal/world-runtime-refinement-v1.zh-CN.md) —— 对固定 World Runtime 的 authorization/resource/version scope、durable effect identity、ambiguous-effect fencing 与 writer/verifier separation 的有限 refinement 检查。
 - [formal/runtime-mediation-surface-v1.zh-CN.md](formal/runtime-mediation-surface-v1.zh-CN.md) —— 固定 public Runtime/adaptor provider-boundary 的五个 dispatch/reconciliation route inventory 与 authority guard 覆盖。
 - [formal/product-connector-refinement-v1.zh-CN.md](formal/product-connector-refinement-v1.zh-CN.md) —— 三种 offboarding effect 从 Runtime request identity 到 Odoo/Keycloak durable request marker、reconciliation 与 product read-back 的有限 refinement。
+- [formal/exposure-bridge-contract-v1.zh-CN.md](formal/exposure-bridge-contract-v1.zh-CN.md) —— 可证伪的 subject-scope exposure contract；当前 target-only product read-back 被明确判定为不足以建立 structural exposure-bound assumption。
 - [tests](tests) —— 回归测试与有限穷举检查。
 
 ## 与 guide、AIOS 的关系
