@@ -187,20 +187,17 @@ This model check does not establish:
 
 Those are separate refinement, bridge, empirical, or deployment obligations.
 
-## Next structural obligation
+## Subsequent refinement status
 
 The next useful formal step is not to enlarge the abstract state count mechanically.
 
-It is to establish a **refinement mapping** from a concrete runtime boundary to this model:
+Since this v1 model check was frozen, the repository has added finite, revision-pinned executable refinement/coverage layers for the AIOS offboarding gate, the World Runtime scope/identity boundary, the public Runtime/adaptor mediation surface, and the three Odoo/Keycloak offboarding connectors.
 
-[
-Omega_{mathrm{bridge}}
-land
-operatorname{Trace}(	ext{implementation})
-preceq
-operatorname{Trace}(K_{mathrm{formal-v1}})
-]
+That progress does not remove the conditional nature of this result. In particular, the third Omega assumption—realized exposure used for settlement is no greater than the declared bound—now has an explicit, falsifiable [Exposure Bridge Contract v1](exposure-bridge-contract-v1.md), but current target-only product read-back is deliberately classified as scope-incomplete and therefore cannot establish that assumption.
 
-for a specific interface such as the pinned AIOS World Runtime capability path.
+The highest-value structural obligations are now:
 
-Until that mapping is established, this result is evidence about the protocol model, not the deployed system.
+1. provide scope-complete reality-side evidence for the declared exposure metric, or define another exposure metric whose completeness is observable; and
+2. once exposure measurement is established, justify that the declared joint-risk functional is the actual risk quantity intended by the guarantee.
+
+Until those semantic-bridge obligations are closed, the joint-risk budget remains a structural guarantee under explicit Omega assumptions, not an unconditional deployed-system guarantee.
