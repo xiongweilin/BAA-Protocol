@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The next structural obligation is a refinement mapping from a concrete runtime boundary, such as the pinned AIOS World Runtime capability path, into the checked transition system.
+The result applies to the finite protocol model only. A first finite concrete-trace refinement now exists for the pinned AIOS offboarding gate; the next structural obligation is to extend that mapping across the pinned World Runtime invocation/reconciliation boundary.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -569,3 +569,16 @@ The accepted interpretation is therefore deliberately mixed:
 This prevents the retrospective offboarding cost surface from being generalized into a broad architecture claim.
 
 The empirical next step should now change the reality-facing action interface or task domain rather than create another canary variant aimed at obtaining a positive frontier. The structural line proceeds independently toward an AIOS/runtime refinement mapping.
+
+
+### AIOS finite trace refinement v1
+
+The first concrete refinement layer is now merged. Three pinned AIOS offboarding-engine fixtures project into the same `formal_model.Phase` vocabulary checked by structural v1:
+
+- normal effects project through `PROPOSED -> RESERVED -> PENDING -> SETTLED`;
+- lost acknowledgement remains pending until independent read-back settles the same logical effect before later release;
+- unresolved ambiguity remains `PENDING` across reconciliation and does not redispatch the provider.
+
+The checker also rejects scope drift across proposal, obligation, target, operation, and stable request identity. This is a finite tested trace relation, not a whole-program proof. Complete mediation at the deployed World Runtime HTTP boundary, concurrency/crash refinement, product-connector refinement, and the exposure/risk semantic bridge remain open obligations.
+
+See [formal/aios-refinement-v1.md](../formal/aios-refinement-v1.md).
