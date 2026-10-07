@@ -61,9 +61,9 @@ checker 会拒绝不连续 phase sequence，以及缺少 scope identity 的 real
 
 每个 effect 的投影都是：
 
-[
-PROPOSED 	o RESERVED 	o PENDING 	o SETTLED
-]
+~~~text
+PROPOSED -> RESERVED -> PENDING -> SETTLED
+~~~
 
 三个 effect 全部 settled，AIOS case 达到 completion。
 
@@ -87,11 +87,9 @@ projected trace 进入 `PENDING`，并在重复 AIOS reconciliation 中持续保
 
 对于上述三个已检查 fixture：
 
-[
-pi(	au_{mathrm{AIOS+gate}})
-in
-operatorname{Trace}(K_{mathrm{formal-v1}})
-]
+~~~text
+pi(trace(AIOS + gate)) is in Trace(K_formal-v1)
+~~~
 
 这里仅针对被表示的 phase relation 与 scope identity。
 
