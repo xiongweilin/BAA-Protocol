@@ -1,7 +1,11 @@
 import unittest
 
 from baa_protocol.exposure_bridge import (
+    MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+    ExposureMetricDeclaration,
+    ManagedSubjectStateChangeMeasurement,
     SubjectScopeEvidence,
+    assess_metric_bound,
     assess_subject_scope_exposure,
     evidence_from_target_readback,
     realized_exposure_for_settlement,
@@ -176,6 +180,141 @@ class ExposureBridgeContractTests(unittest.TestCase):
         self.assertFalse(assessment.established)
         self.assertEqual(assessment.realized_exposure, 1)
         self.assertIn("outside the declared target", assessment.reason)
+
+
+    def test_exact_managed_subject_metric_binding_can_feed_settlement(self):
+        declaration = ExposureMetricDeclaration(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            exposure_bound=1,
+        )
+        measurement = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            observed_postcondition={
+                "subject_ref": "employee:1",
+                "enabled": False,
+            },
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:1",),
+            scope_complete=True,
+        )
+
+        assessment = assess_metric_bound(declaration, measurement)
+
+        self.assertTrue(assessment.established)
+        self.assertEqual(realized_exposure_for_settlement(assessment), 1)
+
+    def test_metric_identity_mismatch_fails_closed(self):
+        declaration = ExposureMetricDeclaration(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            exposure_bound=1,
+        )
+        measurement = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:metric",
+            metric_id="different-metric-v1",
+            declared_subject_ref="employee:1",
+            observed_postcondition={"subject_ref": "employee:1"},
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:1",),
+            scope_complete=True,
+        )
+
+        assessment = assess_metric_bound(declaration, measurement)
+
+        self.assertFalse(assessment.established)
+        self.assertIsNone(assessment.realized_exposure)
+        self.assertIn("metric identity", assessment.reason)
+
+    def test_metric_binding_rejects_proposal_or_subject_rebound(self):
+        declaration = ExposureMetricDeclaration(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            exposure_bound=1,
+        )
+        proposal_rebound = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:other",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            observed_postcondition={"subject_ref": "employee:1"},
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:1",),
+            scope_complete=True,
+        )
+        subject_rebound = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:2",
+            observed_postcondition={"subject_ref": "employee:2"},
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:2",),
+            scope_complete=True,
+        )
+
+        self.assertFalse(
+            assess_metric_bound(declaration, proposal_rebound).established
+        )
+        self.assertFalse(
+            assess_metric_bound(declaration, subject_rebound).established
+        )
+
+    def test_managed_subject_metric_preserves_collateral_counterexample(self):
+        declaration = ExposureMetricDeclaration(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            exposure_bound=1,
+        )
+        measurement = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            observed_postcondition={"subject_ref": "employee:1"},
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:1", "employee:2"),
+            scope_complete=True,
+        )
+
+        assessment = assess_metric_bound(declaration, measurement)
+
+        self.assertFalse(assessment.established)
+        self.assertEqual(assessment.realized_exposure, 2)
+        self.assertIn("exceeds declared bound", assessment.reason)
+
+    def test_managed_subject_metric_requires_complete_scope(self):
+        declaration = ExposureMetricDeclaration(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            exposure_bound=1,
+        )
+        measurement = ManagedSubjectStateChangeMeasurement(
+            proposal_id="p:metric",
+            metric_id=MANAGED_SUBJECT_STATE_CHANGE_METRIC_V1,
+            declared_subject_ref="employee:1",
+            observed_postcondition={"subject_ref": "employee:1"},
+            managed_subject_count_before=2,
+            managed_subject_count_after=2,
+            changed_subject_refs=("employee:1",),
+            scope_complete=False,
+        )
+
+        assessment = assess_metric_bound(declaration, measurement)
+
+        self.assertFalse(assessment.established)
+        self.assertIsNone(assessment.realized_exposure)
+        with self.assertRaises(ValueError):
+            realized_exposure_for_settlement(assessment)
 
 
 if __name__ == "__main__":
