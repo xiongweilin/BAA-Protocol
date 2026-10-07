@@ -119,6 +119,32 @@ class JointRiskBindingContractTests(unittest.TestCase):
         self.assertFalse(assessment.established)
         self.assertIn("risk factor is empty", assessment.reason)
 
+    def test_joint_risk_rejects_mixed_metric_units(self):
+        left = bind_risk_term(
+            ExposureMetricDeclaration("p:1", "subject-count-v1", "employee:1", 1),
+            RiskFactorDeclaration("p:1", "subject-count-v1", "shared"),
+        )
+        right = bind_risk_term(
+            ExposureMetricDeclaration("p:2", "dollars-v1", "employee:2", 1),
+            RiskFactorDeclaration("p:2", "dollars-v1", "shared"),
+        )
+        self.assertTrue(left.established)
+        self.assertTrue(right.established)
+        assert left.term is not None
+        assert right.term is not None
+        with self.assertRaisesRegex(ValueError, "incompatible exposure metrics"):
+            declared_joint_risk([left.term, right.term], interaction_penalty=1)
+
+    def test_joint_risk_rejects_duplicate_proposal_terms(self):
+        bound = bind_risk_term(
+            ExposureMetricDeclaration("p:1", "subject-count-v1", "employee:1", 1),
+            RiskFactorDeclaration("p:1", "subject-count-v1", "shared"),
+        )
+        self.assertTrue(bound.established)
+        assert bound.term is not None
+        with self.assertRaisesRegex(ValueError, "duplicate proposal identity"):
+            declared_joint_risk([bound.term, bound.term], interaction_penalty=1)
+
     def test_current_offboarding_has_no_calibrated_risk_factor_mapping(self):
         self.assertEqual(OFFBOARDING_RISK_FACTOR_IDS_V1, {})
 
