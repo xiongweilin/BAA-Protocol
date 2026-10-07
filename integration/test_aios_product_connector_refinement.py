@@ -287,6 +287,33 @@ class ProductConnectorRefinementTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.error_code, "ConflictingExternalRequestIdentity")
         base._request.assert_not_awaited()
 
+    async def test_keycloak_session_rejects_product_request_identity_rebound(self):
+        base = keycloak_base()
+        connector = KeycloakSessionRevokeConnector(base)
+        base._find_by_attribute = AsyncMock(return_value=[{"id": "user-1"}])
+        base._get_user = AsyncMock(
+            return_value={
+                "id": "user-1",
+                "username": "alice",
+                "enabled": False,
+                "attributes": {
+                    "administrative_subject_ref": ["employee:1"],
+                    "administrative_session_revoke_request_ref": ["request:other"],
+                },
+            }
+        )
+        base._request = AsyncMock()
+
+        result = await connector.invoke(
+            request_ref="request:current",
+            subject_ref="employee:1",
+            parameters={},
+        )
+
+        self.assertIs(result.status, ConnectorStatus.FAILED)
+        self.assertEqual(result.error_code, "ConflictingExternalRequestIdentity")
+        base._request.assert_not_awaited()
+
     async def test_keycloak_session_lost_ack_reconciles_without_second_logout(self):
         base = keycloak_base()
         connector = KeycloakSessionRevokeConnector(base)
