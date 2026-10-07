@@ -51,7 +51,7 @@ Every reality-facing projection event also carries:
 - operation;
 - stable request identity.
 
-The checker rejects non-contiguous phase sequences and scope-less reality-facing events.
+The checker rejects non-contiguous phase sequences, scope-less reality-facing events, and any per-effect drift in proposal, obligation, target, operation, or request identity.
 
 ## Checked concrete traces
 
