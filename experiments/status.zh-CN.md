@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。固定 AIOS offboarding gate、固定 World Runtime invocation/reconciliation boundary，以及固定 public Runtime/adaptor provider-boundary surface 现在都已有有限可执行覆盖。下一项结构义务是把 Runtime request/dispatch identity refinement 到固定 Keycloak/Odoo writer/verifier path。
+该结果只适用于有限 protocol model。固定 AIOS offboarding gate、World Runtime boundary、public Runtime/adaptor mediation surface，以及三个 offboarding product connector 现在都已有有限可执行 refinement 覆盖。下一项结构义务是建立 admission 声明 bound 与 reality-side measured exposure 之间的 exposure/risk semantic bridge。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -592,3 +592,16 @@ checker 还会拒绝同一 effect 在 proposal、obligation、target、operation
 该结果是固定 public Runtime/adaptor provider-boundary surface coverage，不是 universal complete mediation。任意 in-process Python 绕过、OS/network/credential enforcement、未来 revision、connector 语义、concurrency/crash refinement、independent read-back 与 exposure/risk bridge 仍在 claim 之外。
 
 详见 [formal/runtime-mediation-surface-v1.zh-CN.md](../formal/runtime-mediation-surface-v1.zh-CN.md)。
+
+
+### Product connector refinement v1
+
+product-boundary refinement 已基于固定 AIOS revision `34b9f4274487f856ac4c23266d1dd726b24ae53c` 合并，覆盖 Odoo employee deactivation、Keycloak identity disable 与 Keycloak session revocation。
+
+production Runtime provider 把 `CapabilityRequest.id` 作为 connector `request_ref`，reconciliation 继续使用同一个 request id。三个覆盖 connector 都会持久写入或检查 operation-specific product request marker；若已有不同 marker，则作为 external request-identity conflict 拒绝。
+
+BAA CI 现在对三个 operation 都运行 lost-ack fixture。Odoo reconciliation 在同一 deactivate marker 且 employee 已 inactive 时完成，不再执行第二次 product write；Keycloak disable 在同一 marker 且 user 已 disabled 时完成，不再发送 PUT；session revoke 在 ambiguous logout 后通过 GET 观察到 session 已为空时完成，不再发送第二次 logout POST。独立 verifier object 报告实际 product state。
+
+该结果是有限、固定 revision 的 connector identity/reconciliation/read-back refinement。此前真实临时 Keycloak/Odoo acceptance 与组合 E2E run 提供更高 fidelity，但不会把本 claim 扩张成 production safety 或 product-server 形式化证明。
+
+详见 [formal/product-connector-refinement-v1.zh-CN.md](../formal/product-connector-refinement-v1.zh-CN.md)。
