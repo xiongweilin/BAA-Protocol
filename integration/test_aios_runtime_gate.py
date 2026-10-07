@@ -45,6 +45,11 @@ from administrative_orchestrator.policy_plane import (
 )
 
 from aios_gate import BAAGatedAIOSProvider
+from aios_refinement import (
+    AbstractPhase,
+    assert_refines_protocol,
+    phase_by_effect,
+)
 
 
 _NOW = datetime(2026, 9, 11, 9, 0, tzinfo=UTC)
@@ -327,6 +332,12 @@ class BAARuntimeGateTests(unittest.TestCase):
             ["identity.disable", "sessions.revoke", "employee.deactivate"],
         )
         self.assertEqual(provider.execute_calls, 3)
+        assert_refines_protocol(gate.refinement_trace)
+        self.assertEqual(len(gate.refinement_trace), 9)
+        self.assertEqual(
+            set(phase_by_effect(gate.refinement_trace).values()),
+            {AbstractPhase.SETTLED},
+        )
 
     def test_lost_ack_recovers_then_releases_remaining_effects(self):
         store, case = authorized_case()
@@ -358,7 +369,25 @@ class BAARuntimeGateTests(unittest.TestCase):
             ["identity.disable", "sessions.revoke", "employee.deactivate"],
         )
         self.assertEqual(provider.execute_calls, 3)
-
+        assert_refines_protocol(gate.refinement_trace)
+        self.assertEqual(
+            set(phase_by_effect(gate.refinement_trace).values()),
+            {AbstractPhase.SETTLED},
+        )
+        first_effect_events = [
+            event
+            for event in gate.refinement_trace
+            if event.effect_id == gate.refinement_trace[0].effect_id
+        ]
+        self.assertEqual(
+            [event.next for event in first_effect_events[:3]],
+            [
+                AbstractPhase.RESERVED,
+                AbstractPhase.PENDING,
+                AbstractPhase.SETTLED,
+            ],
+        )
+        self.assertEqual(first_effect_events[2].event, "independent-readback")
 
     def test_unknown_first_effect_prevents_additional_provider_dispatch(self):
         store, case = authorized_case()
@@ -386,6 +415,21 @@ class BAARuntimeGateTests(unittest.TestCase):
         again = engine.run(case.case_id)
         self.assertEqual(again.status, CaseStatus.RECONCILING)
         self.assertEqual(provider.execute_calls, 1)
+
+        assert_refines_protocol(gate.refinement_trace)
+        phases = phase_by_effect(gate.refinement_trace)
+        self.assertEqual(len(phases), 1)
+        self.assertEqual(next(iter(phases.values())), AbstractPhase.PENDING)
+        self.assertEqual(
+            [event.next for event in gate.refinement_trace[:2]],
+            [AbstractPhase.RESERVED, AbstractPhase.PENDING],
+        )
+        self.assertTrue(
+            all(
+                event.next is AbstractPhase.PENDING
+                for event in gate.refinement_trace[2:]
+            )
+        )
 
 
 if __name__ == "__main__":
