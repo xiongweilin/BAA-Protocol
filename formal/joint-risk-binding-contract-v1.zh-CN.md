@@ -37,6 +37,8 @@ proposal identity rebound、metric identity rebound、空 risk factor、以及 f
 
 生成的 bound risk term 会保留 proposal id、exposure metric id、exposure bound、risk-factor id 与 functional id。
 
+组合计算还会拒绝**重复 proposal id**和**混合 exposure metric id**。每个 term 单独完成精确绑定，并不等于可以直接相加不同计量单位（例如 subject count 与金额）。跨 metric 组合需要独立论证共同单位或显式换算，不属于 v1 保证。
+
 ## 当前 offboarding 结果：尚未 calibration
 
 三个 reference offboarding proposal class 现在已有 concrete exposure declaration，但**没有** calibrated risk-factor declaration。
