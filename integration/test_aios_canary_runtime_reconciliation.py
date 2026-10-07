@@ -9,6 +9,8 @@ from fastapi.testclient import TestClient
 from world_runtime import WorldRuntime
 from world_runtime.service import create_app
 
+from world_runtime_refinement import assert_ambiguous_effect_fenced
+
 
 class TestClientTransport(httpx.BaseTransport):
     def __init__(self, client: TestClient) -> None:
@@ -77,8 +79,7 @@ class CanaryRuntimeReconciliationTests(unittest.TestCase):
                 )
 
             effect = runtime.effect_boundary.get(key)
-            self.assertEqual(effect["status"], "ambiguous")
-            self.assertFalse(effect["dispatch_allowed"])
+            assert_ambiguous_effect_fenced(effect)
             self.assertEqual(calls["count"], 1)
 
             def would_redispatch():
