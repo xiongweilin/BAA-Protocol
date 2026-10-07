@@ -548,7 +548,7 @@ The frozen v1 abstract universe exhaustively explores **584 reachable states and
 
 The structural claim is deliberately conditional. In particular, the risk-budget invariant assumes realized exposure does not exceed the declared admission bound. A regression counterexample leaves the reference kernel unclamped and shows that if a bound of 5 is falsified by a realized exposure of 6, recorded risk becomes 6 and the budget guarantee fails. This is treated as evidence that the semantic/risk-model assumption was false, not hidden by implementation.
 
-The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors now have finite executable refinement coverage. The exposure-bound bridge and exact metric-binding contract are explicit, and all three reference offboarding proposal classes now declare `managed-subject-state-change-count-v1` with bound 1. The metric is still not an accepted reality-side source or justified as the risk quantity consumed by structural v1. The next structural obligations are an accepted scope-complete measurement source and justification of the declared joint-risk functional.
+The result applies to the finite protocol model only. The pinned AIOS offboarding gate, World Runtime boundary, public Runtime/adaptor mediation surface, and the three offboarding product connectors have finite executable refinement coverage. All three proposal classes declare `managed-subject-state-change-count-v1`, and real ephemeral product E2E now supplies finite accepted measurement/binding evidence for its frozen managed-subject projection. The evidence does not establish that this observable metric is the real risk quantity required by structural v1. The remaining semantic obligation is to justify risk-factor identities and the joint-risk interaction functional, or keep them explicitly uncalibrated.
 
 
 ### Prospective delegation cost-frontier v1 accepted result
@@ -648,7 +648,7 @@ The executable binding requires exact proposal identity, metric identity, declar
 
 This does not establish that the observable metric is the right production risk quantity. It prevents silent metric substitution between concrete measurement and formal settlement.
 
-AIOS PR #35 contains candidate real-product instrumentation for this metric. Its real ephemeral Keycloak run `37631639559` and Odoo run `37631639463` both passed: the managed-subject changed set contained only the declared target and realized exposure was 1 for each covered connector operation. Those runs are not yet imported into the accepted BAA evidence chain because AIOS PR #35 remains unmerged: an unrelated generic Autodev acceptance workflow is red at its Grype high-severity vulnerability gate, while the real-product, CI, network-preflight, and Sonar checks relevant to this change passed.
+AIOS PR #35 is now merged. The earlier unrelated Autodev Grype gate was resolved by a separate pinned base-image security update in AIOS PR #36. The real ephemeral Keycloak run `37631639559` and Odoo run `37631639463` provided candidate managed-subject observations. The subsequent composed real-product E2E run `37638217335` binds all three admitted offboarding proposal declarations to those observable product measurements; its narrow accepted scope is recorded in [real-product exposure binding v1](../formal/real-product-exposure-binding-v1.md). It does not establish a broader real-world loss or joint-risk bound.
 
 See [formal/exposure-metric-binding-v1.md](../formal/exposure-metric-binding-v1.md).
 
@@ -664,3 +664,12 @@ The unit bound remains falsifiable: for every operation class, a scope-complete 
 This is proposal-side semantics only. It does not make AIOS PR #35's candidate measurements accepted evidence and does not justify the structural joint-risk composition rule. The next semantic question is therefore no longer "what exposure metric do these proposal classes declare?" but whether a reality-side measurement source for that metric is accepted and why those unit exposures and their interactions should be composed by the frozen joint-risk functional.
 
 See [formal/offboarding-exposure-declarations-v1.md](../formal/offboarding-exposure-declarations-v1.md).
+
+
+### Real-product exposure binding acceptance v1
+
+AIOS has merged the composed real-product E2E instrumentation (AIOS main `b2cc1254a1908d00ded7c705f6e230c43f08f6f8`). Qualified run `37638217335` has three effectful scenarios (normal, lost acknowledgement, read-back outage), each with three exact admitted-proposal-to-product-measurement bindings, `assessment_established=true` and `realized_exposure=1`. Their artifacts are `11491082646`, `11489419994`, and `11489454782`. Unauthorized Runtime bypass artifact `11489744687` separately records HTTP 403 and no observed product-state change; it is not an exposure-settlement sample.
+
+The accepted observation scope is the frozen projection over enumerated managed subjects in ephemeral tenants: 3 Odoo employees and 2 Keycloak managed subjects. Scope-complete does not mean all possible real-world side effects are observed. This neither calibrates a joint-risk penalty nor bounds production harms.
+
+See [formal/real-product-exposure-binding-v1.md](../formal/real-product-exposure-binding-v1.md).
