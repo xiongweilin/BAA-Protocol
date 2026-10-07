@@ -657,3 +657,12 @@ AIOS 已合并组合真实产品 E2E instrumentation（AIOS main `b2cc1254a1908d
 这里只接受临时租户中已枚举 managed-subject 的冻结状态投影：Odoo snapshot 覆盖 3 个员工，Keycloak 覆盖 2 个 managed subject。scope-complete 不表示全部真实 side effect 可见，更不支持 joint-risk penalty 或 production harm 的上界。
 
 详见 [formal/real-product-exposure-binding-v1.zh-CN.md](../formal/real-product-exposure-binding-v1.zh-CN.md)。
+
+
+### Joint-risk binding contract v1
+
+joint-risk binding contract 已合并。只有 concrete proposal、exposure metric 与独立声明的 risk-factor identity 精确绑定时，才允许复现冻结的 `pairwise-shared-factor-min-v1` 公式。混合 exposure 单位、重复 proposal identity、未支持的 functional 与 identity rebound 均 fail closed。
+
+**offboarding risk-factor registry 有意保持为空。** 真实临时产品 E2E 得到的 managed-subject exposure count 不能决定 HRIS/IAM 行动是否共享真实 harm mechanism，也不能校准 pairwise interaction penalty。这些语义假设仍未关闭。正的现实产品测量结果与负的风险校准结果并不矛盾：能够测量窄的 observable exposure，不代表已证明真实世界 joint-risk 上界。
+
+详见 [formal/joint-risk-binding-contract-v1.zh-CN.md](../formal/joint-risk-binding-contract-v1.zh-CN.md)。
