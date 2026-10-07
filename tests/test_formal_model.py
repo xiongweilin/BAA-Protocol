@@ -14,8 +14,8 @@ from baa_protocol.model import AdmissionKernel, Proposal
 class FiniteFormalModelTests(unittest.TestCase):
     def test_exhaustive_finite_model_satisfies_declared_invariants(self):
         report = reference_model_v1().check()
-        self.assertGreater(report.reachable_states, 1)
-        self.assertGreater(report.explored_transitions, report.reachable_states)
+        self.assertEqual(report.reachable_states, 584)
+        self.assertEqual(report.explored_transitions, 35040)
         self.assertEqual(report.invariants, INVARIANTS_FORMAL_V1)
         self.assertEqual(report.omega, OMEGA_FORMAL_V1)
 
