@@ -522,3 +522,14 @@ canary v1–v5 全部保持冻结。
 当前 simulator 中预算 ceiling 只负责 trace 之后的 feasibility 分类，因此不会为每个 cost cell 重采样；evidence reacquisition 会改变 trajectory，所以继续作为独立 paired treatment block 采样。
 
 正、零或负结果都可接受。qualification 只由冻结 fingerprint、完整分母、接口、transport/error accounting 与版本记录决定。
+
+
+### 结构保证 v1
+
+reference protocol 现在增加了一个与经验 delegation study 分离的有限状态结构模型检查。
+
+冻结 v1 抽象宇宙在显式 `Omega_formal-v1` 假设下穷举 **584 个可达状态、35,040 个状态转移**。检查的不变量覆盖 exact capability scope、reserved/pending/settled accounting 互斥、联合风险预算保持、pending 不静默释放、unknown effect 不 blind replay、protected guarantee-source 隔离，以及 conservative timeout settlement。
+
+结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
+
+该结果只适用于有限 protocol model。下一项结构义务是为具体 runtime boundary（例如固定 AIOS World Runtime capability path）建立到已检查状态迁移系统的 refinement mapping。
