@@ -532,7 +532,7 @@ reference protocol 现在增加了一个与经验 delegation study 分离的有�
 
 结构主张明确是条件性的。尤其是 risk-budget invariant 假设 realized exposure 不超过 admission 时声明的 bound。回归反例有意不对 reference kernel 做 clamp：如果声明 bound=5，而现实 verification 得到 realized exposure=6，则记录风险真实变为 6，预算保证失效。这被保留为 semantic/risk-model 假设被证伪的证据，而不是由实现隐藏。
 
-该结果只适用于有限 protocol model。下一项结构义务是为具体 runtime boundary（例如固定 AIOS World Runtime capability path）建立到已检查状态迁移系统的 refinement mapping。
+该结果只适用于有限 protocol model。现在已经为固定 AIOS offboarding gate 建立第一层有限具体 trace refinement；下一项结构义务是把该 mapping 延伸到固定 World Runtime invocation/reconciliation boundary。
 
 
 ### 前瞻 Delegation cost-frontier v1 接受结果
@@ -553,3 +553,16 @@ evidence-recovery panel 在更窄的预注册意义上为正。H4/H8 都有 5 �
 因此，offboarding 的回顾性成本面不能被推广成普遍架构结论。
 
 经验路线下一步应改变 reality-facing action interface 或任务域，而不是继续制造 canary 变体追求正 frontier。结构路线独立继续推进 AIOS/runtime refinement mapping。
+
+
+### AIOS 有限 trace refinement v1
+
+第一层具体 refinement 已经合并。三个固定 AIOS offboarding-engine fixture 都投影到 structural v1 已检查的同一组 `formal_model.Phase`：
+
+- 正常 effect 依次经过 `PROPOSED -> RESERVED -> PENDING -> SETTLED`；
+- lost acknowledgement 先保持 pending，只有 independent read-back 解决同一逻辑 effect 后才释放后续执行；
+- 无法解决的 ambiguous outcome 在 reconciliation 中持续保持 `PENDING`，provider 不会被二次 dispatch。
+
+checker 还会拒绝同一 effect 在 proposal、obligation、target、operation 与 stable request identity 上发生的 scope drift。这仍是有限具体 trace 的已测试 refinement relation，不是 whole-program proof。deployed World Runtime HTTP boundary 的 complete mediation、concurrency/crash refinement、product connector refinement 与 exposure/risk semantic bridge 仍是开放义务。
+
+详见 [formal/aios-refinement-v1.zh-CN.md](../formal/aios-refinement-v1.zh-CN.md)。
