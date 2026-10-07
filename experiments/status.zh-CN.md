@@ -632,7 +632,7 @@ structural v1 携带整数 `exposure_bound`，但现实侧 measurement 即使也
 
 本结果不建立该 observable metric 就是正确的 production risk quantity；它建立的是 concrete measurement 与 formal settlement 之间不能静默发生 metric substitution。
 
-AIOS PR #35 包含该 metric 的候选 real-product instrumentation。真实临时 Keycloak run `37631639559` 与 Odoo run `37631639463` 均通过：覆盖 connector operation 的 managed-subject changed set 都只包含 declared target，realized exposure 均为 1。但这些运行尚未进入已接受的 BAA evidence chain，因为 AIOS PR #35 仍未合并：一个与本变更无关的通用 Autodev acceptance workflow 在 Grype high-severity vulnerability gate 上保持红灯，而与本变更相关的 real-product、CI、network-preflight 与 Sonar check 均已通过。
+AIOS PR #35 已合并；之前的 Autodev Grype gate 在独立的基础镜像修复 PR #36 合并后通过。临时 Keycloak run `37631639559` 与 Odoo run `37631639463` 提供了候选 managed-subject projection 观测。后续组合 real-product E2E run `37638217335` 进一步把三种 offboarding proposal 声明与产品测量精确绑定；其 accepted scope 见 [real-product exposure binding v1](../formal/real-product-exposure-binding-v1.zh-CN.md)，仍不建立广义真实损害或 joint-risk 的上界。
 
 详见 [formal/exposure-metric-binding-v1.zh-CN.md](../formal/exposure-metric-binding-v1.zh-CN.md)。
 
@@ -648,3 +648,12 @@ unit bound 继续保持可证伪：对三类 operation 任意一类，如果 sco
 这只是 proposal-side semantics。它不会把 AIOS PR #35 的候选 measurement 自动变成已接受 evidence，也不论证 structural joint-risk composition rule。下一项 semantic question 因此已经从“这些 proposal class 声明什么 exposure metric”推进到：该 metric 是否有被正式接受的 reality-side measurement source，以及为什么这些 unit exposure 与它们之间的 interaction 应由冻结 joint-risk functional 组合。
 
 详见 [formal/offboarding-exposure-declarations-v1.zh-CN.md](../formal/offboarding-exposure-declarations-v1.zh-CN.md)。
+
+
+### Real-product exposure binding acceptance v1
+
+AIOS 已合并组合真实产品 E2E instrumentation（AIOS main `b2cc1254a1908d00ded7c705f6e230c43f08f6f8`）。qualified run `37638217335` 的三个 effectful 场景（normal、lost-ack、read-back outage）各有 3 条已准入 proposal 与产品 measurement 的精确绑定，`assessment_established=true` 且 `realized_exposure=1`。三个场景分别对应 artifacts `11491082646`、`11489419994`、`11489454782`。未授权 Runtime bypass artifact `11489744687` 的 HTTP 403 与产品状态不变构成独立 guard evidence，不属于 exposure settlement 样本。
+
+这里只接受临时租户中已枚举 managed-subject 的冻结状态投影：Odoo snapshot 覆盖 3 个员工，Keycloak 覆盖 2 个 managed subject。scope-complete 不表示全部真实 side effect 可见，更不支持 joint-risk penalty 或 production harm 的上界。
+
+详见 [formal/real-product-exposure-binding-v1.zh-CN.md](../formal/real-product-exposure-binding-v1.zh-CN.md)。

@@ -137,6 +137,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [formal/product-connector-refinement-v1.md](formal/product-connector-refinement-v1.md) — finite refinement from Runtime request identity into Odoo/Keycloak durable request markers, reconciliation, and product read-back for the three offboarding effects.
 - [formal/exposure-bridge-contract-v1.md](formal/exposure-bridge-contract-v1.md) — falsifiable subject-scope exposure contract; current target-only product read-back is explicitly insufficient to establish the structural exposure-bound assumption.
 - [formal/exposure-metric-binding-v1.md](formal/exposure-metric-binding-v1.md) — exact proposal/metric/subject binding for the observable `managed-subject-state-change-count-v1` exposure metric before any realized exposure can feed settlement.
+- [formal/real-product-exposure-binding-v1.md](formal/real-product-exposure-binding-v1.md) — finite ephemeral Keycloak/Odoo E2E evidence connecting admitted proposals to managed-subject measurements across normal, recovery and unauthorized-bypass scenarios.
 - [formal/offboarding-exposure-declarations-v1.md](formal/offboarding-exposure-declarations-v1.md) — freezes all three BAA offboarding proposal classes to that observable metric with unit exposure bound 1, while leaving measurement acceptance and risk calibration separate.
 - [tests](tests) — regression and finite exhaustive checks.
 
