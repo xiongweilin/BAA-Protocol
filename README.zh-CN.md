@@ -116,7 +116,8 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-canary-v5-robustness-result.zh-CN.md](experiments/prospective-canary-v5-robustness-result.zh-CN.md) —— 通过资格检查的混合 robustness 结果：aggregate interaction=+1，但仅 1/3 预注册 timing stratum 为正，因此 strong robustness criterion 未满足。
 - [experiments/delegation-frontier-baseline.zh-CN.md](experiments/delegation-frontier-baseline.zh-CN.md) —— 第一版共同预算确定性委托前沿。
 - [experiments/delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/delegation-cost-frontier-v1-protocol.zh-CN.md) —— 基于已接受真实模型 trace 的冻结回顾性成本前沿 accounting contract。
-- [experiments/delegation-cost-frontier-v1-baseline.zh-CN.md](experiments/delegation-cost-frontier-v1-baseline.zh-CN.md) —— 从 offboarding v6 与 canary v5 得到的 attention/risk/assurance 成本面。\n- [experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md) —— 在新的 24-episode 跨机制 canary workload 上预注册的前瞻 cost-frontier 研究。
+- [experiments/delegation-cost-frontier-v1-baseline.zh-CN.md](experiments/delegation-cost-frontier-v1-baseline.zh-CN.md) —— 从 offboarding v6 与 canary v5 得到的 attention/risk/assurance 成本面。
+- [experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md) —— 在新的 24-episode 跨机制 canary workload 上预注册的前瞻 cost-frontier 研究。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) —— 员工离职内核。
@@ -126,7 +127,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [integration/test_aios_offboarding_contract.py](integration/test_aios_offboarding_contract.py) —— 固定 AIOS 兼容性检查。
 - [integration/aios_gate.py](integration/aios_gate.py) —— 位于真实 AIOS EffectProvider 边界的 BAA gate。
 - [integration/test_aios_runtime_gate.py](integration/test_aios_runtime_gate.py) —— 真实 AIOS 离职执行引擎 gate 测试。
-- [tests](tests) —— 回归测试与有限穷举检查。
+- [formal/structural-guarantees-v1.zh-CN.md](formal/structural-guarantees-v1.zh-CN.md) —— 有限状态结构保证记录、显式假设与 refinement 边界。\n- [formal/structural-model-v1-result.json](formal/structural-model-v1-result.json) —— 机器可读的穷举模型检查结果。\n- [tests](tests) —— 回归测试与有限穷举检查。
 
 ## 与 guide、AIOS 的关系
 

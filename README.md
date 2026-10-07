@@ -116,7 +116,8 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-canary-v5-robustness-result.md](experiments/prospective-canary-v5-robustness-result.md) — qualified mixed robustness result: aggregate interaction +1, but only 1/3 preregistered timing strata is positive, so the strong robustness criterion is not met.
 - [experiments/delegation-frontier-baseline.md](experiments/delegation-frontier-baseline.md) — first common-budget deterministic delegation frontier.
 - [experiments/delegation-cost-frontier-v1-protocol.md](experiments/delegation-cost-frontier-v1-protocol.md) — frozen retrospective cost-frontier accounting contract over accepted real-model traces.
-- [experiments/delegation-cost-frontier-v1-baseline.md](experiments/delegation-cost-frontier-v1-baseline.md) — observed attention/risk/assurance cost surface from offboarding v6 and canary v5.\n- [experiments/prospective-delegation-cost-frontier-v1-protocol.md](experiments/prospective-delegation-cost-frontier-v1-protocol.md) — preregistered prospective cost-frontier study on a new 24-episode cross-mechanism canary workload.
+- [experiments/delegation-cost-frontier-v1-baseline.md](experiments/delegation-cost-frontier-v1-baseline.md) — observed attention/risk/assurance cost surface from offboarding v6 and canary v5.
+- [experiments/prospective-delegation-cost-frontier-v1-protocol.md](experiments/prospective-delegation-cost-frontier-v1-protocol.md) — preregistered prospective cost-frontier study on a new 24-episode cross-mechanism canary workload.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — employee-offboarding kernel.
@@ -126,7 +127,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [integration/test_aios_offboarding_contract.py](integration/test_aios_offboarding_contract.py) — pinned AIOS compatibility checks.
 - [integration/aios_gate.py](integration/aios_gate.py) — BAA gate on the real AIOS EffectProvider boundary.
 - [integration/test_aios_runtime_gate.py](integration/test_aios_runtime_gate.py) — real AIOS offboarding-engine gate tests.
-- [tests](tests) — regression and finite exhaustive checks.
+- [formal/structural-guarantees-v1.md](formal/structural-guarantees-v1.md) — finite-state structural guarantee record, explicit assumptions, and refinement boundary.\n- [formal/structural-model-v1-result.json](formal/structural-model-v1-result.json) — machine-readable exhaustive model-check result.\n- [tests](tests) — regression and finite exhaustive checks.
 
 ## Relationship to guide and AIOS
 
