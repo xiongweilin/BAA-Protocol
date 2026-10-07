@@ -187,20 +187,17 @@ reference kernel 有意不会把观测到的 realized exposure 强行截断到 d
 
 这些分别属于 refinement、semantic bridge、经验或部署义务。
 
-## 下一项结构义务
+## 后续 refinement 状态
 
 下一步不应机械扩大抽象状态数。
 
-真正有价值的是为一个具体 runtime boundary 建立到本模型的 **refinement mapping**：
+自本 v1 model check 冻结以来，仓库已经为固定 AIOS offboarding gate、World Runtime scope/identity boundary、public Runtime/adaptor mediation surface，以及三个 Odoo/Keycloak offboarding connector 建立有限、revision-pinned 的可执行 refinement/coverage layer。
 
-[
-Omega_{mathrm{bridge}}
-land
-operatorname{Trace}(	ext{implementation})
-preceq
-operatorname{Trace}(K_{mathrm{formal-v1}})
-]
+这仍然没有消除本结果的条件性。尤其是第三项 Omega assumption——settlement 使用的 realized exposure 不超过 declared bound——现在虽然已经有显式、可证伪的 [Exposure Bridge Contract v1](exposure-bridge-contract-v1.zh-CN.md)，但当前 target-only product read-back 被明确判定为 scope-incomplete，因此不能建立该假设。
 
-例如固定 AIOS World Runtime capability path。
+所以当前最重要的结构义务已经从“是否存在 concrete refinement mapping”推进为：
 
-在该 mapping 建立之前，本结果只属于 protocol model，而不是 deployed system。
+1. 为已声明 exposure metric 提供 scope-complete reality-side evidence，或定义另一种可以完整观察的 exposure metric；
+2. 在 exposure measurement 建立后，再论证 declared joint-risk functional 就是实际希望保证的 risk quantity。
+
+在这些 semantic bridge 义务关闭之前，joint-risk budget 仍然只是显式 Omega 条件下的结构保证，而不是 deployed-system 无条件保证。
