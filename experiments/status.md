@@ -522,3 +522,19 @@ The observed surface makes the cost condition explicit:
 These are retrospective thresholds read from accepted traces, not a preregistered causal replication. AIOS workflow run `37476354998` reproducibly regenerated the cost surface from the two accepted source artifacts and passed the frozen C2/H8 accounting checks; derived artifact id `11418149915`. The next cost study must freeze its grid before generating new traces.
 
 Long-study progress telemetry is also now an explicit infrastructure invariant: future model-study runners emit structured call start/completion and periodic heartbeat events without changing prompts, retry rules, model-visible state, or qualification semantics.
+
+
+### Prospective delegation cost-frontier v1 preregistration
+
+A new cost-frontier study is now frozen **before any real-model sampling**.
+
+It is intentionally not canary v6 and not offboarding v7. The workload is a new 24-episode progressive-release grid spanning six mechanism groups: clean control, guardrail control, missing observer, stale-evidence recovery, lost-ack recovery, and rollback-unavailable control. The frozen workload SHA-256 is `2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29`.
+
+The study has two independent sampling blocks:
+
+- an architecture panel comparing self-check, post-hoc audit, and BAA across C0/C1/C2, followed by preregistered reclassification over attention, unsafe-transition, terminal-unresolved, human-assurance, and automatic-intervention ceilings;
+- a BAA evidence-recovery panel comparing `no_reacquire` and `reacquire` at H4/H8 over a preregistered automatic-intervention × evidence-read cost grid.
+
+Budget ceilings are post-trace classifiers in the current simulator and therefore do not trigger resampling per cost cell. Evidence reacquisition remains a trajectory-changing treatment and is sampled in its own paired block.
+
+The accepted result may be positive, null, or negative. Qualification is based only on the frozen fingerprint, denominators, interface, transport/error accounting, and recorded revisions.

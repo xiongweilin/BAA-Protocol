@@ -506,3 +506,19 @@ canary v1–v5 全部保持冻结。
 这些 threshold 是从已接受 trace 上回顾性读出的，不是预注册因果 replication。AIOS workflow run `37476354998` 已从两个接受的源 artifact 可重复生成该成本面，并通过冻结的 C2/H8 accounting 检查；派生 artifact id 为 `11418149915`。下一次成本研究必须在生成新 trace 前冻结预算网格。
 
 长实验 progress telemetry 也成为显式基础设施不变量：未来模型研究 runner 输出结构化 call start/completion 与周期 heartbeat，但不改变 prompt、retry rule、model-visible state 或 qualification semantics。
+
+
+### 前瞻 Delegation cost-frontier v1 预注册
+
+新的成本前沿研究现在已经在**任何真实模型采样之前**冻结。
+
+它明确不是 canary v6，也不是 offboarding v7。workload 是新的 24-episode progressive-release 跨机制网格，覆盖六组：clean control、guardrail control、missing observer、stale-evidence recovery、lost-ack recovery 与 rollback-unavailable control。冻结 workload SHA-256 为 `2d4f57abe9be25cd4365009be5c5183ad63961cd2856701c1463c16d61897a29`。
+
+研究包含两个彼此独立的 sampling block：
+
+- architecture panel：比较 self-check、post-hoc audit 与 BAA 的 C0/C1/C2 trace，再按预注册 attention、unsafe-transition、terminal-unresolved、human-assurance 与 automatic-intervention ceiling 重判定；
+- BAA evidence-recovery panel：在 H4/H8 下比较 `no_reacquire` 与 `reacquire`，使用预注册 automatic-intervention × evidence-read 成本网格。
+
+当前 simulator 中预算 ceiling 只负责 trace 之后的 feasibility 分类，因此不会为每个 cost cell 重采样；evidence reacquisition 会改变 trajectory，所以继续作为独立 paired treatment block 采样。
+
+正、零或负结果都可接受。qualification 只由冻结 fingerprint、完整分母、接口、transport/error accounting 与版本记录决定。
