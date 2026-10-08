@@ -59,6 +59,8 @@ RECOVERY -> VERIFIED_RECOVERY
 
 这些 label 表示 semantic position。deployment 可合并 storage operation，但必须保留语义区别。
 
+**后置条件不成立的回读，不是“效果从未发生”的证明。** 当前快照不匹配，并不能证明原动作没有发生、没有短暂效果或允许安全重放。offboarding 参考内核必须保持 `POSSIBLY_EFFECTED`，集成 refinement 保持 `PENDING`。概念上的 `VERIFIED_NO_EFFECT` 只有在另有独立且完整覆盖的 no-effect 证明机制时才能发生；不能由不匹配快照直接推出。
+
 ## 4. Capability lifecycle
 
 capability 仅在以下全部成立时有效：
