@@ -69,7 +69,8 @@ class MaintenanceModelReplayTests(unittest.TestCase):
                 p = maintenance_prompt(w, h)
                 self.assertNotIn(str(w.artifact_id), p)
                 self.assertNotIn(w.archive_sha256, p)
-                self.assertNotIn(w.expected_final, p)
+                self.assertNotIn("expected_final", p)
+                self.assertNotIn("hidden_cause", p)
 
     def test_external_gate_cannot_use_future_samples(self):
         for horizon in (2, 3):
