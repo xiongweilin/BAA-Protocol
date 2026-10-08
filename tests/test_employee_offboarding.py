@@ -205,6 +205,53 @@ class OffboardingDomainTests(unittest.TestCase):
             EffectKnowledge.POSSIBLY_EFFECTED,
         )
 
+    def test_unmet_postcondition_does_not_prove_no_effect_or_allow_replay(self):
+        kernel = self.kernel()
+        obligation = obligations()[1]
+        result = kernel.admit(proposal("p1", obligation), now=100)
+        capability = result.capability
+        assert capability is not None
+
+        kernel.execute(
+            capability,
+            now=101,
+            case_id="case:1",
+            authority_epoch=7,
+            state_version=3,
+            subject_ref="employee:1",
+            target_system="iam",
+            operation="identity.disable",
+            request_identity="request:p1",
+        )
+        # A current observation of enabled=True is NOT proof that the
+        # original request had no effect at any time or is safe to replay.
+        self.assertFalse(
+            kernel.verify(
+                obligation.obligation_id,
+                observed_postcondition={"enabled": True},
+            )
+        )
+        self.assertEqual(
+            kernel.effects[obligation.obligation_id].knowledge,
+            EffectKnowledge.POSSIBLY_EFFECTED,
+        )
+
+        retry = kernel.admit(proposal("p2", obligation), now=102)
+        self.assertEqual(retry.decision, Decision.HOLD)
+        self.assertIsNone(retry.capability)
+        with self.assertRaises(PermissionError):
+            kernel.execute(
+                capability,
+                now=102,
+                case_id="case:1",
+                authority_epoch=7,
+                state_version=3,
+                subject_ref="employee:1",
+                target_system="iam",
+                operation="identity.disable",
+                request_identity="request:p1",
+            )
+
     def test_unresolved_limit_serializes_external_effects(self):
         kernel = self.kernel(unresolved_limit=1)
         first_obligation, second_obligation = obligations()[:2]
