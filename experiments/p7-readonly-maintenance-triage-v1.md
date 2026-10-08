@@ -21,7 +21,7 @@ The policy rejects missing/duplicated/out-of-order source evidence, does not sil
 ## Provenance and denominators
 
 - AIOS [PR #42](https://github.com/xiongweilin/aios/pull/42): source branch HEAD `427002b8ddb26b5f54b6309ff40c6e60697d982b`; merged main SHA `02360374af3a61e7e63aee911a69a6fb50007ca7`.
-- Qualified GitHub Actions [run 37718555268](https://github.com/xiongweilin/aios/actions/runs/37718555268), attempt 1. Evidence `maintenance-triage.json`, `observations.json`, `provenance.json) in artifact **11524233834**, archive digest `sha256:abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134`.
+- Qualified GitHub Actions [run 37718555268](https://github.com/xiongweilin/aios/actions/runs/37718555268), attempt 1. Evidence `maintenance-triage.json`, `observations.json`, `provenance.json` in artifact **11524233834**, archive digest `sha256:abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134`.
 - The artifact's workflow PR checkout merge ref is `6bd401579aa1a9e7716461c95404e23ff071fc2f`; this is not the source branch or later squash-merge SHA.
 - New diagnostic tasks: **3 × 4 rounds × 4 sources = 48 observation slots**, **46 actual live GET requests + 2 explicitly injected observer-side missing/anomalous observations**. By case: `16+0`, `15+1`, `15+1` live + injected slots.
 - All three diagnostic outcomes qualified. No final unresolved among these three *fixtures*. The transport-gap case encountered one UNKNOWN and required two full fresh rounds; the contract-anomaly case escalated instead of treating subsequent OK samples as closure.
