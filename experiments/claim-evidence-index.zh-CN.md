@@ -14,7 +14,7 @@
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
 | 冻结产品投影中的 exposure | [指标绑定](../formal/exposure-metric-binding-v1.zh-CN.md)、[产品验收](../formal/real-product-exposure-binding-v1.zh-CN.md) | 三类 effect 的单位指标，精确绑定枚举受管主体投影 | 全部现实损失与中间时序损害 |
 | 联合风险因子与 interaction | [不可识别性负结果](../formal/joint-risk-identifiability-v1.zh-CN.md)、[绑定契约](../formal/joint-risk-binding-contract-v1.zh-CN.md) | **尚未识别**；offboarding registry 有意留空 | 已校准因子划分或 penalty |
-| P3 时序联合损失 | [P3 协议](p3-offboarding-temporal-outcome-v1.zh-CN.md)、[观测积分器](../baa_protocol/temporal_outcome.py)、[只读采集器](../baa_protocol/temporal_collector.py) | **仅合成仪器资格验证**：主体秒上下界、显式 unknown 和访问探针诊断 | 真实产品连续观测资格、`Y` 校准、风险模型映射 |
+| P3 实际受保护资源点探针 | [资格记录](p3-protected-access-qualification-v1.zh-CN.md)、[P3 协议](p3-offboarding-temporal-outcome-v1.zh-CN.md)、[观测积分器](../baa_protocol/temporal_outcome.py) | **隔离真实产品点探针已合格**：目标 ALLOW→DENY、未撤权对照 ALLOW→ALLOW、网络失败 UNKNOWN；保留前三次资格失败 | 真实产品连续时序状态、`Y` 校准、风险模型映射 |
 
 ## 主张等级不能互相替代
 
@@ -28,7 +28,7 @@ CI 变绿只能说明代码与测试契约一致，不能升级现实保证。�
 
 ## 最近的实验准入依赖
 
-P3 下一步需要经授权的隔离 Keycloak/Odoo 测试环境、合格独立只读观测及真正访问能力探针。两次相同轮询快照不足以精确计算主体秒。首次产品实验前，必须冻结环境版本、主体映射、事件／时钟来源及误差界、干预条件、共享影响域随机分配和负结果规则。
+P3 已在**一个授权隔离 Keycloak/Odoo 环境**通过实际受保护资源单时点访问探针资格验证，包含未撤权对照和 UNKNOWN 网络失效测试，详见[资格验证记录](p3-protected-access-qualification-v1.zh-CN.md)。但两次相同轮询快照仍不足以精确计算主体秒。首次产品实验前，必须冻结环境版本、主体映射、事件／时钟来源及误差界、干预条件、共享影响域随机分配和负结果规则。
 
 在获得独立联合损失观测及可区分竞争模型的预测之前，现有不可识别性负结果继续有效，不能填充 risk-factor registry。
 
