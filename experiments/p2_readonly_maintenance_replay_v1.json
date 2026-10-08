@@ -1,0 +1,168 @@
+{
+  "version": "p2-readonly-maintenance-model-replay-v1",
+  "provenance_grade": "archived isolated point evidence; two observer-only disturbances and one actual reversible Keycloak process pause; not independent operational incidents",
+  "sampling_rounds": [
+    2,
+    3,
+    4
+  ],
+  "regimes": [
+    "self_check",
+    "external_record_audit",
+    "bounded_action_protocol"
+  ],
+  "episodes": [
+    {
+      "id": "M01",
+      "origin": "37718555268:maintenance-triage:normal",
+      "artifact_id": 11524233834,
+      "archive_sha256": "abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134",
+      "hidden_cause": "healthy_disposable_services",
+      "expected_final": "verified_stable",
+      "observations": [
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "origin": "37718555268:maintenance-triage:observer_transport_gap",
+      "artifact_id": 11524233834,
+      "archive_sha256": "abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134",
+      "hidden_cause": "observer_only_transport_gap",
+      "expected_final": "verified_recovered_evidence",
+      "observations": [
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "transport_unknown",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "origin": "37718555268:maintenance-triage:observer_contract_anomaly",
+      "artifact_id": 11524233834,
+      "archive_sha256": "abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134",
+      "hidden_cause": "observer_only_contract_schema_anomaly",
+      "expected_final": "escalate_contract_or_authority",
+      "observations": [
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "schema_unknown",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "unknown"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "origin": "37720702388:real-isolated-outage",
+      "artifact_id": 11526016609,
+      "archive_sha256": "dfafd340bd3a10f2c4768c578b908cad1756e6f1009e3c5b153d49046ec16b60",
+      "hidden_cause": "actual_disposable_keycloak_process_pause",
+      "expected_final": "verified_recovered_evidence",
+      "observations": [
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "transport_unknown",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        },
+        {
+          "runtime_health": "ok",
+          "runtime_capabilities": "ok",
+          "keycloak_realm": "ok",
+          "odoo_root": "ok",
+          "capability_contract": "qualified"
+        }
+      ]
+    }
+  ]
+}
