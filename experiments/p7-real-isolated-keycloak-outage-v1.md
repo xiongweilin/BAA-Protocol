@@ -31,12 +31,21 @@ No staff accounts, product write API, policy mutation, credential rotation or pr
 - Measured local monotonic interval from completion of the Docker unpause command to completion of the second clean observation round: **2.076049 seconds**. This is **instrument reacquisition wall time**, not the underlying Keycloak repair instant or a representative mean time to recover.
 - Existing same-run, separate observation tasks also qualified: a 40-second `9 × 4 = 36`-GET healthy shadow and the previous three deterministic read-only triage cases. **Do not combine their denominators** with the outage episode.
 
+## Final merged implementation and second qualifying run
+
+- AIOS PR #43 final source head: `d8439c17248b88e0fdd971477f3a28fb151c6e76`; merged main commit [`c3c54474727e`](https://github.com/xiongweilin/aios/commit/c3c54474727e82f9f5d30e3a504065ae9d660a63).
+- [Final CI run 37720702388](https://github.com/xiongweilin/aios/actions/runs/37720702388), artifact **11526016609**, archive SHA-256 `dfafd340bd3a10f2c4768c578b908cad1756e6f1009e3c5b153d49046ec16b60`. The `provenance.json` PR checkout ref is `2288420643148fd8a2aa56de8ba6f9def0cbe1cd`, not the branch or main SHA.
+- Disposable Odoo/Keycloak/World Runtime bootstrapped successfully in **one** attempt: `fixture-startup.json` reports `attempted=1`, `failed=0`, `qualified=true`, upper bound 2.
+- The second real fault episode independently satisfied the unchanged protocol: **4 rounds / 16 GETs**, exactly one `keycloak_realm` non-OK, three control sources with zero non-OK results, real container unpause succeeded, two full fresh evidence rounds; `verified_recovered_evidence`, no terminal unresolved.
+- Local time from completed Docker unpause command to completion of two complete clean read rounds: **2.074594 seconds**. Together with the earlier **2.076049 seconds**, these are two finite measurements, not an MTTR distribution or statistical guarantee.
+- All **seven** AIOS PR #43 checks (CI, Acceptance, Real Product Offboarding E2E, P3 probe, P7 shadow, BAA network preflight and SonarCloud) passed before squash merge. BAA archival CI is separate.
+
 ## Implementation / test-environment qualification failures
 
 - The first scientific outage result succeeded but the source-head main PR CI failed `F401` (an unused imported constant), which was removed without modifying the procedure.
 - A later [run 37720464278](https://github.com/xiongweilin/aios/actions/runs/37720464278) failed during disposable `odoo-init` bootstrap (exit code 2), **before baseline or any fault experiment**. It contributes a failed infrastructure qualification, not a recovery episode or statistical reliability point.
 - A subsequent fixture-only change allows **at most two** fresh disposable Compose startup attempts. `fixture-startup.json` records attempts and failures, and both failed attempts abort the workflow. The root cause of sporadic Odoo initialization failure was **not established**. This change does not adjust the fault, controls, read criteria, number of recovery rounds, or conclusions.
-- Final release/merge CI after this instrument-readiness change must be evaluated **separately** from the first qualified science run.
+- The final post-change source revision passed all seven CI workflows and was merged; the first accepted observation remains separately attributed to its own source head.
 
 ## Boundaries and remaining gates
 
