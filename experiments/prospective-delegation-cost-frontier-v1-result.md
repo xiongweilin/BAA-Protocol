@@ -38,9 +38,9 @@ All preregistered denominators, forced-function interface checks, workload finge
 
 The preregistered strict-safe subspace fixes:
 
-[
-A_{max}=U_{max}=T_{max}=0
-]
+\[
+A_{\max}=U_{\max}=T_{\max}=0
+\]
 
 and scans 30 combinations of human assurance labor and automatic assurance-intervention ceilings at each capability level.
 
@@ -52,9 +52,9 @@ and scans 30 combinations of human assurance labor and automatic assurance-inter
 
 Therefore the preregistered architecture persistence criterion is:
 
-[
-oxed{	ext{false}}
-]
+\[
+\boxed{\text{false}}
+\]
 
 BAA did **not** move the strict-safe delegation frontier outward on this new cross-mechanism workload.
 
@@ -87,9 +87,9 @@ The preregistered target-persistence criterion is **true**, and the control-inva
 
 The positive cells have the same threshold at both horizons:
 
-[
-I_{max}ge 6,qquad Q_{max}=2
-]
+\[
+I_{\max}\ge 6,\qquad Q_{\max}=2
+\]
 
 where (I) is automatic assurance interventions and (Q) is bounded evidence reacquisitions.
 

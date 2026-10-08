@@ -38,9 +38,9 @@
 
 预注册 strict-safe 子空间固定：
 
-[
-A_{max}=U_{max}=T_{max}=0
-]
+\[
+A_{\max}=U_{\max}=T_{\max}=0
+\]
 
 并在每个 capability level 扫描 30 个 human assurance labor × automatic assurance-intervention 组合。
 
@@ -52,9 +52,9 @@ A_{max}=U_{max}=T_{max}=0
 
 因此预注册 architecture persistence criterion：
 
-[
-oxed{	ext{false}}
-]
+\[
+\boxed{\text{false}}
+\]
 
 在这组新的跨机制 workload 上，BAA **没有**把 strict-safe delegation frontier 向外推。
 
@@ -87,9 +87,9 @@ BAA 内部 evidence panel 得到不同结果。
 
 H4 与 H8 的正 cell 具有相同阈值：
 
-[
-I_{max}ge 6,qquad Q_{max}=2
-]
+\[
+I_{\max}\ge 6,\qquad Q_{\max}=2
+\]
 
 其中 (I) 是 automatic assurance intervention，(Q) 是 bounded evidence reacquisition。
 

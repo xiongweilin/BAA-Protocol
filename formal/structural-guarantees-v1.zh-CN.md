@@ -22,13 +22,12 @@
 
 当前检查的主张是：
 
-[
-Omega_{mathrm{formal-v1}}
-Rightarrow
-orall 	au in operatorname{Trace}(K_{mathrm{formal-v1}}),
-quad
-	au models I_{mathrm{formal-v1}}
-]
+\[
+\Omega_{\mathrm{formal-v1}}
+\Rightarrow
+\forall \tau \in \operatorname{Trace}(K_{\mathrm{formal-v1}}),
+\quad \tau \models I_{\mathrm{formal-v1}}
+\]
 
 其中量化范围只覆盖 `FiniteBAAModel` 编码的有限状态系统。
 
@@ -113,9 +112,9 @@ wrong-object、wrong-operation、over-quota、expired、stale-version、被修�
 
 所有可达状态均满足：
 
-[
-ho(X_t) le R
-]
+\[
+\rho(X_t) \le R
+\]
 
 这里使用冻结的 joint-risk function。
 
@@ -146,9 +145,9 @@ proposal 处于 pending 时，即使使用完全相同的 execute 请求也会�
 
 pending timeout 按声明上界结算：
 
-[
-E_{mathrm{settled}} = E_{mathrm{declared bound}}
-]
+\[
+E_{\mathrm{settled}}=E_{\mathrm{declared\ bound}}
+\]
 
 不会因为 confirmation 丢失而释放 exposure。
 
@@ -166,9 +165,9 @@ reference kernel 有意不会把观测到的 realized exposure 强行截断到 d
 
 因此：
 
-[
-	ext{realized exposure} le 	ext{declared bound}
-]
+\[
+\text{realized exposure} \le \text{declared bound}
+\]
 
 是实质性的 semantic/risk-model 假设。现实一旦违反它，结构预算保证就失效。若实现把观测值静默 clamp 为 5，反而会隐藏 (Omega) 已被证伪这一事实。
 
