@@ -55,6 +55,8 @@ RECOVERY -> VERIFIED_RECOVERY
 
 These labels describe semantic positions. A deployment may combine storage operations while preserving the distinctions.
 
+**Negative read-back is not a no-effect proof.** A current observation that fails the expected postcondition does not establish that the action never occurred, never had a transient effect, or is safe to replay. In the reference offboarding kernel it leaves the effect `POSSIBLY_EFFECTED`; the integration refinement leaves its phase `PENDING`. The conceptual `VERIFIED_NO_EFFECT` transition requires a separate, explicitly justified, scope-complete no-effect proof mechanism, not merely a mismatching snapshot.
+
 ## 4. Capability lifecycle
 
 A capability is valid only when all of the following hold:
