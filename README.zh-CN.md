@@ -120,6 +120,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md) —— 在新的 24-episode 跨机制 canary workload 上预注册的前瞻 cost-frontier 研究。
 - [experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md) —— 通过 qualification 的“架构零结果 / evidence-recovery 正结果”前瞻成本前沿。
 - [experiments/prospective-delegation-cost-frontier-v1-result.json](experiments/prospective-delegation-cost-frontier-v1-result.json) —— 封存的机器可读 endpoint 与 provenance。
+- [experiments/p2-readonly-maintenance-source-qualification-v1.zh-CN.md](experiments/p2-readonly-maintenance-source-qualification-v1.zh-CN.md) —— 模型调用前必须核验 P7 原始 ZIP 摘要及五窗口观测投影，不修改既有实验端点。
 - [experiments/p2-readonly-maintenance-model-v1.zh-CN.md](experiments/p2-readonly-maintenance-model-v1.zh-CN.md) —— 预注册真实模型三制度只读维护证据回放；样本相关，非在线 staging 访问。
 - [experiments/p7-real-isolated-keycloak-outage-v1.zh-CN.md](experiments/p7-real-isolated-keycloak-outage-v1.zh-CN.md) —— 两轮合格的隔离 Keycloak 真实可逆中断、两轮完整恢复取证；不构成生产 SLO。
 - [experiments/p7-readonly-maintenance-triage-v1.zh-CN.md](experiments/p7-readonly-maintenance-triage-v1.zh-CN.md) —— 隔离真实产品只读维护诊断及证据恢复／升级机制；不宣称 Agent 委托增益。
