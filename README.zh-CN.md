@@ -123,6 +123,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/p3-offboarding-temporal-outcome-v1.zh-CN.md](experiments/p3-offboarding-temporal-outcome-v1.zh-CN.md) —— P3 主体秒损失观测及可识别性预注册门槛（仅仪器测试，未进行产品校准）。
 - [baa_protocol/temporal_outcome.py](baa_protocol/temporal_outcome.py) —— 部分可观测、时钟不确定条件下的区间损失上下界。
 - [baa_protocol/temporal_collector.py](baa_protocol/temporal_collector.py) —— 独立只读快照采集接口、访问探针及单时点资格检测。
+- [experiments/claim-evidence-index.zh-CN.md](experiments/claim-evidence-index.zh-CN.md) —— 证据等级索引、封存研究导航及 P3 当前准入依赖。
 - [experiments/status.zh-CN.md](experiments/status.zh-CN.md) —— 当前证据层级与阶段边界。
 - [baa_protocol/model.py](baa_protocol/model.py) —— 通用参考模型。
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) —— 员工离职内核。
