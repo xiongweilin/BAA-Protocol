@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
@@ -144,8 +146,8 @@ class Provider:
         )
 
 
-def authorized_case():
-    store = SqlStore("sqlite+pysqlite:///:memory:")
+def authorized_case(database_url: str = "sqlite+pysqlite:///:memory:"):
+    store = SqlStore(database_url)
     store.init_schema()
     authority = AuthorityRepository(store)
 
@@ -310,6 +312,46 @@ def authorized_case():
 
 
 class BAARuntimeGateTests(unittest.TestCase):
+    def test_disk_reopen_keeps_unknown_effect_replay_fence(self):
+        # Simulate AIOS + BAA service reconstruction against a durable
+        # SQLite state store. No provider observation can disambiguate the
+        # first external attempt, so the same identity must not be resent.
+        with TemporaryDirectory() as temp:
+            database = (Path(temp) / "case.sqlite").as_posix()
+            database_url = f"sqlite+pysqlite:///{database}"
+            store, case = authorized_case(database_url)
+            provider = Provider(unknown_first=True)
+            first_gate = BAAGatedAIOSProvider(
+                store, provider, now=lambda: _AFTER, unresolved_limit=1
+            )
+            first_engine = OffboardingExecutionEngine(
+                store, first_gate, clock=lambda: _AFTER
+            )
+            uncertain = first_engine.run(case.case_id)
+            self.assertEqual(uncertain.status, CaseStatus.RECONCILING)
+            self.assertEqual(provider.execute_calls, 1)
+            self.assertEqual(provider.operations, ["identity.disable"])
+
+            # Entire execution wrapper is reconstructed. In-memory BAA
+            # projections from the first instance are deliberately absent.
+            reopened_store = SqlStore(database_url)
+            reopened_store.init_schema()
+            second_gate = BAAGatedAIOSProvider(
+                reopened_store, provider, now=lambda: _AFTER, unresolved_limit=1
+            )
+            restarted_engine = OffboardingExecutionEngine(
+                reopened_store, second_gate, clock=lambda: _AFTER
+            )
+            for _ in range(3):
+                after_restart = restarted_engine.run(case.case_id)
+                self.assertEqual(after_restart.status, CaseStatus.RECONCILING)
+                self.assertEqual(provider.execute_calls, 1)
+                self.assertEqual(provider.operations, ["identity.disable"])
+
+            # This test establishes the persisted AIOS *replay fence* in
+            # this finite scenario. It does not prove durable BAA admission
+            # reservations or all possible crash/interleaving traces.
+
     def test_real_aios_offboarding_completes_through_baa_gate(self):
         store, case = authorized_case()
         provider = Provider()
