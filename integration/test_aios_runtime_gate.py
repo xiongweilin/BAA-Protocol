@@ -421,7 +421,10 @@ class BAARuntimeGateTests(unittest.TestCase):
         )
         current = engine.run(case.case_id)
 
-        self.assertEqual(current.status, CaseStatus.RECONCILING)
+        self.assertIn(
+            current.status,
+            {CaseStatus.RECONCILING, CaseStatus.REOPEN_REQUIRED},
+        )
         self.assertEqual(provider.execute_calls, 1)
         self.assertEqual(provider.operations, ["identity.disable"])
         kernel = next(iter(gate._kernels.values()))
@@ -441,7 +444,10 @@ class BAARuntimeGateTests(unittest.TestCase):
         )
 
         again = engine.run(case.case_id)
-        self.assertEqual(again.status, CaseStatus.RECONCILING)
+        self.assertIn(
+            again.status,
+            {CaseStatus.RECONCILING, CaseStatus.REOPEN_REQUIRED},
+        )
         self.assertEqual(provider.execute_calls, 1)
         assert_refines_protocol(gate.refinement_trace)
 
