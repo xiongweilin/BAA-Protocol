@@ -14,7 +14,7 @@
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
 | P2 模型 gateway 首次资格 | [已封存的接口资格负结果](p2-readonly-maintenance-gateway-preflight-v1.zh-CN.md) | Windows runner 在采样前无法连接本机模型 catalog；没有模型结果；后继接口仅手动触发 | BAA 策略失败、零风险／注意力、真实模型结果或委托增益 |
 | P2 维护模型证据来源 | [原始归档校验修订](p2-readonly-maintenance-source-qualification-v1.zh-CN.md) | 必须核对 P7 原始 ZIP 摘要／run 身份／五窗口投影；真实中断与观测端故障在读数层不可区分 | 事故成因识别、模型采样完成、真实注意力或 BAA 委托增益 |
-| P2 真实模型维护先导 | [预注册回放协议](p2-readonly-maintenance-model-v1.zh-CN.md)、[冻结五窗口工作负载](p2_readonly_maintenance_v1.json) | **目前仅有协议与真实产品历史证据；真实模型采样尚未验收**；各制度共享初始采样和不可写沙箱 | 真实在线委托、独立 episode 随机化、实际 attention/assurance 成本与 BAA 因果增益 |
+| P2 真实模型维护先导 | [预注册回放协议](p2-readonly-maintenance-model-v1.zh-CN.md)、[冻结五窗口](p2_readonly_maintenance_v1.json)、[首轮合格结果](p2-readonly-maintenance-model-v1-result.zh-CN.md) | 11 次真实模型调用、45 条共享回放记录；C0/C1 **三制度均 0/5**，C2 **均 1/5**；BAA 各等级阻止一次错误诊断，**未扩大可委托前沿** | 在线委托、独立随机 episode、实际 attention/assurance 成本或普遍因果优势 |
 | P7 真实隔离进程中断 | [Keycloak 暂停／恢复预注册资格记录](p7-real-isolated-keycloak-outage-v1.zh-CN.md) | 两轮合格的可逆真实隔离服务中断，每轮 4 轮／16 次 GET，仅 Keycloak 不可达，解除暂停后两轮重新取证 | 自然故障恢复、MTTR 分布、Agent 自主价值或生产可靠性 |
 | P7 只读维护诊断 | [冻结的三场景真实产品诊断资格验证](p7-readonly-maintenance-triage-v1.zh-CN.md) | 48 个位置、46 次真实 GET、2 次观测端模拟异常；正常／重新取证／升级处理均符合规则 | 真实 provider 故障恢复、Agent 交付、注意力风险增益或生产可靠性 |
 | P7 隔离只读观测 | [40 秒基线](p7-isolated-readonly-shadow-v1.zh-CN.md) | 9 轮、36 次 GET 检查，未观察到服务中断或 capability 契约漂移 | 长期可靠性、实际恢复、部署接受 |
