@@ -123,6 +123,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/p3-offboarding-temporal-outcome-v1.md](experiments/p3-offboarding-temporal-outcome-v1.md) — P3 preregistered independent subject-second outcome and identifiability gate (instrument-only; no product calibration).
 - [baa_protocol/temporal_outcome.py](baa_protocol/temporal_outcome.py) — partial-observation interval bounds with clock and evidence uncertainty.
 - [baa_protocol/temporal_collector.py](baa_protocol/temporal_collector.py) — read-only snapshot-only collector contract, access probe, and point qualification.
+- [experiments/claim-evidence-index.md](experiments/claim-evidence-index.md) — concise evidence-grade index, frozen-study links, and current P3 qualification dependency.
 - [experiments/status.md](experiments/status.md) — current evidence level and convergence boundary.
 - [baa_protocol/model.py](baa_protocol/model.py) — generic reference model.
 - [baa_protocol/offboarding.py](baa_protocol/offboarding.py) — employee-offboarding kernel.
