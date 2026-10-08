@@ -169,6 +169,26 @@ class TemporalOutcomeTests(unittest.TestCase):
         self.assertEqual(outcome.joint_violation.lower_s, 10)
         self.assertEqual(outcome.joint_violation.upper_s, 10)
 
+    def test_pre_effective_denial_is_not_disruption_without_entitlement(self):
+        policies = (
+            SubjectPolicy(
+                "s1", effective_at_s=10, grace_s=5,
+                pre_effective_access_expected=False,
+            ),
+        )
+        pre_denied = projection(
+            hris=True, iam=True, sessions=0, probe=AccessProbe.DENY
+        )
+        outcome = run(
+            interval("s1", 0, 10, pre_denied),
+            interval("s1", 10, 15, pre_denied),
+            interval("s1", 15, 30, POST),
+            subjects=policies,
+        )
+        self.assertTrue(outcome.fully_identified)
+        self.assertEqual(outcome.joint_violation.upper_s, 0)
+        self.assertEqual(outcome.premature_access_denial.upper_s, 0)
+
     def test_unenumerated_subject_and_overlap_are_rejected(self):
         with self.assertRaisesRegex(ValueError, "outside declared universe"):
             run(interval("s2", 0, 30, PRE))
