@@ -120,6 +120,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-delegation-cost-frontier-v1-protocol.md](experiments/prospective-delegation-cost-frontier-v1-protocol.md) — preregistered prospective cost-frontier study on a new 24-episode cross-mechanism canary workload.
 - [experiments/prospective-delegation-cost-frontier-v1-result.md](experiments/prospective-delegation-cost-frontier-v1-result.md) — qualified architecture-null / evidence-recovery-positive prospective cost-frontier result.
 - [experiments/prospective-delegation-cost-frontier-v1-result.json](experiments/prospective-delegation-cost-frontier-v1-result.json) — sealed machine-readable endpoints and provenance.
+- [experiments/p7-isolated-readonly-shadow-v1.md](experiments/p7-isolated-readonly-shadow-v1.md) — bounded isolated operational observation baseline.
 - [experiments/p6-real-product-quality-baseline-v1.md](experiments/p6-real-product-quality-baseline-v1.md) — P6 isolated real-product four-scenario timing evidence; descriptive only, no SLO qualification.
 - [experiments/p3-protected-access-timeline-v1.md](experiments/p3-protected-access-timeline-v1.md) — 33-round isolated protected-resource timeline with conditional 0.205-s request bracket; no continuous loss identification.
 - [experiments/p3-protected-access-qualification-v1.md](experiments/p3-protected-access-qualification-v1.md) — first qualified isolated Keycloak protected-resource point probes, with three failed instrument qualifications preserved; not continuous loss evidence.

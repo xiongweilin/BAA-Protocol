@@ -12,6 +12,7 @@
 | Offboarding 真实模型委托价值 | [v6 结果](prospective-model-v6-result.zh-CN.md) | 冻结工作负载下 C2 aggregate +6 | 跨机制全面泛化 |
 | Canary 证据恢复 × horizon | [v5 robustness](prospective-canary-v5-robustness-result.zh-CN.md) | aggregate interaction +1；仅 1/3 timing strata 为正 | 对 timing 稳健的 interaction |
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
+| P7 隔离只读观测 | [40 秒基线](p7-isolated-readonly-shadow-v1.zh-CN.md) | 9 轮、36 次 GET 检查，未观察到服务中断或 capability 契约漂移 | 长期可靠性、实际恢复、部署接受 |
 | P6 真实产品质量 | [四场景隔离基线](p6-real-product-quality-baseline-v1.zh-CN.md) | 四组通过验收的一次性 E2E 分段耗时及状态计数，每组仅一个 case；无采样溢出 | 生产 P95/P99 SLO、持续吞吐、assurance 成本与 principal attention |
 | 冻结产品投影中的 exposure | [指标绑定](../formal/exposure-metric-binding-v1.zh-CN.md)、[产品验收](../formal/real-product-exposure-binding-v1.zh-CN.md) | 三类 effect 的单位指标，精确绑定枚举受管主体投影 | 全部现实损失与中间时序损害 |
 | 联合风险因子与 interaction | [不可识别性负结果](../formal/joint-risk-identifiability-v1.zh-CN.md)、[绑定契约](../formal/joint-risk-binding-contract-v1.zh-CN.md) | **尚未识别**；offboarding registry 有意留空 | 已校准因子划分或 penalty |
