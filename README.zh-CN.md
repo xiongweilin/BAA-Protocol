@@ -120,6 +120,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md) —— 在新的 24-episode 跨机制 canary workload 上预注册的前瞻 cost-frontier 研究。
 - [experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md) —— 通过 qualification 的“架构零结果 / evidence-recovery 正结果”前瞻成本前沿。
 - [experiments/prospective-delegation-cost-frontier-v1-result.json](experiments/prospective-delegation-cost-frontier-v1-result.json) —— 封存的机器可读 endpoint 与 provenance。
+- [experiments/p7-real-isolated-keycloak-outage-v1.zh-CN.md](experiments/p7-real-isolated-keycloak-outage-v1.zh-CN.md) —— 一次隔离 Keycloak 真实可逆中断、两轮完整恢复取证；不构成生产 SLO。
 - [experiments/p7-readonly-maintenance-triage-v1.zh-CN.md](experiments/p7-readonly-maintenance-triage-v1.zh-CN.md) —— 隔离真实产品只读维护诊断及证据恢复／升级机制；不宣称 Agent 委托增益。
 - [experiments/p7-isolated-readonly-shadow-v1.zh-CN.md](experiments/p7-isolated-readonly-shadow-v1.zh-CN.md) —— 隔离只读运行观测基线。
 - [experiments/p6-real-product-quality-baseline-v1.zh-CN.md](experiments/p6-real-product-quality-baseline-v1.zh-CN.md) —— P6 隔离真实产品四场景分阶段质量测量；仅描述性，不构成 SLO 验收。
