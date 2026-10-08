@@ -108,7 +108,8 @@ HRIS active = false；IAM enabled = false；
 ## 版本与停止条件
 
 - 观测器：`baa_protocol/temporal_outcome.py`，v1。
-- 参考测试：`tests/test_temporal_outcome.py`。
+- 参考测试：`tests/test_temporal_outcome.py` 与 `tests/test_temporal_collector.py`。
+- 只读快照采集契约：`baa_protocol/temporal_collector.py`。该采集器可检测观测时点的违规、保留部分失效来源，但**永不**把两次采样升级为已证明的连续区间。证书/日志真实性及现场权限隔离仍需独立验收。
 - 当前状态：仅合成仪器资格验证；**尚无产品损失校准，也不更新 registry**。
 - 首次产品实验须冻结 BAA、AIOS、采集器、Keycloak/Odoo、workload SHA-256、策略和探针版本。
 - 在独立采集器资格与隔离测试租户授权就绪前，停止于此，不触发实际权限更改。
