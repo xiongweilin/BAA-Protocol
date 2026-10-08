@@ -120,6 +120,7 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [experiments/prospective-delegation-cost-frontier-v1-protocol.md](experiments/prospective-delegation-cost-frontier-v1-protocol.md) — preregistered prospective cost-frontier study on a new 24-episode cross-mechanism canary workload.
 - [experiments/prospective-delegation-cost-frontier-v1-result.md](experiments/prospective-delegation-cost-frontier-v1-result.md) — qualified architecture-null / evidence-recovery-positive prospective cost-frontier result.
 - [experiments/prospective-delegation-cost-frontier-v1-result.json](experiments/prospective-delegation-cost-frontier-v1-result.json) — sealed machine-readable endpoints and provenance.
+- [experiments/p3-protected-access-qualification-v1.md](experiments/p3-protected-access-qualification-v1.md) — first qualified isolated Keycloak protected-resource point probes, with three failed instrument qualifications preserved; not continuous loss evidence.
 - [experiments/p3-offboarding-temporal-outcome-v1.md](experiments/p3-offboarding-temporal-outcome-v1.md) — P3 preregistered independent subject-second outcome and identifiability gate (instrument-only; no product calibration).
 - [baa_protocol/temporal_outcome.py](baa_protocol/temporal_outcome.py) — partial-observation interval bounds with clock and evidence uncertainty.
 - [baa_protocol/temporal_collector.py](baa_protocol/temporal_collector.py) — read-only snapshot-only collector contract, access probe, and point qualification.
