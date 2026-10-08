@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 from urllib.parse import urlparse
 
+from baa_protocol.maintenance_archive_qualifier import qualify_archived_maintenance
 from baa_protocol.maintenance_model_replay import (
     HORIZONS,
     REGIMES,
@@ -34,6 +35,8 @@ def args_parser() -> argparse.ArgumentParser:
     parser.add_argument("--workload", type=Path, default=DEFAULT_WORKLOAD)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--qualify-only", action="store_true")
+    parser.add_argument("--triage-zip", type=Path)
+    parser.add_argument("--outage-zip", type=Path)
     parser.add_argument("--gateway-base", default="http://127.0.0.1:4101")
     parser.add_argument("--model", default="gpt-6-luna")
     parser.add_argument("--timeout-seconds", type=float, default=180.0)
@@ -64,10 +67,26 @@ def main() -> None:
         "live_business_systems_contacted": False,
         "causal_P2_effect_estimated": False,
     }
+    if (args.triage_zip is None) != (args.outage_zip is None):
+        raise ValueError("both source Actions ZIPs are required together")
+    if args.triage_zip is not None and args.outage_zip is not None:
+        manifest["source_archive_qualification"] = qualify_archived_maintenance(
+            windows,
+            triage_zip=args.triage_zip,
+            outage_zip=args.outage_zip,
+        )
+    else:
+        manifest["source_archive_qualification"] = {
+            "qualified": False,
+            "reason": "source ZIP bytes not supplied; structural qualification only",
+        }
     if args.qualify_only:
         args.output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print(json.dumps(manifest, sort_keys=True))
         return
+
+    if manifest["source_archive_qualification"]["qualified"] is not True:
+        raise ValueError("real-model sampling requires both verified pinned source artifact ZIPs")
 
     gateway = urlparse(args.gateway_base)
     if gateway.scheme != "http" or gateway.hostname not in {"127.0.0.1", "localhost"}:
