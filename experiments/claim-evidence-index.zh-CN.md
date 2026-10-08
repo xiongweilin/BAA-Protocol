@@ -12,6 +12,7 @@
 | Offboarding 真实模型委托价值 | [v6 结果](prospective-model-v6-result.zh-CN.md) | 冻结工作负载下 C2 aggregate +6 | 跨机制全面泛化 |
 | Canary 证据恢复 × horizon | [v5 robustness](prospective-canary-v5-robustness-result.zh-CN.md) | aggregate interaction +1；仅 1/3 timing strata 为正 | 对 timing 稳健的 interaction |
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
+| P2 真实模型维护先导 | [预注册回放协议](p2-readonly-maintenance-model-v1.zh-CN.md)、[冻结五窗口工作负载](p2_readonly_maintenance_v1.json) | **目前仅有协议与真实产品历史证据；真实模型采样尚未验收**；各制度共享初始采样和不可写沙箱 | 真实在线委托、独立 episode 随机化、实际 attention/assurance 成本与 BAA 因果增益 |
 | P7 真实隔离进程中断 | [Keycloak 暂停／恢复预注册资格记录](p7-real-isolated-keycloak-outage-v1.zh-CN.md) | 两轮合格的可逆真实隔离服务中断，每轮 4 轮／16 次 GET，仅 Keycloak 不可达，解除暂停后两轮重新取证 | 自然故障恢复、MTTR 分布、Agent 自主价值或生产可靠性 |
 | P7 只读维护诊断 | [冻结的三场景真实产品诊断资格验证](p7-readonly-maintenance-triage-v1.zh-CN.md) | 48 个位置、46 次真实 GET、2 次观测端模拟异常；正常／重新取证／升级处理均符合规则 | 真实 provider 故障恢复、Agent 交付、注意力风险增益或生产可靠性 |
 | P7 隔离只读观测 | [40 秒基线](p7-isolated-readonly-shadow-v1.zh-CN.md) | 9 轮、36 次 GET 检查，未观察到服务中断或 capability 契约漂移 | 长期可靠性、实际恢复、部署接受 |
