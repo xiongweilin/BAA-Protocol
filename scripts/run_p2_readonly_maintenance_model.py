@@ -26,8 +26,10 @@ def main() -> None:
     parser.add_argument("--max-calls", type=int, default=96)
     parser.add_argument("--timeout-seconds", type=float, default=180.0)
     args = parser.parse_args()
-    if not args.gateway_base.startswith("http://127.0.0.1:"):
-        parser.error("v1 gateway is restricted to local loopback")
+    # Exact origin is intentionally pinned: a string-prefix check would
+    # allow malformed authority/userinfo URLs to route outside loopback.
+    if args.gateway_base.rstrip("/") != "http://127.0.0.1:4101":
+        parser.error("v1 model gateway must be exactly http://127.0.0.1:4101")
     if not (1 <= args.max_calls <= 96):
         parser.error("max-calls must be bounded to 1..96")
 
