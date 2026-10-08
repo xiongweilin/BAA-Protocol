@@ -22,13 +22,12 @@ Executable checker:
 
 The checked claim is:
 
-[
-Omega_{mathrm{formal-v1}}
-Rightarrow
-orall 	au in operatorname{Trace}(K_{mathrm{formal-v1}}),
-quad
-	au models I_{mathrm{formal-v1}}
-]
+\[
+\Omega_{\mathrm{formal-v1}}
+\Rightarrow
+\forall \tau \in \operatorname{Trace}(K_{\mathrm{formal-v1}}),
+\quad \tau \models I_{\mathrm{formal-v1}}
+\]
 
 where the quantification is only over the finite transition system encoded by `FiniteBAAModel`.
 
@@ -113,9 +112,9 @@ A transition cannot silently double-count the same proposal in multiple categori
 
 For every reachable state:
 
-[
-ho(X_t) le R
-]
+\[
+\rho(X_t) \le R
+\]
 
 under the frozen joint-risk function.
 
@@ -146,9 +145,9 @@ No reachable state gives that proposal reserved, pending, or settled reality-fac
 
 A pending timeout settles at the proposal's declared upper bound:
 
-[
-E_{mathrm{settled}} = E_{mathrm{declared bound}}
-]
+\[
+E_{\mathrm{settled}}=E_{\mathrm{declared\ bound}}
+\]
 
 rather than releasing the exposure because confirmation is missing.
 
@@ -166,9 +165,9 @@ A regression test demonstrates the consequence:
 
 Therefore:
 
-[
-	ext{realized exposure} le 	ext{declared bound}
-]
+\[
+\text{realized exposure} \le \text{declared bound}
+\]
 
 is a substantive semantic/risk-model assumption. If reality violates it, the structural budget guarantee is invalidated. Silently clamping the observation to 5 would hide the failure instead of preserving evidence that (Omega) was false.
 
