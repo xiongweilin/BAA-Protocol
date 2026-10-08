@@ -1,0 +1,37 @@
+# Claim / Evidence Index — 2026-10-08
+
+> English | [简体中文](claim-evidence-index.zh-CN.md)
+
+This is a navigation and evidence-grade index. It neither recomputes nor supersedes any frozen experiment. Each source remains authoritative for its own scope, version, qualification, and failure criteria.
+
+| Question / claim | Best recorded evidence | Current evidential status | Not established |
+|---|---|---|---|
+| Basic incompleteness dimensions and local sufficiency | [guide](https://github.com/xiongweilin/guide); [BAA guarantees](../spec/guarantees.md) | Conceptual framework | Universal sufficiency theorem |
+| Enforced bounded-action protocol | [Finite structural check](../formal/structural-guarantees-v1.md); [AIOS refinement](../formal/aios-refinement-v1.md) | 584 states / 35,040 abstract transitions; limited implementation trace refinements | Complete mediation for all deployed action channels |
+| Product effect authorization / read-back / reconciliation | [Real-product acceptance](../formal/real-product-exposure-binding-v1.md); [Product connector refinement](../formal/product-connector-refinement-v1.md) | Isolated Odoo/Keycloak effect-boundary evidence | Production-tenant safety; all effects |
+| Real-model delegation leverage in offboarding | [v6 result](prospective-model-v6-result.md) | Qualified C2 aggregate +6 under frozen workload | Cross-mechanism generalization |
+| Evidence recovery × horizon in canary | [v5 robustness result](prospective-canary-v5-robustness-result.md) | Aggregate interaction +1; only 1/3 timing strata positive | Timing-robust interaction |
+| Prospective cost frontier | [Preregistered cost frontier](prospective-delegation-cost-frontier-v1-result.md) | C0/C1/C2 each 0/30 strict-safe BAA-positive cells; bounded recovery locally beneficial | General improvement in attention-risk exchange rate |
+| Scope-complete *declared* product exposure | [Exposure metric binding](../formal/exposure-metric-binding-v1.md); [Product exposure acceptance](../formal/real-product-exposure-binding-v1.md) | Three unit effect observations, each bound to frozen enumerated managed-subject projection | Total real-world loss or intermediate temporal harm |
+| Joint risk factors / interaction | [Negative identifiability result](../formal/joint-risk-identifiability-v1.md); [Binding contract](../formal/joint-risk-binding-contract-v1.md) | **Not identified**; offboarding risk-factor registry intentionally empty | Calibrated risk partition or penalty |
+| P3 temporal joint-loss outcome | [P3 protocol](p3-offboarding-temporal-outcome-v1.md); [reference instrument](../baa_protocol/temporal_outcome.py); [snapshot collector](../baa_protocol/temporal_collector.py) | **Instrument-only synthetic qualification**: subject-second bounds, explicit unknowns, and access-probe diagnostics | Validated continuous real-product observation, calibrated `Y`, risk mapping |
+
+## Exact separation of claims
+
+1. **Finite structural:** conditional invariants under the model's explicit `Omega`.
+2. **Isolated product integration:** actual effect/read-back observations for the named version and test tenant.
+3. **Qualified prospective empirical:** preregistered episode-level outcomes and null/positive results under the stated workload.
+4. **Instrumentation only:** interfaces/tests have been constructed, but no independently qualified external loss observations have been collected.
+5. **Deployment acceptance:** not established by the evidence above.
+
+A green CI test is a software conformance signal, not a new real-world guarantee. Product projections and P3 subject-seconds have different units; they must not silently be substituted in `rho`.
+
+## Immediate next acceptance dependency
+
+P3 requires an isolated, pre-authorized Keycloak/Odoo test realm with qualified independent read-only observations and an actual access probe. Two matching polling snapshots cannot license an exact subject-second estimate. The first product study must freeze the environment versions, subject mapping, event/time-source provenance, clock bound, intervention arms, cluster allocation, and negative-result rule **before execution**.
+
+The existing negative result remains valid until independent joint-outcome measurements and distinguishing predictions justify a different conclusion. There is no instruction here to populate the risk-factor registry.
+
+## Provenance
+
+These links refer to the frozen source records; the index is intentionally not a substitute for individual run ids, SHA-256 fingerprints, artifact ids, qualification notes, or CI artifacts recorded there.
