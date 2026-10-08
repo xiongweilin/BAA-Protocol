@@ -120,6 +120,7 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-protocol.zh-CN.md) —— 在新的 24-episode 跨机制 canary workload 上预注册的前瞻 cost-frontier 研究。
 - [experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md](experiments/prospective-delegation-cost-frontier-v1-result.zh-CN.md) —— 通过 qualification 的“架构零结果 / evidence-recovery 正结果”前瞻成本前沿。
 - [experiments/prospective-delegation-cost-frontier-v1-result.json](experiments/prospective-delegation-cost-frontier-v1-result.json) —— 封存的机器可读 endpoint 与 provenance。
+- [experiments/p3-protected-access-timeline-v1.zh-CN.md](experiments/p3-protected-access-timeline-v1.zh-CN.md) —— 隔离受保护资源的 33 轮时间序列及有条件 0.205 秒请求包络；未识别连续损失。
 - [experiments/p3-protected-access-qualification-v1.zh-CN.md](experiments/p3-protected-access-qualification-v1.zh-CN.md) —— Keycloak 隔离受保护资源点探针资格结果，保留三次仪器失败；不构成连续损失证据。
 - [experiments/p3-offboarding-temporal-outcome-v1.zh-CN.md](experiments/p3-offboarding-temporal-outcome-v1.zh-CN.md) —— P3 主体秒损失观测及可识别性预注册门槛（仅仪器测试，未进行产品校准）。
 - [baa_protocol/temporal_outcome.py](baa_protocol/temporal_outcome.py) —— 部分可观测、时钟不确定条件下的区间损失上下界。
