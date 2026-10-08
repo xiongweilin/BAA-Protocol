@@ -37,6 +37,21 @@
 
 **M03** 上过早发布 `verified_recovered_evidence` 的一次错误诊断，在每个 capability 水平下都由自检／事后审计模拟发布，BAA 则保守 hold。BAA 的**已发布错误诊断为零**，但有更多未解决与注意力需求代理成本。这支持有限的结构性拒绝机制，**不支持增加有效可委托工作**的结论。
 
+## 永久、无损的机器结果归档
+
+原始 `result.json` 含 45 行 episode/regime 明细及模型核算字段，已按字节**无损**压缩为可审计的 [gzip/base64 证据对象](evidence/p2-readonly-maintenance-model-v1-result.json.gz.b64)。CI 负责解压并核对前述原始 SHA-256。恢复方法：
+
+```python
+from pathlib import Path
+import base64, gzip, hashlib
+p = Path("experiments/evidence/p2-readonly-maintenance-model-v1-result.json.gz.b64")
+raw = gzip.decompress(base64.b64decode(p.read_text().strip()))
+assert hashlib.sha256(raw).hexdigest() == "0d9b6f19a42f8f42b0c083ed76e8c39a696056f7d567a50453d83808154e452c"
+Path("result.json").write_bytes(raw)
+```
+
+此对象只归档原始 `result.json`，**不替代**完整 Actions ZIP 或其中格式错误的独立校验 sidecar；两者摘要及边界继续独立保留。
+
 ## 有效性、成本与负结果边界
 
 - 这只是**一次模型采样、五个相关窗口**，不是五个独立事故；M02/M03/M04 是**同一次真实隔离 Keycloak 故障**的不同证据前缀。三个制度均在离线回放沙箱内，**没有执行业务维护操作**。
