@@ -44,7 +44,7 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     if args.qualify_source_only:
         args.output.write_text(
-            json.dumps(source_qualification, indent=2, sort_keys=True) + "\\n",
+            json.dumps(source_qualification, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
         return
