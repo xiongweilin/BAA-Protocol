@@ -11,7 +11,6 @@ attention measurement.
 from __future__ import annotations
 
 import json
-from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -32,6 +31,10 @@ REGIMES = (Regime.SELF_CHECK, Regime.AUDIT, Regime.BAA)
 VALID_READINGS = frozenset({"ok", "transport_unknown", "http_error", "schema_unknown"})
 CANONICAL_CONTRACT = "qualified"
 GAP_STATUS = "unresolved_observation"
+FROZEN_ARCHIVES = {
+    11524233834: "abb424b07aa953724029ef4bf18ed962afe54d2e42317b37f0106d3915a04134",
+    11526016609: "dfafd340bd3a10f2c4768c578b908cad1756e6f1009e3c5b153d49046ec16b60",
+}
 
 
 @dataclass(frozen=True)
@@ -154,8 +157,8 @@ def load_maintenance_windows(path: str | Path) -> tuple[MaintenanceWindow, ...]:
         )
         if window.expected_final != expected_from_full_observations(window.observations):
             raise ValueError("archived full-window outcome/reference disagreement")
-        if len(window.archive_sha256) != 64:
-            raise ValueError("missing pinned artifact checksum")
+        if FROZEN_ARCHIVES.get(window.artifact_id) != window.archive_sha256:
+            raise ValueError("frozen source artifact ID/SHA-256 pin mismatch")
         windows.append(window)
     if [w.episode_id for w in windows] != ["M01", "M02", "M03", "M04"]:
         raise ValueError("unregistered or reordered archived episode IDs")
