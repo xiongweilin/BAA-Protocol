@@ -12,6 +12,7 @@
 | Offboarding 真实模型委托价值 | [v6 结果](prospective-model-v6-result.zh-CN.md) | 冻结工作负载下 C2 aggregate +6 | 跨机制全面泛化 |
 | Canary 证据恢复 × horizon | [v5 robustness](prospective-canary-v5-robustness-result.zh-CN.md) | aggregate interaction +1；仅 1/3 timing strata 为正 | 对 timing 稳健的 interaction |
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
+| P6 真实产品质量 | [四场景隔离基线](p6-real-product-quality-baseline-v1.zh-CN.md) | 四组通过验收的一次性 E2E 分段耗时及状态计数，每组仅一个 case；无采样溢出 | 生产 P95/P99 SLO、持续吞吐、assurance 成本与 principal attention |
 | 冻结产品投影中的 exposure | [指标绑定](../formal/exposure-metric-binding-v1.zh-CN.md)、[产品验收](../formal/real-product-exposure-binding-v1.zh-CN.md) | 三类 effect 的单位指标，精确绑定枚举受管主体投影 | 全部现实损失与中间时序损害 |
 | 联合风险因子与 interaction | [不可识别性负结果](../formal/joint-risk-identifiability-v1.zh-CN.md)、[绑定契约](../formal/joint-risk-binding-contract-v1.zh-CN.md) | **尚未识别**；offboarding registry 有意留空 | 已校准因子划分或 penalty |
 | P3 受保护资源时序观测 | [点探针资格记录](p3-protected-access-qualification-v1.zh-CN.md)、[独立时间序列记录](p3-protected-access-timeline-v1.zh-CN.md)、[P3 协议](p3-offboarding-temporal-outcome-v1.zh-CN.md) | **隔离真实产品点／序列仪器已合格**：33 轮／66 次实际探针，目标 ALLOW→DENY、对照保持 ALLOW；有条件请求包络仅供描述 | HRIS/IAM/访问联合连续状态、已校准主体秒 `Y`、风险映射 |
