@@ -12,6 +12,7 @@
 | Offboarding 真实模型委托价值 | [v6 结果](prospective-model-v6-result.zh-CN.md) | 冻结工作负载下 C2 aggregate +6 | 跨机制全面泛化 |
 | Canary 证据恢复 × horizon | [v5 robustness](prospective-canary-v5-robustness-result.zh-CN.md) | aggregate interaction +1；仅 1/3 timing strata 为正 | 对 timing 稳健的 interaction |
 | 前瞻委托成本前沿 | [成本前沿结果](prospective-delegation-cost-frontier-v1-result.zh-CN.md) | C0/C1/C2 的 strict-safe BAA-positive 均为 0/30；证据恢复有局部增益 | 普遍改善 attention-risk exchange rate |
+| P2 模型 gateway 首次资格 | [已封存的接口资格负结果](p2-readonly-maintenance-gateway-preflight-v1.zh-CN.md) | Windows runner 在采样前无法连接本机模型 catalog；没有模型结果；后继接口仅手动触发 | BAA 策略失败、零风险／注意力、真实模型结果或委托增益 |
 | P2 维护模型证据来源 | [原始归档校验修订](p2-readonly-maintenance-source-qualification-v1.zh-CN.md) | 必须核对 P7 原始 ZIP 摘要／run 身份／五窗口投影；真实中断与观测端故障在读数层不可区分 | 事故成因识别、模型采样完成、真实注意力或 BAA 委托增益 |
 | P2 真实模型维护先导 | [预注册回放协议](p2-readonly-maintenance-model-v1.zh-CN.md)、[冻结五窗口工作负载](p2_readonly_maintenance_v1.json) | **目前仅有协议与真实产品历史证据；真实模型采样尚未验收**；各制度共享初始采样和不可写沙箱 | 真实在线委托、独立 episode 随机化、实际 attention/assurance 成本与 BAA 因果增益 |
 | P7 真实隔离进程中断 | [Keycloak 暂停／恢复预注册资格记录](p7-real-isolated-keycloak-outage-v1.zh-CN.md) | 两轮合格的可逆真实隔离服务中断，每轮 4 轮／16 次 GET，仅 Keycloak 不可达，解除暂停后两轮重新取证 | 自然故障恢复、MTTR 分布、Agent 自主价值或生产可靠性 |
