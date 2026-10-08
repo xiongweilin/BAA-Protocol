@@ -192,12 +192,13 @@ def _score_projection(
     kind: EvidenceKind,
     phase: Phase,
     duration: int,
+    pre_access_expected: bool,
 ) -> tuple[DurationBounds, DurationBounds, DurationBounds]:
     unknown = _bound(duration, None)
     zero = _bound(duration, False)
     if kind is not EvidenceKind.INTERVAL_ATTESTED or projection is None:
         if phase is Phase.BEFORE_EFFECTIVE:
-            return unknown, zero, unknown
+            return unknown, zero, unknown if pre_access_expected else zero
         if phase is Phase.AFTER_DEADLINE:
             return unknown, unknown, zero
         return unknown, unknown, unknown
@@ -206,9 +207,15 @@ def _score_projection(
         joint = _or_unknown((
             _mismatch(projection.hris_active, True),
             _mismatch(projection.iam_enabled, True),
-            _mismatch(projection.access_probe, AccessProbe.ALLOW),
+            _mismatch(
+                projection.access_probe,
+                AccessProbe.ALLOW if pre_access_expected else AccessProbe.DENY,
+            ),
         ))
-        disruption = _mismatch(projection.access_probe, AccessProbe.ALLOW)
+        disruption = (
+            _mismatch(projection.access_probe, AccessProbe.ALLOW)
+            if pre_access_expected else False
+        )
         return _bound(duration, joint), zero, _bound(duration, disruption)
 
     if phase is Phase.AFTER_DEADLINE:
@@ -313,7 +320,10 @@ def measure_offboarding(
                     late_access.append(_bound(duration, None))
                     early_denial.append(_bound(duration, None))
                     continue
-                j, a, d = _score_projection(projection, kind, phase, duration)
+                j, a, d = _score_projection(
+                    projection, kind, phase, duration,
+                    policy.pre_effective_access_expected,
+                )
                 joint.append(j)
                 late_access.append(a)
                 early_denial.append(d)
