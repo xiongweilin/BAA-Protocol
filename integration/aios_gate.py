@@ -253,8 +253,8 @@ class BAAGatedAIOSProvider:
             effect,
             proposal,
             prior=AbstractPhase.PENDING,
-            next=AbstractPhase.SETTLED,
-            event="post-dispatch-readback",
+            next=AbstractPhase.SETTLED if verified else AbstractPhase.PENDING,
+            event="post-dispatch-readback" if verified else "postcondition-unmet",
         )
         if not verified:
             return ProviderExecutionResult(
@@ -279,7 +279,7 @@ class BAAGatedAIOSProvider:
                 and observation.freshness.value == "current"
                 and observation.presence.value == "present"
             ):
-                kernel.verify(
+                verified = kernel.verify(
                     str(effect.obligation_id),
                     observed_postcondition=self._verification_state(observation),
                 )
@@ -287,8 +287,8 @@ class BAAGatedAIOSProvider:
                     effect,
                     proposal,
                     prior=AbstractPhase.PENDING,
-                    next=AbstractPhase.SETTLED,
-                    event="independent-readback",
+                    next=AbstractPhase.SETTLED if verified else AbstractPhase.PENDING,
+                    event="independent-readback" if verified else "postcondition-unmet",
                 )
             else:
                 self._record_refinement(
