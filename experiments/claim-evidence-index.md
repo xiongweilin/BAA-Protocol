@@ -14,7 +14,7 @@ This is a navigation and evidence-grade index. It neither recomputes nor superse
 | Prospective cost frontier | [Preregistered cost frontier](prospective-delegation-cost-frontier-v1-result.md) | C0/C1/C2 each 0/30 strict-safe BAA-positive cells; bounded recovery locally beneficial | General improvement in attention-risk exchange rate |
 | Scope-complete *declared* product exposure | [Exposure metric binding](../formal/exposure-metric-binding-v1.md); [Product exposure acceptance](../formal/real-product-exposure-binding-v1.md) | Three unit effect observations, each bound to frozen enumerated managed-subject projection | Total real-world loss or intermediate temporal harm |
 | Joint risk factors / interaction | [Negative identifiability result](../formal/joint-risk-identifiability-v1.md); [Binding contract](../formal/joint-risk-binding-contract-v1.md) | **Not identified**; offboarding risk-factor registry intentionally empty | Calibrated risk partition or penalty |
-| P3 temporal joint-loss outcome | [P3 protocol](p3-offboarding-temporal-outcome-v1.md); [reference instrument](../baa_protocol/temporal_outcome.py); [snapshot collector](../baa_protocol/temporal_collector.py) | **Instrument-only synthetic qualification**: subject-second bounds, explicit unknowns, and access-probe diagnostics | Validated continuous real-product observation, calibrated `Y`, risk mapping |
+| P3 protected-access point instrument | [P3 qualification record](p3-protected-access-qualification-v1.md); [P3 protocol](p3-offboarding-temporal-outcome-v1.md); [reference instrument](../baa_protocol/temporal_outcome.py) | **Qualified isolated real-product point probes**: target ALLOW→DENY, untouched control ALLOW→ALLOW, forced outage UNKNOWN; first three failed qualifications preserved | Continuous real-product temporal state, calibrated `Y`, risk mapping |
 
 ## Exact separation of claims
 
@@ -28,7 +28,7 @@ A green CI test is a software conformance signal, not a new real-world guarantee
 
 ## Immediate next acceptance dependency
 
-P3 requires an isolated, pre-authorized Keycloak/Odoo test realm with qualified independent read-only observations and an actual access probe. Two matching polling snapshots cannot license an exact subject-second estimate. The first product study must freeze the environment versions, subject mapping, event/time-source provenance, clock bound, intervention arms, cluster allocation, and negative-result rule **before execution**.
+P3 has now **qualified an actual protected-resource access point probe in one isolated Keycloak/Odoo test realm**, with a still-entitled control and an explicit UNKNOWN outage check; see the [qualification record](p3-protected-access-qualification-v1.md). Two matching polling snapshots still cannot license an exact subject-second estimate. The first product study must freeze the environment versions, subject mapping, event/time-source provenance, clock bound, intervention arms, cluster allocation, and negative-result rule **before execution**.
 
 The existing negative result remains valid until independent joint-outcome measurements and distinguishing predictions justify a different conclusion. There is no instruction here to populate the risk-factor registry.
 
