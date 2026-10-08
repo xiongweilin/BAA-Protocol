@@ -115,7 +115,8 @@ If observations are insufficient or all candidate predictions remain observation
 ## Version and stopping rule
 
 - Instrument: `baa_protocol/temporal_outcome.py`, v1.
-- Reference tests: `tests/test_temporal_outcome.py`.
+- Read-only polling collector: `baa_protocol/temporal_collector.py`; it preserves errors and provenance but emits **SNAPSHOT_ONLY**, never verified continuity.
+- Reference tests: `tests/test_temporal_outcome.py`, `tests/test_temporal_collector.py`.
 - Current stage: synthetic qualification only; **no product calibration and no registry update**.
 - First product study must pin BAA, AIOS, collector, Keycloak/Odoo versions, workload hash, policy and probe configuration.
 - Stop at this stage until a qualified independent collector and explicit safe test-tenant authorization exist.
