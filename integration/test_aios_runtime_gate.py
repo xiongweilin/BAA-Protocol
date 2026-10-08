@@ -395,6 +395,56 @@ class BAARuntimeGateTests(unittest.TestCase):
         )
         self.assertEqual(first_effect_events[2].event, "independent-readback")
 
+    def test_unmet_readback_remains_pending_and_fences_repeated_dispatch(self):
+        store, case = authorized_case()
+
+        class UnmetReadbackProvider(Provider):
+            def observe(self, effect):
+                result = super().observe(effect)
+                if effect.operation == "identity.disable":
+                    return result.model_copy(
+                        update={"state": {**result.state, "enabled": True}}
+                    )
+                return result
+
+        provider = UnmetReadbackProvider()
+        gate = BAAGatedAIOSProvider(
+            store,
+            provider,
+            now=lambda: _AFTER,
+            unresolved_limit=1,
+        )
+        engine = OffboardingExecutionEngine(
+            store,
+            gate,
+            clock=lambda: _AFTER,
+        )
+        current = engine.run(case.case_id)
+
+        self.assertEqual(current.status, CaseStatus.RECONCILING)
+        self.assertEqual(provider.execute_calls, 1)
+        self.assertEqual(provider.operations, ["identity.disable"])
+        kernel = next(iter(gate._kernels.values()))
+        first_obligation = next(
+            key for key, value in kernel.obligations.items()
+            if value.operation == "identity.disable"
+        )
+        from baa_protocol.offboarding import EffectKnowledge
+
+        self.assertEqual(
+            kernel.effects[first_obligation].knowledge,
+            EffectKnowledge.POSSIBLY_EFFECTED,
+        )
+        self.assertEqual(
+            phase_by_effect(gate.refinement_trace)[gate.refinement_trace[0].effect_id],
+            AbstractPhase.PENDING,
+        )
+
+        again = engine.run(case.case_id)
+        self.assertEqual(again.status, CaseStatus.RECONCILING)
+        self.assertEqual(provider.execute_calls, 1)
+        assert_refines_protocol(gate.refinement_trace)
+
     def test_unknown_first_effect_prevents_additional_provider_dispatch(self):
         store, case = authorized_case()
         provider = Provider(unknown_first=True)
