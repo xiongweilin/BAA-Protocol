@@ -346,11 +346,13 @@ class OffboardingKernel:
 
         expected = dict(obligation.expected_postcondition)
         satisfied = all(observed_postcondition.get(key) == value for key, value in expected.items())
-        state.knowledge = (
-            EffectKnowledge.VERIFIED_EFFECTED
-            if satisfied
-            else EffectKnowledge.VERIFIED_NO_EFFECT
-        )
+        # A current postcondition mismatch establishes only "not presently
+        # verified". It does NOT prove that the attempted operation had no
+        # effect, no transient effect, or may safely be dispatched again.
+        # Preserve the pending/replay fence unless a separately justified
+        # no-effect proof mechanism is introduced.
+        if satisfied:
+            state.knowledge = EffectKnowledge.VERIFIED_EFFECTED
         return satisfied
 
     def observation_unavailable(self, obligation_id: str) -> None:
