@@ -37,6 +37,21 @@ Additional accounting, all counts per 5-window cell:
 
 One erroneous premature `verified_recovered_evidence` diagnosis on **M03** was hypothetically finalized in self-check and audit across all three levels. BAA conservatively held it, so it had zero *wrong finalized diagnostic decisions* but higher unresolved/attention-demand proxy. The result supports a **finite structural rejection** property without proving an increase in useful delegable work.
 
+## Permanent lossless machine-result copy
+
+The original `result.json` (45 full episode/regime records and all original model-side accounting fields) is preserved **byte-for-byte** as deterministic gzip/base64 text in [the repository evidence object](evidence/p2-readonly-maintenance-model-v1-result.json.gz.b64). The CI regression test decompresses it and verifies the original result SHA-256 above. Decode locally with:
+
+```python
+from pathlib import Path
+import base64, gzip, hashlib
+p = Path("experiments/evidence/p2-readonly-maintenance-model-v1-result.json.gz.b64")
+raw = gzip.decompress(base64.b64decode(p.read_text().strip()))
+assert hashlib.sha256(raw).hexdigest() == "0d9b6f19a42f8f42b0c083ed76e8c39a696056f7d567a50453d83808154e452c"
+Path("result.json").write_bytes(raw)
+```
+
+This preserves `result.json`, **not** the full original Actions ZIP or its malformed qualification sidecar; both historical source digests remain distinct.
+
 ## Validity, cost and negative-result boundaries
 
 - This is **one real-model draw on five related read-only windows**, not five independent incidents; M02, M03 and M04 are prefixes of the **same actual isolated Keycloak outage**. The externalized maintenance action was **never executed**; all three regimes used the same offline replay sandbox.
