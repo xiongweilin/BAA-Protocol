@@ -31,12 +31,21 @@
 - Docker unpause 命令结束后，直到第二轮完整正常观测结束的**同一主机单调时钟**耗时为 **2.076049 秒**。它是**重新取证耗时**，并非 Keycloak 真正恢复的精确时刻，更不是代表性的平均恢复时间。
 - 同一 run 的其他独立任务也通过：40 秒只读 shadow（9 轮／36 次 GET）及此前的三个确定性只读维护诊断。**不能与中断实验的分母混算**。
 
+## 最终合并版本与第二次合格实验
+
+- AIOS PR #43 最终源分支 HEAD：`d8439c17248b88e0fdd971477f3a28fb151c6e76`；合并后 main [`c3c54474727e`](https://github.com/xiongweilin/aios/commit/c3c54474727e82f9f5d30e3a504065ae9d660a63)。
+- [最终 CI run 37720702388](https://github.com/xiongweilin/aios/actions/runs/37720702388)，artifact **11526016609**，归档 SHA-256 `dfafd340bd3a10f2c4768c578b908cad1756e6f1009e3c5b153d49046ec16b60`；`provenance.json` 的 PR checkout ref 为 `2288420643148fd8a2aa56de8ba6f9def0cbe1cd`，与源分支及 main SHA 不同。
+- 本次 Odoo/Keycloak/World Runtime 隔离测试栈**一次启动成功**：`fixture-startup.json` 为 `attempted=1`、`failed=0`、`qualified=true`，最大次数 2。
+- 第二轮实际故障再次满足未修改的规则：**4 轮／16 次 GET**，仅 `keycloak_realm` 一次非 OK，三个对照接口均无失败；Docker unpause 成功，连续两轮重新取证；结果 `verified_recovered_evidence`，没有终态未解决。
+- 从 Docker unpause 命令完成至两轮完整恢复观测完成的本机耗时为 **2.074594 秒**。加上首轮 **2.076049 秒**，也只有两次有限观测，不构成 MTTR 分布或统计保证。
+- AIOS PR #43 的七项检查——CI、Acceptance、Real Product Offboarding E2E、P3 探针、P7 shadow、BAA 网络预检查及 SonarCloud——全部通过后才合并；BAA 归档 CI 独立检查。
+
 ## 实现及基础设施资格失败
 
 - 首轮真实中断的科学判据通过，但同一源 HEAD 的主 CI 存在一个未使用 import 的 `F401` 错误，随后只修复导入。
 - [run 37720464278](https://github.com/xiongweilin/aios/actions/runs/37720464278) 在启动一次性 `odoo-init` 时以退出码 2 失败，**尚未进入基线或中断实验**；属于基础设施资格失败，不计入恢复实验的正负分母。
 - 随后仅对启动环节增加**最多两次**全新一次性 Compose 初始化，`fixture-startup.json` 记录尝试与失败次数；两次都失败仍判 CI 失败。Odoo 初始化偶发失败的根因**尚未查明**。故障目标、三项对照、两轮恢复、八轮上限和科学判据全部保持不变。
-- 最终版本的完整 CI 与合并资格必须另行检验，不能由首轮正结果代替。
+- 最终版本已通过全部七项 CI 并合并；首轮合格实验仍按其独立源 HEAD 记录。
 
 ## 不能外推的保证
 
