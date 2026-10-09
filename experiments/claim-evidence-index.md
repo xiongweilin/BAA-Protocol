@@ -1,4 +1,4 @@
-# Claim / Evidence Index — 2026-10-08
+# Claim / Evidence Index — 2026-10-09
 
 > English | [简体中文](claim-evidence-index.zh-CN.md)
 
@@ -22,6 +22,8 @@ This is a navigation and evidence-grade index. It neither recomputes nor superse
 | Scope-complete *declared* product exposure | [Exposure metric binding](../formal/exposure-metric-binding-v1.md); [Product exposure acceptance](../formal/real-product-exposure-binding-v1.md) | Three unit effect observations, each bound to frozen enumerated managed-subject projection | Total real-world loss or intermediate temporal harm |
 | Joint risk factors / interaction | [Negative identifiability result](../formal/joint-risk-identifiability-v1.md); [Binding contract](../formal/joint-risk-binding-contract-v1.md) | **Not identified**; offboarding risk-factor registry intentionally empty | Calibrated risk partition or penalty |
 | P3 protected-access observation | [Point qualification record](p3-protected-access-qualification-v1.md); [independent timeline record](p3-protected-access-timeline-v1.md); [P3 protocol](p3-offboarding-temporal-outcome-v1.md) | **Qualified isolated real-product point/timeline instrument**: 33 rounds / 66 live probes, observed target ALLOW→DENY and stable control; a conditional request bracket is descriptive only | Continuous HRIS/IAM/access state, validated subject-second `Y`, risk mapping |
+
+| Long-horizon human assurance capacity | [Proposed measurement in experimental design §15](design.md#15-long-horizon-human-assurance-capacity-proposed-measurement-not-evidence) | **Not measured**; task-specific HRCC and longitudinal evaluation are proposed only | Human reviewer skill retention, qualified review capacity under deployment, aggregate labor/time savings |
 
 ## Exact separation of claims
 
