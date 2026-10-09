@@ -23,6 +23,8 @@
 | 联合风险因子与 interaction | [不可识别性负结果](../formal/joint-risk-identifiability-v1.zh-CN.md)、[绑定契约](../formal/joint-risk-binding-contract-v1.zh-CN.md) | **尚未识别**；offboarding registry 有意留空 | 已校准因子划分或 penalty |
 | P3 受保护资源时序观测 | [点探针资格记录](p3-protected-access-qualification-v1.zh-CN.md)、[独立时间序列记录](p3-protected-access-timeline-v1.zh-CN.md)、[P3 协议](p3-offboarding-temporal-outcome-v1.zh-CN.md) | **隔离真实产品点／序列仪器已合格**：33 轮／66 次实际探针，目标 ALLOW→DENY、对照保持 ALLOW；有条件请求包络仅供描述 | HRIS/IAM/访问联合连续状态、已校准主体秒 `Y`、风险映射 |
 
+| 长期人工保证能力 | [实验设计第15节：待检验指标](design.zh-CN.md#15-长期人工保证能力待检验的测量方案不是已有证据) | **尚未测量**；只提出任务域相对的 HRCC 与纵向验证方案 | 人工复核技能维持、真实部署下合格复核容量、社会总劳动与时间收益 |
+
 ## 主张等级不能互相替代
 
 1. **有限结构保证**：仅在显式 `Omega` 及对应模型范围内成立。
