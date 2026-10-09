@@ -1,4 +1,4 @@
-# Claim / Evidence Index — 2026-10-08
+# Claim / Evidence Index — 2026-10-09
 
 > English | [简体中文](claim-evidence-index.zh-CN.md)
 
