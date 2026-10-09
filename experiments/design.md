@@ -372,3 +372,22 @@ The capability sweep is considered evidence only about these finite fixtures.
 A positive frontier difference can motivate the real-model experiment, but it
 cannot establish production delegation leverage or a worst-case adaptive-risk
 bound.
+
+## 15. Long-horizon human assurance capacity: proposed measurement, not evidence
+
+**Hypothesis to test:** automation may remove entry-level practice opportunities and eventually reduce the pool of humans capable of independently checking authorization, semantic bridges, risk assumptions, and unusual recoveries. The opposite is also possible if simulation and auditing create better training. Neither effect has been measured by this repository.
+
+For each predeclared task domain, reviewer qualification standard, and stress scenario, track:
+
+```text
+HRCC_t =
+  independently qualified human review capacity in the horizon
+  / required human review workload in the same horizon and scenario
+```
+
+- **Numerator:** number of blind, unseen, independently scored review cases that available reviewers can correctly finish within the declared response deadline. Record both accuracy and capacity; do not count headcount, AI-generated answers, or unchecked approvals as successful independent review.
+- **Denominator:** review cases required by a frozen scenario of escalations, semantic-bridge failures, assumption invalidations, emergency takeovers, and audits. Use the same task mix, units, and time window as the numerator; if no workload is required, the ratio is undefined, not infinite.
+- **Design:** repeat the exercise on new unseen cases over time, include newcomers and experienced reviewers, compare against a non-delegated or training-preserving cohort where feasible, and report selection, attrition, case difficulty, review labor, and model assistance separately.
+- **Decision use:** HRCC below 1 means the *specified scenario* has more independently qualified review demand than capacity by definition; it is a prompt to reassess deployment and training, not a universal measured safety threshold. A ratio above 1 does not certify review correctness, independence, or safety outside the scenario.
+
+This measurement is not a fourth basic non-closure category or a structural BAA guarantee. The current experiments do **not** establish HRCC, a decline in reviewer skill, aggregate labor savings, or additional discretionary time for end users. A future human-capacity claim requires a separately frozen longitudinal design, external measurements, uncertainty, and an explicit baseline.
