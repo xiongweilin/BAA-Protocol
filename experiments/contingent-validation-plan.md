@@ -1,5 +1,7 @@
 # Conditional-policy validation: two distinct evidence gates
 
+> English | [简体中文](contingent-validation-plan.zh-CN.md)
+
 Status: **research branch, no new real-model or human observations.** The two
 below are different tests; neither replaces the frozen v6 and cost-frontier
 results.
