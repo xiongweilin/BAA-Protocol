@@ -35,7 +35,7 @@ jobs:
           git -C baa rev-parse HEAD
           git -C aios rev-parse HEAD
       - name: Install AIOS boundary code
-        run: python -m pip install -e ./aios
+        run: python -m pip install -e ./aios "pytest>=9,<10"
       - name: Run paired AIOS authorization and policy-adversary tests
         env:
           PYTHONPATH: aios/src:baa
