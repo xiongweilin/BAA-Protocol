@@ -44,8 +44,8 @@
 
 - [条件策略合成／独立验证器](baa_protocol/contingent_policy.py)、[逆境世界测试](tests/test_contingent_policy.py)。
 - 真实效果仍受 [原准入协议](spec/protocol.zh-CN.md)、[状态机](spec/state-machine.zh-CN.md)、[保证义务](spec/guarantees.zh-CN.md)约束。
-- [AIOS 实验性执行边界](https://github.com/xiongweilin/aios/blob/research/contingent-safe-execution-v1/src/domains/administrative_orchestrator/contingent_execution.py)只准备请求，不擅自执行外部写入。
-- [guide 新理论主干](https://github.com/xiongweilin/guide/blob/research/contingent-safe-execution-v1/minimal-derivation.zh-CN.md)、[Lean 条件性共同安全行动证明](https://github.com/xiongweilin/distinction-self-reference-lean/blob/research/contingent-safe-execution-v1/DistinctionSelfReference/RobustAction.lean)。
+- [AIOS 实验性执行边界](https://github.com/xiongweilin/aios/blob/main/src/domains/administrative_orchestrator/contingent_execution.py)只准备请求，不擅自执行外部写入。
+- [guide 新理论主干](https://github.com/xiongweilin/guide/blob/main/minimal-derivation.zh-CN.md)、[Lean 条件性共同安全行动证明](https://github.com/xiongweilin/distinction-self-reference-lean/blob/main/DistinctionSelfReference/RobustAction.lean)。
 
 原有跨仓 CI 保留当前主分支与固定版本的兼容性检查。新分支的 AIOS 配对集成还必须单独验证。
 
