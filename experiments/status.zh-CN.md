@@ -54,11 +54,13 @@
 
 ## 固定 AIOS 兼容性
 
-BAA CI 固定：
+当前 BAA 兼容性 workflow 将 AIOS 固定到：
 
 ~~~text
-xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
+xiongweilin/aios@0ba9c36bd8168ae1346770e6430474662b30e196
 ~~~
+
+这与历史组合真实产品验收使用的 AIOS commit `87f24f32a01c67a9246fc3cb127517c80798e169` 不同；后者仍是该记录结果对应的版本。
 
 CI 验证：
 

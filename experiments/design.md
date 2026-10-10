@@ -391,3 +391,9 @@ HRCC_t =
 - **Decision use:** HRCC below 1 means the *specified scenario* has more independently qualified review demand than capacity by definition; it is a prompt to reassess deployment and training, not a universal measured safety threshold. A ratio above 1 does not certify review correctness, independence, or safety outside the scenario.
 
 This measurement is not a fourth basic non-closure category or a structural BAA guarantee. The current experiments do **not** establish HRCC, a decline in reviewer skill, aggregate labor savings, or additional discretionary time for end users. A future human-capacity claim requires a separately frozen longitudinal design, external measurements, uncertainty, and an explicit baseline.
+
+The [longitudinal protocol draft](human-assurance-capacity-v1.md) lists the domain, rubric, comparator, and timing decisions that remain open; it is not preregistered or measured.
+
+## 16. Total human labor: proposed measurement, not evidence
+
+The existing `principal_attention` and `assurance_labor` fields do not by themselves measure total human labor. The [human-cost study protocol](human-cost-study-v1.md) specifies a separate, task-attributed person-minute measure across principals, reviewers, repairers, exception responders, and maintainers. Event counts, model calls, synthetic cost units, and unattended elapsed time remain separate. The protocol is a draft; no total-labor comparison has been run.

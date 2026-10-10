@@ -8,9 +8,11 @@ BAA-Protocol pins the first employee-offboarding integration to:
 xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
+This is the first offboarding integration snapshot and the version used by the recorded composed end-to-end acceptance. The current compatibility workflow separately checks out AIOS commit `0ba9c36bd8168ae1346770e6430474662b30e196`; it does not reproduce that historical end-to-end run.
+
 ## Level 1: contract compatibility
 
-CI imports the pinned AIOS package and checks:
+The current compatibility workflow imports AIOS at `0ba9c36bd8168ae1346770e6430474662b30e196` and checks:
 
 - offboarding policy effect set;
 - derived external obligations;
