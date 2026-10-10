@@ -73,6 +73,34 @@ class StrongPlannerAnalysisTests(unittest.TestCase):
         self.assertEqual(result["fully_known_strict_pairs"], 0)
         self.assertEqual(result["unknown_strict_pairs"], 1)
 
+    def test_unresolved_effect_counts_as_unknown(self):
+        rows = [
+            self.row("A", "baa", unknown="1"),
+            self.row("A", "strong_control"),
+        ]
+        result = analysis.analyze(self.write(rows))
+        self.assertEqual(result["unknown_strict_pairs"], 1)
+        self.assertEqual(result["fully_known_strict_pairs"], 0)
+        self.assertEqual(result["strict_safe_delivery_delta_bounds"], [-1, 1])
+
+    def test_witnessed_unsafe_is_known_negative(self):
+        rows = [
+            self.row("A", "baa", safety="unsafe", delivery="unknown", unknown="1"),
+            self.row("A", "strong_control"),
+        ]
+        result = analysis.analyze(self.write(rows))
+        self.assertEqual(result["unknown_strict_pairs"], 0)
+        self.assertEqual(result["strong_control_only_strict_safe_useful"], 1)
+
+    def test_fractional_discrete_counts_rejected(self):
+        for field in ("terminal_unknown_effects", "model_calls",
+                      "automatic_interventions", "horizon"):
+            with self.subTest(field=field):
+                rows = [self.row("A", "baa"), self.row("A", "strong_control")]
+                rows[0][field] = "0.5"
+                with self.assertRaisesRegex(ValueError, "integer count"):
+                    analysis.analyze(self.write(rows))
+
     def test_rejects_missing_human_or_unbounded_numeric_fields(self):
         rows = [self.row("A", "baa"), self.row("A", "strong_control")]
         rows[0]["principal_seconds"] = "-1"
