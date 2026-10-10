@@ -1,5 +1,7 @@
 # Frozen CI artifact provenance snapshot — 2026-10-10
 
+> English | [简体中文](source-artifact-provenance-2026-10-10.zh-CN.md)
+
 This inventory records **original downloaded GitHub Actions ZIP bytes**, not a new experiment, re-run, or permanent mirror. Each digest is SHA-256 over the ZIP itself, not the uncompressed JSON. The six ZIPs were independently downloaded from the cited successful runs on 2026-10-10; copies were supplied in the audit handoff. A hash list does **not** preserve artifact bytes after GitHub retention expires.
 
 | Original artifact / arm | Actions run | Artifact ID | ZIP bytes | ZIP SHA-256 | GitHub expiry (UTC) |
