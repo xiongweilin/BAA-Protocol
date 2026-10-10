@@ -36,6 +36,14 @@ jobs:
 
   aios-compatibility:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: pinned
+            aios_ref: 0ba9c36bd8168ae1346770e6430474662b30e196
+          - label: current-aios-main
+            aios_ref: main
     steps:
       - name: Checkout BAA-Protocol
         uses: actions/checkout@v4
@@ -45,12 +53,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: xiongweilin/aios
-          ref: 0ba9c36bd8168ae1346770e6430474662b30e196
+          ref: ${{ matrix.aios_ref }}
           path: aios
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install pinned AIOS
+      - name: Record exact cross-repository heads
+        run: |
+          git -C baa rev-parse HEAD
+          git -C aios rev-parse HEAD
+      - name: Install checked-out AIOS
         run: python -m pip install -e ./aios
       - name: Check AIOS policy surface
         env:
