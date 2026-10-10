@@ -1,5 +1,7 @@
 # Contingent policy v1 — bounded research-code merge acceptance
 
+> English | [简体中文](contingent-policy-acceptance-2026-10-10.zh-CN.md)
+
 Date: 2026-10-10. **Accept research compiler + standalone staging contract only, not validated production autonomy or measured C0/C1/C2 advantage.**
 
 ## Immutable candidates and test evidence
