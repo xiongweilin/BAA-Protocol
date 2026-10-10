@@ -20,11 +20,12 @@ jobs:
         with:
           path: baa
           persist-credentials: false
-      - name: Checkout AIOS experimental staging boundary
+      - name: Checkout independently accepted AIOS staging boundary
         uses: actions/checkout@v4
         with:
           repository: xiongweilin/aios
-          ref: research/contingent-safe-execution-v1
+          # Immutable, squash-merged AIOS #53 accepted source.
+          ref: d68e77f4343ed798c6c0b8d29a007858dbcc908f
           path: aios
           persist-credentials: false
       - uses: actions/setup-python@v5
