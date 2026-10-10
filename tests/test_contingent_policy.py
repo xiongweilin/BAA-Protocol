@@ -78,6 +78,12 @@ class ContingentPolicyTests(unittest.TestCase):
                 {"ready_a"}, (effect,), safe=frozenset({"ready_a"}),
             )
 
+    def test_forged_cost_certificate_is_rejected(self):
+        effect = approval_effect()
+        forged = Policy("effect", "complete", next=Policy("done"), worst_cost=0)
+        with self.assertRaisesRegex(ValueError, "forged effect cost"):
+            self.verify(forged, {"ready_a"}, (effect,), steps=1)
+
     def test_incomplete_branch_and_fake_observation_are_rejected(self):
         probe = Probe("see", (("unknown_a", "a"), ("unknown_b", "b")), trusted=True)
         fake = Policy("probe", "see", branches=(("a", Policy("done")),))
