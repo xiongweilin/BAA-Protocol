@@ -108,6 +108,10 @@ class StrongPlannerAnalysisTests(unittest.TestCase):
             analysis.analyze(self.write(rows))
         rows[0]["principal_seconds"] = "NA"
         rows[0]["model_calls"] = "nan"
+        with self.assertRaisesRegex(ValueError, "integer count"):
+            analysis.analyze(self.write(rows))
+        rows[0]["model_calls"] = "2"
+        rows[0]["principal_seconds"] = "nan"
         with self.assertRaisesRegex(ValueError, "nonfinite"):
             analysis.analyze(self.write(rows))
 
