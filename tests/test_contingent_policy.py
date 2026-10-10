@@ -99,6 +99,34 @@ class ContingentPolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "positive"):
             self.compile({"ready_a"}, (replace(approval_effect(), cost=0),))
 
+    def test_independent_checker_rejects_vacuous_empty_successor(self):
+        # A forged caller model could otherwise turn a non-goal belief into
+        # the empty set, which is vacuously a subset of the goal.
+        broken = Effect("erase", (("ready_a", ()),), authorized=True)
+        forged = Policy("effect", "erase", next=Policy("done"), worst_cost=1)
+        with self.assertRaisesRegex(ValueError, "cannot be empty"):
+            self.verify(forged, {"ready_a"}, (broken,), steps=1)
+        with self.assertRaisesRegex(ValueError, "cannot be empty"):
+            self.compile({"ready_a"}, (broken,), steps=1)
+
+    def test_independent_checker_rejects_duplicate_pre_states(self):
+        effect = Effect("rewrite", (
+            ("ready_a", ("done",)), ("ready_a", ("pending",)),
+        ), authorized=True)
+        forged = Policy("effect", "rewrite", next=Policy("done"), worst_cost=1)
+        with self.assertRaisesRegex(ValueError, "duplicate effect"):
+            self.verify(forged, {"ready_a"}, (effect,), steps=1)
+        duplicate_probe = Probe("peek", (
+            ("ready_a", "a"), ("ready_a", "b"),
+        ), trusted=True)
+        with self.assertRaisesRegex(ValueError, "duplicate probe"):
+            self.verify(Policy("done"), {"done"}, (), (duplicate_probe,), steps=1)
+
+    def test_independent_checker_rejects_blank_operation_name(self):
+        step = Effect("", (("ready_a", ("done",)),), authorized=True)
+        with self.assertRaisesRegex(ValueError, "empty step"):
+            self.verify(Policy("done"), {"done"}, (step,), steps=0)
+
     def test_minimum_worst_cost_not_arbitrary_hold(self):
         direct = approval_effect()
         probe = Probe("read", (("ready_a", "a"), ("ready_b", "b")), trusted=True)
