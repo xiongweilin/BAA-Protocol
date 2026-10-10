@@ -86,7 +86,54 @@ def main() -> None:
     else:
         raise AssertionError("unapproved compiled policy must never dispatch")
 
-    print("Experimental BAA->AIOS policy contract: two branches, anti-replay, live authority gate OK")
+    # A critical multi-repo contract: a possibly effected write can be
+    # reconciled by a precompiled qualified observation, without a new LLM
+    # proposal or a blind replay of that effect.
+    uncertain = Effect("send", (("ready", ("done", "pending")),), authorized=True)
+    reconcile = Effect(
+        "reconcile", (("pending", ("done",)),), authorized=True,
+    )
+    readback = Probe(
+        "trusted.readback",
+        (("done", "done"), ("pending", "pending")),
+        trusted=True,
+    )
+    recovery_kwargs = dict(
+        possible_states=frozenset({"ready"}),
+        goal_states=frozenset({"done"}),
+        safe_states=frozenset({"ready", "done", "pending"}),
+        effects=(uncertain, reconcile),
+        probes=(readback,), max_steps=3,
+    )
+    recovery_plan = synthesize(**recovery_kwargs)
+    assert recovery_plan is not None
+    assert_structurally_safe(recovery_plan, **recovery_kwargs)
+    for observed in ("done", "pending"):
+        recovery_cursor = ContingentPolicyCursor(
+            recovery_plan.as_dict(), binding,
+            authorize_effect=lambda _binding, name: name in {"send", "reconcile"},
+            qualify_probe=lambda _binding, name: name == "trusted.readback",
+        )
+        assert recovery_cursor.next_step(binding).name == "send"
+        recovery_cursor.resolve_effect(
+            binding, effect_name="send", result="unknown",
+            independent_readback=False,
+        )
+        assert recovery_cursor.next_step(binding).name == "trusted.readback"
+        recovery_cursor.observe(
+            binding, probe_name="trusted.readback",
+            observed_label=observed, independent_readback=True,
+        )
+        if observed == "pending":
+            assert recovery_cursor.next_step(binding).name == "reconcile"
+            assert recovery_cursor.next_step(binding).kind == "blocked"
+            recovery_cursor.resolve_effect(
+                binding, effect_name="reconcile", result="verified",
+                independent_readback=True,
+            )
+        assert recovery_cursor.next_step(binding).kind == "done"
+
+    print("Experimental BAA->AIOS contract: two action branches, unknown-effect readback/recovery, no blind replay, live authority OK")
 
 
 if __name__ == "__main__":
