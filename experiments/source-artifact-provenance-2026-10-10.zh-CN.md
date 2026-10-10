@@ -2,7 +2,7 @@
 
 > [English](source-artifact-provenance-2026-10-10.md) | 简体中文
 
-本表记录于 2026-10-10 从 GitHub Actions 成功运行中**实际下载的原始 ZIP 字节**。SHA-256 针对 ZIP 本身而非内部 JSON。它不是新增实验、重复执行或永久镜像；聊天审计交付中另附了六份 ZIP 副本。**保存 SHA-256 并不等于永久保存原始数据。**
+本表记录的是 GitHub Actions **原始 artifact ZIP 字节**，不是新增实验或重跑。SHA-256 针对 ZIP 本身而非内部 JSON。2026-10-10 已从表中对应运行下载六份原始档案，副本保存在 `D:\infrastructure\data\evidence\BAA-Protocol\github-actions\2026-10-10\original-zips\`；同目录 `manifest.json` 记录 artifact ID、run ID、字节数、摘要和允许用途。六个本地文件的字节数与 SHA-256 均匹配本表。此次保全下载没有解包或查看档案内容。**SHA-256 清单本身不保存 ZIP 字节；本地副本只证明该目录在本次校验时保存了这些字节。**
 
 | 原始运行 | Actions run | Artifact ID | ZIP 字节数 | ZIP SHA-256 | GitHub UTC 到期 |
 | --- | ---: | ---: | ---: | --- | --- |
@@ -17,7 +17,7 @@
 
 - v6 ZIP 含 `summary.json`、逐案例 `result.json` 和 `gateway.json`；成本前沿 ZIP 还含 `workload.json`。E2E ZIP 含 `evidence.json`、`p6-quality.json`、服务日志与进程状态。
 - 复制原始记录并复算汇总数只构成**一致性审计**，不能算作新的独立模型样本。v6 在特定 C2 工作负载的 +6 不推翻成本前沿 0/30 的严格安全成本零结果。
-- **尚待持久保全：**把六个 ZIP 按访问控制和日志脱敏策略放到可核对 SHA-256 的长久证据库。不能把含内部运行日志的原始包未经审查直接公开提交到源码仓库。
+- **本地保全状态：**六个已核验 ZIP 副本保存在 `D:\infrastructure\data\evidence\BAA-Protocol\github-actions\2026-10-10\original-zips\`，位于 Git 仓库之外，并附有本地 `manifest.json`。这只是本地副本；没有核验独立备份或恢复能力。该目录的访问控制尚未通过资格核验，本次也没有审阅档案日志。未完成 secret/log 检查与适当脱敏前，不得公开原始 ZIP。
 - 本次未提供人体实验结果、生产授权、四小时真实 P7 观测、长期运行可靠性或人力节省证据。
 
 核对保留的原始文件：

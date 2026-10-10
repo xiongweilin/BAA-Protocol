@@ -44,6 +44,6 @@ The existing negative result remains valid until independent joint-outcome measu
 
 ## Provenance
 
-The original CI ZIP identities, SHA-256 digests and retention deadlines for key offboarding/cost/E2E runs are recorded in [the source artifact provenance snapshot](source-artifact-provenance-2026-10-10.md). **The hash inventory is not a durable mirror of the ZIP bytes.**
+The original CI ZIP identities, SHA-256 digests and retention deadlines for key offboarding/cost/E2E runs, plus the verified local-copy location and its limits, are recorded in [the source artifact provenance snapshot](source-artifact-provenance-2026-10-10.md). The hash inventory is not itself the ZIP bytes, and no independent backup is qualified.
 
 These links refer to the frozen source records; the index is intentionally not a substitute for individual run ids, SHA-256 fingerprints, artifact ids, qualification notes, or CI artifacts recorded there.
