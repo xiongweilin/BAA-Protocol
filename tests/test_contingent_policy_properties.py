@@ -154,6 +154,34 @@ class ContingentPolicyOracleTests(unittest.TestCase):
         ), trusted=True)
         self.assertIsNone(synthesize(**{**kwargs, "probes": (probe,)}))
 
+    def test_unknown_effect_can_recover_only_after_qualified_readback(self):
+        send = Effect("send", (("ready", ("done", "pending")),), authorized=True)
+        recover = Effect("reconcile", (("pending", ("done",)),), authorized=True)
+        probe = Probe("independent-readback", (
+            ("done", "settled"), ("pending", "pending"),
+        ), trusted=True)
+        inputs = dict(
+            possible_states=frozenset({"ready"}),
+            goal_states=frozenset({"done"}),
+            safe_states=frozenset({"ready", "done", "pending"}),
+            effects=(send, recover), probes=(probe,), max_steps=3,
+        )
+        policy = synthesize(**inputs)
+        self.assertIsNotNone(policy)
+        self.assertEqual(policy.kind, "effect")
+        self.assertEqual(policy.name, "send")
+        self.assertEqual(policy.next.kind, "probe")
+        self.assertEqual(policy.next.name, "independent-readback")
+        self.assertEqual(
+            {label: next_policy.kind for label, next_policy in policy.next.branches},
+            {"pending": "effect", "settled": "done"},
+        )
+        assert_structurally_safe(policy, **inputs)
+        # If the evidence channel is not qualified, recovery is not supported.
+        self.assertIsNone(synthesize(**{
+            **inputs, "probes": (replace(probe, trusted=False),),
+        }))
+
     def test_information_refinement_cannot_remove_existing_common_action(self):
         action = Effect("commit", (
             ("s0", ("goal",)), ("s1", ("goal",)),
