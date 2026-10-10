@@ -115,7 +115,31 @@ def main() -> None:
     else:
         raise AssertionError("rebound durable effect identity was accepted")
 
-    print("Synthetic BAA->AIOS receipt contract: 2 branches, no bool bypass, no rebound effect, NO provider writes")
+    # A repeated qualified named probe needs fresh evidence. The same
+    # source-backed locator cannot prove a second readback step.
+    repeated = {
+        "kind": "probe", "name": "probe.subject",
+        "branches": {
+            "a": {
+                "kind": "probe", "name": "probe.subject",
+                "branches": {"a": {"kind": "done"}, "b": {"kind": "done"}},
+            },
+            "b": {"kind": "done"},
+        },
+    }
+    cursor = make_cursor(repeated, identities)
+    cursor.next_step(BIND)
+    first = receipt("probe", "probe.subject", "a")
+    cursor.observe_with_receipt(BIND, probe_name="probe.subject", receipt=first)
+    cursor.next_step(BIND)
+    try:
+        cursor.observe_with_receipt(BIND, probe_name="probe.subject", receipt=first)
+    except ContingentPolicyViolation:
+        assert cursor.next_step(BIND).kind == "blocked"
+    else:
+        raise AssertionError("one evidence locator was replayed as a fresh observation")
+
+    print("Synthetic BAA->AIOS: 2 branches, boolean/identity/receipt-replay rejection; no provider writes")
 
 
 if __name__ == "__main__":
