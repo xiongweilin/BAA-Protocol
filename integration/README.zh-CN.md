@@ -8,9 +8,11 @@ BAA-Protocol 的第一版 employee-offboarding integration 固定到：
 xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
 
+这是第一版 offboarding 集成快照，也是已记录的组合端到端验收所用版本。当前兼容性 workflow 另行检出 AIOS commit `0ba9c36bd8168ae1346770e6430474662b30e196`；它不会复现该历史端到端运行。
+
 ## Level 1：contract compatibility
 
-CI 导入固定 AIOS package，并检查：
+当前兼容性 workflow 导入 `0ba9c36bd8168ae1346770e6430474662b30e196` 版本的 AIOS，并检查：
 
 - offboarding policy effect set；
 - derived external obligations；

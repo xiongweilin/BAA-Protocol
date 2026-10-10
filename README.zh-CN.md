@@ -68,13 +68,23 @@ Admit(T_t | H_t, q_t, K) -> {deny, hold, admit}
 
 安全与交付必须分开报告。
 
+已接受的前瞻结果限定于各自工作负载，包含局部正向、空结果和负向结果；它们没有证明普遍委托扩张或净人工劳动下降。见[主张—证据索引](experiments/claim-evidence-index.zh-CN.md)和[guide 影响路径](https://github.com/xiongweilin/guide/blob/main/use/studies/impact-pathway.zh-CN.md)。
+
 ## 第一个具体任务域
 
-第一个任务域是**员工离职（employee offboarding）**，来自以下固定 AIOS 快照：
+第一个任务域是**员工离职（employee offboarding）**，最初与以下历史 AIOS 快照集成：
 
 ~~~text
 xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
+
+当前兼容性 workflow 使用另一个固定 AIOS commit：
+
+~~~text
+xiongweilin/aios@0ba9c36bd8168ae1346770e6430474662b30e196
+~~~
+
+当前兼容性检查不会重跑 `87f24f32a01c67a9246fc3cb127517c80798e169` 上的历史组合端到端验收。
 
 兼容性 CI 检查：
 
@@ -95,6 +105,8 @@ xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 - [spec/state-machine.zh-CN.md](spec/state-machine.zh-CN.md) —— 协议状态语义。
 - [spec/vsar.zh-CN.md](spec/vsar.zh-CN.md) —— 版本化充分性保证记录（VSAR）。
 - [experiments/design.zh-CN.md](experiments/design.zh-CN.md) —— 可证伪实验设计。
+- [experiments/human-cost-study-v1.zh-CN.md](experiments/human-cost-study-v1.zh-CN.md) —— 总人工劳动测量协议草案；尚无劳动结果。
+- [experiments/human-assurance-capacity-v1.zh-CN.md](experiments/human-assurance-capacity-v1.zh-CN.md) —— HRCC 纵向协议草案；人工复核能力尚未测量。
 - [experiments/prospective-model-protocol.zh-CN.md](experiments/prospective-model-protocol.zh-CN.md) — 前瞻真实模型研究的预注册协议。
 - [experiments/prospective-model-result.zh-CN.md](experiments/prospective-model-result.zh-CN.md) —— v1 接受的真实模型零结果。
 - [experiments/prospective-model-v2-result.zh-CN.md](experiments/prospective-model-v2-result.zh-CN.md) —— v2 qualification failure。

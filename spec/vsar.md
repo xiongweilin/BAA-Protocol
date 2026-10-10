@@ -111,6 +111,8 @@ completed
 safe_terminal
 ~~~
 
+`principal_attention` and `assurance_labor` are separate observations; their presence does not establish total human labor. State the unit, role coverage, source, and observation status for each. Do not add event counts, model calls, synthetic cost units, or elapsed machine time to person-time. The [draft human-cost protocol](../experiments/human-cost-study-v1.md) defines the unmeasured total-labor question.
+
 Safe termination may be a safety success and a delivery failure.
 
 ## Statistical discipline

@@ -53,11 +53,13 @@ The prototype includes:
 
 ## Pinned AIOS compatibility
 
-BAA CI pins:
+The current BAA compatibility workflow pins AIOS to:
 
 ~~~text
-xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
+xiongweilin/aios@0ba9c36bd8168ae1346770e6430474662b30e196
 ~~~
+
+This is distinct from the historical composed real-product acceptance at AIOS commit `87f24f32a01c67a9246fc3cb127517c80798e169`, which remains the version for that recorded result.
 
 CI verifies:
 

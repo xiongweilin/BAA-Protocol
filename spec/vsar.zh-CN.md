@@ -111,6 +111,8 @@ completed
 safe_terminal
 ~~~
 
+`principal_attention` 与 `assurance_labor` 是不同观察项；字段存在不表示已经测得总人工劳动。每项都应记录单位、角色覆盖范围、来源和观察状态。不得把事件数、模型调用、合成成本单位或机器经过时间加进人工作业时间。[人工成本协议草案](../experiments/human-cost-study-v1.zh-CN.md)界定了当前尚未测量的总劳动问题。
+
 safe termination 可以是 safety success，同时是 delivery failure。
 
 ## 统计纪律

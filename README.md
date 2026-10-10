@@ -68,13 +68,23 @@ Primary question:
 
 Safety and delivery are reported separately.
 
+The accepted prospective results are workload-specific and include localized positive, null, and negative outcomes. They do not establish general delegation expansion or net human-labor reduction; see the [claim/evidence index](experiments/claim-evidence-index.md) and the [guide impact pathway](https://github.com/xiongweilin/guide/blob/main/use/studies/impact-pathway.md).
+
 ## First concrete domain
 
-The first domain is **employee offboarding**, derived from this pinned AIOS snapshot:
+The first domain is **employee offboarding**, first integrated against this historical AIOS snapshot:
 
 ~~~text
 xiongweilin/aios@87f24f32a01c67a9246fc3cb127517c80798e169
 ~~~
+
+The current compatibility workflow uses a separate, fixed AIOS commit:
+
+~~~text
+xiongweilin/aios@0ba9c36bd8168ae1346770e6430474662b30e196
+~~~
+
+This current compatibility check does not rerun the historical composed end-to-end acceptance at `87f24f32a01c67a9246fc3cb127517c80798e169`.
 
 Compatibility CI checks:
 
@@ -95,6 +105,8 @@ Passing compatibility means that the BAA projection matches this pinned AIOS con
 - [spec/state-machine.md](spec/state-machine.md) — protocol state semantics.
 - [spec/vsar.md](spec/vsar.md) — Versioned Sufficiency Assurance Record.
 - [experiments/design.md](experiments/design.md) — falsifiable experiment design.
+- [experiments/human-cost-study-v1.md](experiments/human-cost-study-v1.md) — draft total-human-labor measurement protocol; no labor result has been collected.
+- [experiments/human-assurance-capacity-v1.md](experiments/human-assurance-capacity-v1.md) — draft longitudinal HRCC protocol; reviewer capacity remains unmeasured.
 - [experiments/prospective-model-protocol.md](experiments/prospective-model-protocol.md) — preregistered real-model study protocol.
 - [experiments/prospective-model-result.md](experiments/prospective-model-result.md) — accepted v1 real-model null result.
 - [experiments/prospective-model-v2-result.md](experiments/prospective-model-v2-result.md) — v2 qualification failure.
