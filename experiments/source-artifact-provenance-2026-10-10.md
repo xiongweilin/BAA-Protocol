@@ -2,7 +2,7 @@
 
 > English | [简体中文](source-artifact-provenance-2026-10-10.zh-CN.md)
 
-This inventory records **original downloaded GitHub Actions ZIP bytes**, not a new experiment, re-run, or permanent mirror. Each digest is SHA-256 over the ZIP itself, not the uncompressed JSON. The six ZIPs were independently downloaded from the cited successful runs on 2026-10-10; copies were supplied in the audit handoff. A hash list does **not** preserve artifact bytes after GitHub retention expires.
+This inventory records **original GitHub Actions artifact ZIP bytes**, not a new experiment or re-run. Each digest is SHA-256 over the ZIP itself, not the uncompressed JSON. On 2026-10-10 the six archives were downloaded from the cited successful runs. Their local copies are stored at `D:\infrastructure\data\evidence\BAA-Protocol\github-actions\2026-10-10\original-zips\`; the adjacent `manifest.json` records the artifact IDs, run IDs, byte counts, digests, and allowed use. All six local files match the listed byte counts and SHA-256 values. The preservation download did not extract or inspect archive contents. A hash list does **not** preserve artifact bytes; the local copies preserve them at the stated location as verified on this date.
 
 | Original artifact / arm | Actions run | Artifact ID | ZIP bytes | ZIP SHA-256 | GitHub expiry (UTC) |
 | --- | ---: | ---: | ---: | --- | --- |
@@ -18,7 +18,7 @@ This inventory records **original downloaded GitHub Actions ZIP bytes**, not a n
 - The v6 ZIP contains `summary.json`, `result.json` with episode-level rows, and `gateway.json`; the cost-frontier ZIP contains the same kinds of files plus `workload.json`. E2E ZIPs contain `evidence.json`, `p6-quality.json`, process metadata, and service logs.
 - The frozen reports and repository result summaries remain authoritative for qualified conclusions. Recomputed totals from copied records are **integrity cross-checks**, not additional independent real-model draws.
 - The v6 observed +6 qualified C2 delegation episodes does not supersede the zero BAA-positive strict safe-cost cells in the subsequent frontier; the latter result explicitly narrows the efficiency claim.
-- Retention expiry means a future auditor may be unable to retrieve the original ZIP even while this index survives. **Open preservation requirement:** store the actual six ZIPs in an access-controlled, durable, checksum-verifiable evidence store with appropriate secret/log review and public-safe redaction policy. Do not upload logs indiscriminately as Git repository source.
+- **Local preservation status:** the six checksum-verified ZIP copies are stored at `D:\infrastructure\data\evidence\BAA-Protocol\github-actions\2026-10-10\original-zips\`, outside Git, with a local `manifest.json`. This is a local copy; no independent backup or restore was verified. The directory's access-control status has not been qualified, and archive logs were not reviewed here. Do not publish the raw ZIPs without secret/log review and appropriate redaction.
 - No participant data, production authorization, long-horizon reliability or realized human-hours benefit is supplied by this snapshot.
 
 ## Verify a retained original ZIP

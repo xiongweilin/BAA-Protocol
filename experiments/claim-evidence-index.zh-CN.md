@@ -44,4 +44,6 @@ P3 已在**一个授权隔离 Keycloak/Odoo 环境**通过实际受保护资源�
 
 ## 来源与可追溯性
 
-本索引仅指向已封存的原始记录，不替代其中的 run id、SHA-256、artifact id、资格说明或 CI 记录。
+关键离职、成本与 E2E 运行的原始 ZIP 身份、SHA-256、保留期限，以及本地校验副本的位置与限制，见[原始 artifact 来源记录](source-artifact-provenance-2026-10-10.zh-CN.md)。摘要清单本身不是 ZIP 字节；独立备份尚未核实。
+
+本索引不替代各冻结记录中的 run id、artifact id、资格说明或 CI 记录。
