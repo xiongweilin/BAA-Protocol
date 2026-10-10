@@ -163,6 +163,13 @@ def assert_structurally_safe(
     probe_map = {item.name: item for item in probes}
     if not possible_states or not possible_states <= safe_states:
         raise ValueError("initial belief violates safety envelope")
+    if not goal_states <= safe_states or max_steps < 0:
+        raise ValueError("invalid goal, safety envelope, or horizon")
+    if any(step.cost <= 0 for step in (*effects, *probes)):
+        raise ValueError("step costs must be positive")
+    all_names = [step.name for step in (*effects, *probes)]
+    if len(all_names) != len(set(all_names)):
+        raise ValueError("duplicate step names")
 
     def check(
         node: Policy, belief: frozenset[str],
@@ -173,6 +180,8 @@ def assert_structurally_safe(
         if node.kind == "done":
             if not belief <= goal_states or node.next or node.branches:
                 raise ValueError("premature or malformed completion")
+            if node.worst_cost != 0:
+                raise ValueError("forged completion cost")
             return
         if left == 0 or not node.name:
             raise ValueError("missing step/horizon")
@@ -187,6 +196,8 @@ def assert_structurally_safe(
             later = frozenset(s for before in belief for s in outcomes[before])
             if not later <= safe_states:
                 raise ValueError("effect can leave safety envelope")
+            if node.worst_cost != step.cost + node.next.worst_cost:
+                raise ValueError("forged effect cost")
             check(node.next, later, used | {node.name}, left - 1)
             return
         if node.kind == "probe":
@@ -203,6 +214,9 @@ def assert_structurally_safe(
             branches = dict(node.branches)
             if len(branches) != len(node.branches) or set(branches) != set(actual):
                 raise ValueError("missing, fake or duplicate observation branch")
+            if (len(actual) <= 1 or node.worst_cost != step.cost +
+                    max(child.worst_cost for child in branches.values())):
+                raise ValueError("non-discriminating observation or forged cost")
             for label, subset in actual.items():
                 check(branches[label], subset, used, left - 1)
             return
