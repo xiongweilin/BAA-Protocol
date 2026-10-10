@@ -46,6 +46,10 @@ case, including unsafe, incomplete, and unknown outcomes. Per-task human work
 is principal + independent assurance + operations person-seconds, with missing
 components left unknown, **not zero**. Strict safe useful delivery requires
 known-safe execution, useful delivery, and no terminal unknown effects.
+Unresolved terminal effects with otherwise safe/useful recorded status remain
+**unknown**, not a known failure. Witnessed unsafe execution or known-incomplete
+delivery is a known negative. Discrete operation/effect/call counts must be
+nonnegative integers; fractional or nonfinite counts fail validation.
 
 This analyzer cannot authenticate the rows, prove independently measured
 real-world safety, verify comparator competence, validate model calls or
