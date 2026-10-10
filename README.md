@@ -46,8 +46,8 @@ Earlier experiments are frozen and will **not** be reclassified after architectu
 
 - [Contingent policy synthesis and independent verifier](baa_protocol/contingent_policy.py), with [adversarial-belief tests](tests/test_contingent_policy.py).
 - Existing [admission protocol](spec/protocol.md), [state machine](spec/state-machine.md) and [guarantee claims](spec/guarantees.md) remain authoritative for actual external effects.
-- [AIOS integration boundary](https://github.com/xiongweilin/aios/blob/research/contingent-safe-execution-v1/src/domains/administrative_orchestrator/contingent_execution.py) stages but does not automatically dispatch a conditional step.
-- [guide theory revision](https://github.com/xiongweilin/guide/blob/research/contingent-safe-execution-v1/minimal-derivation.md) makes safe action under uncertainty primary; [Lean RobustAction](https://github.com/xiongweilin/distinction-self-reference-lean/blob/research/contingent-safe-execution-v1/DistinctionSelfReference/RobustAction.lean) proves a conditional common-action special case.
+- [AIOS integration boundary](https://github.com/xiongweilin/aios/blob/main/src/domains/administrative_orchestrator/contingent_execution.py) stages but does not automatically dispatch a conditional step.
+- [guide theory revision](https://github.com/xiongweilin/guide/blob/main/minimal-derivation.md) makes safe action under uncertainty primary; [Lean RobustAction](https://github.com/xiongweilin/distinction-self-reference-lean/blob/main/DistinctionSelfReference/RobustAction.lean) proves a conditional common-action special case.
 
 Test reference logic: `python -m unittest discover -s tests -p 'test_*.py' -v`. Cross-repository CI continues to test pinned and moving AIOS main versions; branch-specific AIOS integration must also be separately checked.
 

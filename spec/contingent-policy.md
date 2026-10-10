@@ -36,4 +36,4 @@ The finite search minimizes worst-case total declared step cost across the polic
 - Compiler and checker: [contingent_policy.py](../baa_protocol/contingent_policy.py).
 - Negative and positive model cases: [test_contingent_policy.py](../tests/test_contingent_policy.py).
 - Existing BAA gate: [protocol](protocol.md) and [state machine](state-machine.md).
-- Real effect mediation: [AIOS contingent execution branch](https://github.com/xiongweilin/aios/blob/research/contingent-safe-execution-v1/src/domains/administrative_orchestrator/contingent_execution.py).
+- Real effect mediation: [AIOS contingent execution branch](https://github.com/xiongweilin/aios/blob/main/src/domains/administrative_orchestrator/contingent_execution.py).

@@ -31,4 +31,4 @@
 - 有界搜索不证明更广泛场景中的不可能性。现有 v6 和成本前沿的零结果不可改写，也不构成新结构 C0/C1/C2 提升的证据。
 - 新实验必须事先冻结任务、资源和强基线，使全部架构拥有同等观察、授权、成本与反馈机会，不能为追求全面正收益而挑选案例。
 
-代码：[条件策略编译与检查](../baa_protocol/contingent_policy.py)；[测试](../tests/test_contingent_policy.py)；[现有协议](protocol.zh-CN.md)；[AIOS 实验性执行边界](https://github.com/xiongweilin/aios/blob/research/contingent-safe-execution-v1/src/domains/administrative_orchestrator/contingent_execution.py)。
+代码：[条件策略编译与检查](../baa_protocol/contingent_policy.py)；[测试](../tests/test_contingent_policy.py)；[现有协议](protocol.zh-CN.md)；[AIOS 实验性执行边界](https://github.com/xiongweilin/aios/blob/main/src/domains/administrative_orchestrator/contingent_execution.py)。
