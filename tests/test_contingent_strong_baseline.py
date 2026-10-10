@@ -54,7 +54,7 @@ class StrongPlannerAnalysisTests(unittest.TestCase):
         self.assertEqual(result["unknown_strict_pairs"], 1)
         self.assertEqual(result["strict_safe_delivery_delta_bounds"], [-1 / 3, 1 / 3])
         self.assertEqual(result["labor_both_arms_complete_pairs"], 2)
-        self.assertEqual(result["unsafe_episode_counts"], {"baa": 1, "strong_control": 0})
+        self.assertEqual(result["cases_with_recorded_unsafe_status"], {"baa": 1, "strong_control": 0})
 
     def test_rejects_weaker_control_and_incomplete_pair(self):
         rows = [self.row("A", "baa"), self.row("A", "strong_control")]
