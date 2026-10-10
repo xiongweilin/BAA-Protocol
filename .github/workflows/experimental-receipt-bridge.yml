@@ -24,7 +24,7 @@ jobs:
         with:
           repository: xiongweilin/aios
           # AIOS draft PR #54; explicitly NOT merged or an official release.
-          ref: 20fb802e54170b37ea2d78e65577b99e2937b3f3
+          ref: c565b4bb4e5851e60032f07c683d64ea8967e2bf
           path: aios
           persist-credentials: false
       - uses: actions/setup-python@v5
