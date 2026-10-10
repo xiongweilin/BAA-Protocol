@@ -36,6 +36,10 @@ jobs:
           git -C aios rev-parse HEAD
       - name: Install AIOS boundary code
         run: python -m pip install -e ./aios
+      - name: Run paired AIOS authorization and policy-adversary tests
+        env:
+          PYTHONPATH: aios/src:baa
+        run: python -m pytest -q aios/tests/domains/administrative/test_contingent_execution.py
       - name: Execute policy refinement tests without provider effects
         env:
           PYTHONPATH: baa
