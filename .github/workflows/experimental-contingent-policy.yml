@@ -1,0 +1,42 @@
+name: Experimental BAA-AIOS contingent policy
+on:
+  pull_request:
+    paths:
+      - "baa_protocol/contingent_policy.py"
+      - "integration/experimental_policy_contract.py"
+      - ".github/workflows/experimental-contingent-policy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  experimental-policy-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout BAA proposal compiler
+        uses: actions/checkout@v4
+        with:
+          path: baa
+          persist-credentials: false
+      - name: Checkout AIOS experimental staging boundary
+        uses: actions/checkout@v4
+        with:
+          repository: xiongweilin/aios
+          ref: research/contingent-safe-execution-v1
+          path: aios
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Record exact tested revisions
+        run: |
+          git -C baa rev-parse HEAD
+          git -C aios rev-parse HEAD
+      - name: Install AIOS boundary code
+        run: python -m pip install -e ./aios
+      - name: Execute policy refinement tests without provider effects
+        env:
+          PYTHONPATH: baa
+        run: python baa/integration/experimental_policy_contract.py
