@@ -168,8 +168,19 @@ def assert_structurally_safe(
     if any(step.cost <= 0 for step in (*effects, *probes)):
         raise ValueError("step costs must be positive")
     all_names = [step.name for step in (*effects, *probes)]
-    if len(all_names) != len(set(all_names)):
-        raise ValueError("duplicate step names")
+    if len(all_names) != len(set(all_names)) or any(not name for name in all_names):
+        raise ValueError("duplicate or empty step names")
+    # The independent checker must reject malformed caller models too, not
+    # just malformed policy trees. Otherwise a missing successor could turn
+    # an impossible effect into an empty belief and vacuous `done` success.
+    for effect in effects:
+        if len(effect.outcomes) != len(effect.as_map()):
+            raise ValueError("duplicate effect pre-state")
+        if any(not successor_set for _, successor_set in effect.outcomes):
+            raise ValueError("effect result set cannot be empty")
+    for probe in probes:
+        if len(probe.readings) != len(probe.as_map()):
+            raise ValueError("duplicate probe pre-state")
 
     def check(
         node: Policy, belief: frozenset[str],
