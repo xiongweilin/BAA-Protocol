@@ -1,0 +1,42 @@
+name: Experimental BAA-AIOS receipt bridge
+on:
+  pull_request:
+    paths:
+      - "integration/research_receipt_contract.py"
+      - ".github/workflows/experimental-receipt-bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  receipt-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout BAA research source
+        uses: actions/checkout@v4
+        with:
+          path: baa
+          persist-credentials: false
+      - name: Checkout immutable AIOS receipt research snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: xiongweilin/aios
+          # AIOS draft PR #54; explicitly NOT merged or an official release.
+          ref: cc1a1d42ad8a46bea93700acab5ccee9f85d6a8a
+          path: aios
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Record paired source versions
+        run: |
+          git -C baa rev-parse HEAD
+          git -C aios rev-parse HEAD
+      - name: Install staged AIOS boundary
+        run: python -m pip install -e ./aios
+      - name: Check synthetic receipt-bound policy and negative cases
+        env:
+          PYTHONPATH: baa:aios/src:aios/src/domains
+        run: python baa/integration/research_receipt_contract.py

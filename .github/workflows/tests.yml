@@ -21,6 +21,10 @@ jobs:
         env:
           PYTHONPATH: .
         run: python scripts/run_formal_model_check.py
+      - name: Stress-test model-to-policy bridge assumptions (synthetic only)
+        env:
+          PYTHONPATH: .
+        run: python scripts/run_contingent_model_stress.py
       - name: Run deterministic offboarding experiment
         env:
           PYTHONPATH: .
