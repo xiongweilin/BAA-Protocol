@@ -2,9 +2,9 @@
 
 > [English](README.md) | 简体中文
 
-**有界行动准入＋实验性条件安全策略合成。** 目标是在不信任模型对权限、外部效果和世界状态的自我声明的前提下，完成更多真正安全的工作。
+**有界行动准入与实验性条件策略合成。** 目标是在不信任模型对权限、外部效果和世界状态的自我声明的前提下，完成更多真正安全的工作。
 
-## 新架构
+## 当前架构
 
     任务目标＋当前证据＋显式世界与操作模型
                 ↓
@@ -18,7 +18,7 @@
                 ↓
       独立回读→对账／结算／重新打开
 
-旧结构主要对模型已经提议的一个行动拒绝、保持或准入。新 [条件策略](spec/contingent-policy.zh-CN.md) 能在所有声明的可能世界里提前搜索安全行动和可信观测分支，在给定深度内优化最坏情形操作成本。未知外部效果仍包含所有可能后继，不盲目重发。预编译策略**不提供执行权限**；每一步仍需现有 World Runtime 实时授权和中介。
+现行实时准入器负责对已提议的具体行动拒绝、保持或准入；实验性[条件策略](spec/contingent-policy.zh-CN.md)在**模型枚举并保守覆盖的候选世界**中搜索安全行动及可信观察分支，在给定深度内优化最坏情形操作成本。未知外部效果仍包含所有可能后继，不盲目重发。预编译策略**不提供执行权限**；每一步仍需现有 World Runtime 实时授权和中介。
 
 ## 三条理论边界
 
@@ -43,9 +43,9 @@
 ## 代码和跨仓接口
 
 - [条件策略合成／独立验证器](baa_protocol/contingent_policy.py)、[逆境世界测试](tests/test_contingent_policy.py)。
-- 真实效果仍受 [原准入协议](spec/protocol.zh-CN.md)、[状态机](spec/state-machine.zh-CN.md)、[保证义务](spec/guarantees.zh-CN.md)约束。
+- 真实效果仍受 [实时准入协议](spec/protocol.zh-CN.md)、[状态机](spec/state-machine.zh-CN.md)、[保证义务](spec/guarantees.zh-CN.md)约束。
 - [AIOS 实验性执行边界](https://github.com/xiongweilin/aios/blob/main/src/domains/administrative_orchestrator/contingent_execution.py)只准备请求，不擅自执行外部写入。
-- [guide 新理论主干](https://github.com/xiongweilin/guide/blob/main/minimal-derivation.zh-CN.md)、[Lean 条件性共同安全行动证明](https://github.com/xiongweilin/distinction-self-reference-lean/blob/main/DistinctionSelfReference/RobustAction.lean)。
+- [guide 有界行动推导](https://github.com/xiongweilin/guide/blob/main/applications/bounded-action/minimal-derivation.zh-CN.md)、[Lean 条件性共同安全行动证明](https://github.com/xiongweilin/distinction-self-reference-lean/blob/main/DistinctionSelfReference/RobustAction.lean)。
 
 原有跨仓 CI 保留当前主分支与固定版本的兼容性检查。新分支的 AIOS 配对集成还必须单独验证。
 
