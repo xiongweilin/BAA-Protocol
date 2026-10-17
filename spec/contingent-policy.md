@@ -4,7 +4,7 @@
 
 ## Why this is an architectural change
 
-The original gate accepts, holds or denies a **proposed next action**. A held proposal is safe but may waste an entire feedback horizon. The new planner searches for a **bounded sequence of actions and information-gathering branches** whose every declared world path remains qualified. It sits strictly *upstream* of the original BAA admission kernel.
+The current live gate accepts, holds or denies a **proposed next action** and remains mandatory. The experimental planner searches **only the declared, conservatively covering candidate worlds** for bounded actions and information-gathering branches. Its result is model-relative and sits strictly *upstream* of the live BAA admission kernel; unmodeled real hazards are not excluded by the search.
 
     possible worlds + protected goal + authorized effect interface
       -> worst-case-cost AND/OR policy synthesis
